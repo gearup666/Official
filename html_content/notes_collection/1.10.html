@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事业单位管理制度知识学习网页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: padding-left 0.3s ease-in-out; /* For sidebar toggling */
+        }
+        .content-section {
+            scroll-margin-top: 70px; 
+            display: none; /* Hidden by default, shown by JS */
+        }
+        .content-section.active {
+            display: block;
+        }
+        details > summary { /* For details elements WITHIN a section */
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            background-color: #065f46; /* emerald-800, slightly darker for internal details */
+            color: white;
+            border-radius: 0.375rem; /* rounded-lg for internal details */
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            list-style: none; 
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        details > summary::-webkit-details-marker {
+            display: none; 
+        }
+        details > summary:hover {
+            background-color: #047857; /* emerald-700 */
+        }
+        details[open] > summary {
+            background-color: #047857; /* emerald-700 */
+            border-radius: 0.375rem 0.375rem 0 0;
+        }
+        details > div.p-4 { /* Content of internal details */
+             border: 1px solid #047857; /* emerald-700 */
+             border-top: none;
+             border-radius: 0 0 0.375rem 0.375rem;
+             background-color: #f0fdfa; /* emerald-50 for a very light green background */
+        }
+        .key-point {
+            background-color: #d1fae5; /* emerald-100 */
+            border-left: 4px solid #10b981; /* emerald-500 */
+            color: #047857; /* emerald-700 */
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0 0.375rem 0.375rem 0; /* rounded-r-lg */
+        }
+        .example-box { /* Used for 【习题】 */
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* shadow-md */
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .explanation {
+            display: none;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background-color: #ecfdf5; /* emerald-50 */
+            border: 1px solid #a7f3d0; /* emerald-200 */
+            border-radius: 0.375rem; /* rounded-md */
+        }
+        .highlight { 
+            background-color: #fef3c7; 
+            padding: 0.125rem 0.25rem; 
+            border-radius: 0.125rem; 
+        }
+        .btn {
+            background-color: #10b981; /* emerald-500 */
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #059669; /* emerald-600 */
+        }
+        
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+            height: calc(100vh - 4rem); 
+            transform: translateX(-100%); 
+            width: 20rem; /* w-80 */
+        }
+        main {
+            transition: margin-left 0.3s ease-in-out;
+            width: 100%; 
+            margin-left: 0;
+        }
+
+        body.sidebar-visible #sidebar {
+            transform: translateX(0);
+        }
+        body.sidebar-visible main {
+           margin-left: 20rem; /* w-80 */
+        }
+         @media (min-width: 768px) { /* md breakpoint */
+            body:not(.sidebar-globally-hidden) #sidebar {
+                transform: translateX(0);
+            }
+            body:not(.sidebar-globally-hidden) main {
+                margin-left: 20rem; /* w-80 */
+            }
+            body.sidebar-globally-hidden #sidebar {
+                transform: translateX(-100%);
+            }
+            body.sidebar-globally-hidden main {
+                margin-left: 0;
+            }
+        }
+
+        .sidebar-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            color: #d1fae5; /* emerald-100 */
+            text-decoration: none;
+            border-radius: 0.375rem; /* rounded-md */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: 600; 
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #10b981; /* emerald-500 */
+            color: white;
+        }
+         .details-marker { 
+            font-size: 0.8em;
+            margin-left: 0.5rem;
+            transition: transform 0.2s ease-in-out;
+        }
+        details[open] > summary > .details-marker {
+            transform: rotate(90deg);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        th, td {
+            border: 1px solid #a1a1aa; 
+            padding: 0.5rem;
+            text-align: left;
+        }
+        th {
+            background-color: #e4e4e7; 
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-slate-100">
+    <header class="bg-emerald-700 text-white p-4 fixed w-full top-0 z-50 shadow-md flex justify-between items-center">
+        <button id="menu-button" class="p-2 rounded-md text-emerald-200 hover:text-white hover:bg-emerald-600">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </button>
+        <h1 class="text-xl font-bold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">事业单位管理制度学习网页</h1>
+    </header>
+
+    <div class="flex pt-16">
+        <aside id="sidebar" class="bg-emerald-800 text-white p-4 space-y-1 fixed top-16 left-0 z-40 overflow-y-auto">
+            <nav>
+                <a href="#introduction" class="sidebar-link">制度概览</a>
+                <a href="#topic1" class="sidebar-link">事业单位概述</a>
+                <a href="#topic2" class="sidebar-link">岗位设置</a>
+                <a href="#topic3" class="sidebar-link">公开招聘和竞聘上岗</a>
+                <a href="#topic4" class="sidebar-link">聘用合同</a>
+                <a href="#topic5" class="sidebar-link">考核和培训</a>
+                <a href="#topic6" class="sidebar-link">奖励和处分</a>
+                <a href="#topic7" class="sidebar-link">工资福利和社会保险</a>
+                <a href="#topic8" class="sidebar-link">人事争议处理</a>
+                <a href="#topic9" class="sidebar-link">回避</a>
+                <a href="#topic10" class="sidebar-link">法律责任</a>
+                <a href="#topic11" class="sidebar-link">事业单位领导人员管理规定</a>
+                <a href="#exercises_ch10" class="sidebar-link">相关习题</a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-6">
+            <section id="introduction" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">事业单位管理制度概览</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="mb-3 text-gray-700 leading-relaxed">
+                        欢迎学习事业单位管理制度。本部分内容将详细介绍事业单位的定义、登记管理、人事管理（包括岗位设置、公开招聘、聘用合同、考核培训、奖惩、工资福利、人事争议处理、回避制度）、法律责任以及领导人员管理规定。
+                    </p>
+                    <div class="key-point">
+                        <h4 class="font-semibold text-lg mb-2">学习要点：</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>理解事业单位的公益属性和社会服务组织性质。</li>
+                            <li>掌握事业单位法人登记、变更、注销的条件和程序。</li>
+                            <li>熟悉事业单位人事管理的基本原则和各项制度。</li>
+                            <li>了解事业单位岗位类别的划分和等级设置。</li>
+                            <li>掌握公开招聘和竞聘上岗的原则、程序及违纪处理。</li>
+                            <li>理解聘用合同的期限、试用期及解除情形。</li>
+                            <li>熟悉考核、培训、奖励、处分的具体规定。</li>
+                            <li>了解工资福利、社会保险及人事争议处理机制。</li>
+                            <li>掌握岗位回避和履职回避的具体要求。</li>
+                            <li>了解事业单位及其工作人员违反规定的法律责任。</li>
+                            <li>熟悉事业单位领导人员管理的各项规定。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="topic1" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">事业单位概述</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">(一) 概念 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>事业单位,是指国家为了社会公益目的,由国家机关举办或者其他组织利用国有资产举办的,从事教育、科技、文化、卫生等活动的社会服务组织。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(二) 事业单位登记 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>事业单位经县级以上各级人民政府及其有关主管部门(统称审批机关)批准成立后,应当依照规定登记或者备案。事业单位应当具备法人条件。</p>
+                            <p class="font-semibold mt-2">1. 设立登记</p>
+                            <p class="ml-4">申请事业单位法人登记,应当具备下列条件:</p>
+                            <ul class="list-disc list-inside ml-8">
+                                <li>①经审批机关批准设立;</li>
+                                <li>②有自己的名称、组织机构和场所;</li>
+                                <li>③有与其业务活动相适应的从业人员;</li>
+                                <li>④有与其业务活动相适应的经费来源;</li>
+                                <li>⑤能够独立承担民事责任。</li>
+                            </ul>
+                            <p class="ml-4">登记管理机关应当自收到登记申请书之日起30日内审查,作出准予登记或者不予登记的决定。准予登记的,发给《事业单位法人证书》;不予登记的,说明理由。</p>
+                            <p class="ml-4">县级以上各级人民政府设立的直属事业单位直接向登记管理机关备案。登记管理机关应当自收到备案文件之日起30日内发给《事业单位法人证书》。</p>
+                            <p class="font-semibold mt-2">2. 变更登记</p>
+                            <p class="ml-4">事业单位的登记事项需要变更的,应当向登记管理机关办理变更登记。</p>
+                            <p class="font-semibold mt-2">3. 注销登记或注销备案</p>
+                            <p class="ml-4">事业单位被撤销、解散的,应当向登记管理机关办理注销登记或者注销备案。办理注销登记前,应成立清算组织完成清算工作。清算结束之日起15日内办理注销登记,提交撤销或解散文件和清算报告。登记管理机关收缴《事业单位法人证书》和印章。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(三) 事业单位人事管理 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p>事业单位人事管理,坚持党管干部、党管人才原则,全面准确贯彻民主、公开、竞争、择优方针。国家对事业单位工作人员实行分级分类管理。</p>
+                             <p>中央事业单位人事综合管理部门负责全国事业单位人事综合管理工作。县级以上地方各级事业单位人事综合管理部门负责本辖区事业单位人事综合管理工作。事业单位主管部门具体负责所属事业单位人事管理工作。</p>
+                             <p>事业单位应当建立健全人事管理制度。制定或者修改人事管理制度,应当通过职工代表大会或者其他形式听取工作人员意见。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="topic2" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">岗位设置</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p>国家对事业单位岗位设置实行宏观调控,分类指导,分级管理。国家建立事业单位岗位管理制度,明确岗位类别和等级。</p>
+                    <p>政府人事行政部门是事业单位岗位设置管理的综合管理部门。事业单位主管部门负责所属事业单位岗位设置的工作指导、组织实施和监督管理。</p>
+                    <p>事业单位根据职责任务和工作需要,按照国家有关规定设置岗位。岗位应当具有明确的名称、职责任务、工作标准和任职条件。</p>
+                    <p>事业单位拟订岗位设置方案,应当报人事综合管理部门备案。</p>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(一) 岗位类别 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 分类:</p>
+                            <p class="ml-4">事业单位岗位分为管理岗位、专业技术岗位和工勤技能岗位三种类别。原则上不得同时在两类岗位任职,确需兼任须按人事管理权限审批。</p>
+                            <p class="font-semibold mt-2">2. 特设岗位:</p>
+                            <p class="ml-4">经批准可设置,用于聘用急需的高层次人才等。不受岗位总量、最高等级和结构比例限制,完成任务后核销。设置经主管部门审核后,报设区的市级以上政府人事行政部门核准。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(二) 岗位等级 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 管理岗位:</strong> 分为10个等级 (一至十级职员岗位)。</p>
+                            <p><strong>2. 专业技术岗位:</strong> 分为13个等级 (高级1-7级, 中级8-10级, 初级11-13级)。专业技术一级岗位人员聘用需报人事部商有关部门确定。</p>
+                            <p><strong>3. 工勤技能岗位:</strong> 技术工岗位 (1-5级), 普通工岗位 (不分等级)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(三) 岗位任职条件 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 三类岗位的基本任职条件:</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>(1) 遵守宪法和法律;</li>
+                                <li>(2) 具有良好的品行;</li>
+                                <li>(3) 岗位所需的专业、能力或技能条件;</li>
+                                <li>(4) 适应岗位要求的身体条件。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">2. 管理岗位基本条件:</p>
+                            <p class="ml-4">(1) 职员岗位一般应具有中专以上文化程度,六级以上一般大学专科以上,四级以上一般大学本科以上。</p>
+                            <p class="ml-4">(2) 各等级职员岗位任职年限要求 (例:三级须在四级岗工作2年以上)。一级、二级按国家规定执行。</p>
+                            <p class="font-semibold mt-2">3. 专业技术岗位基本条件:</p>
+                            <p class="ml-4">实行职业资格准入控制的应包括准入要求。专业技术一级岗位是国家专设特级岗位,条件包括:两院院士；做出系统性、创造性成就和重大贡献的专家学者；其他为国家做出重大贡献、享誉业内的一流人才。</p>
+                            <p class="font-semibold mt-2">4. 工勤技能岗位基本任职条件:</p>
+                            <p class="ml-4">一级、二级须在本工种下一级岗工作满5年,并通过高级技师、技师考评；三级、四级须在本工种下一级岗工作满5年,并通过高级工、中级工考核；学徒期满通过初级工考核可确定为五级。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="topic3" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">公开招聘和竞聘上岗</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">(一) 公开招聘的基本内容 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 公开招聘范围:</strong> 事业单位新聘用工作人员,应面向社会公开招聘 (国家政策性安置、上级任命、涉密岗位等除外)。</p>
+                            <p><strong>2. 招聘的原则:</strong> 德才兼备,公开、平等、竞争、择优。政府宏观管理与单位用人自主权结合,统一规范、分类指导、分级管理。</p>
+                            <p><strong>3. 主管机关和招聘工作组织:</strong> 政府人事行政部门是主管机关。可成立招聘工作组织负责具体实施。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(二) 工作程序 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 公开招聘程序:</p>
+                            <ul class="list-decimal list-inside ml-4">
+                                <li>①制定公开招聘方案;</li>
+                                <li>②公布招聘岗位、资格条件等招聘信息 (外国国籍人员招聘须报省级以上政府人事部门核准);</li>
+                                <li>③审查应聘人员资格条件;</li>
+                                <li>④考试、考察 (高层次、短缺专业人才可直接考核);</li>
+                                <li>⑤体检;</li>
+                                <li>⑥公示拟聘人员名单 (一般7-15日);</li>
+                                <li>⑦订立聘用合同,办理聘用手续。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">2. 竞聘上岗程序 (内部产生岗位人选):</p>
+                             <ul class="list-decimal list-inside ml-4">
+                                <li>①制定竞聘上岗方案;</li>
+                                <li>②在本单位公布竞聘岗位、资格条件、聘期等信息;</li>
+                                <li>③审查竞聘人员资格条件;</li>
+                                <li>④考评;</li>
+                                <li>⑤在本单位公示拟聘人员名单;</li>
+                                <li>⑥办理聘任手续。</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(三) 公开招聘违纪违规行为处理规定 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 应聘人员违纪违规行为处理:</p>
+                            <p class="ml-4">(1) 取消本次应聘资格 (如伪造材料、信息不实影响审核)。</p>
+                            <p class="ml-4">(2) 当次该科目考试成绩无效 (如携带违规物品、不按规定填写信息、带出试卷等)。</p>
+                            <p class="ml-4">(3) 记入诚信档案库 (五年: 抄袭、持伪造证件、使用违禁通讯工具等；长期: 串通作弊、替考等)。</p>
+                            <p class="ml-4">(4) 体检中弄虚作假、请人顶替等，不予聘用，严重者记入诚信档案五年。</p>
+                            <p class="ml-4">(5) 考察中提供虚假材料、隐瞒事实等，不予聘用，严重者记入诚信档案五年。</p>
+                            <p class="font-semibold mt-2">2. 招聘单位和招聘工作人员违纪违规行为处理:</p>
+                            <p class="ml-4">(1) 给予处分 (如擅自组织招聘、设置无关条件、未按规定发布公告、资格审查不严等)。</p>
+                            <p class="ml-4">(2) 停止参加招聘工作 (如擅自调整考试时间、调换考场、未执行回避制度等)。</p>
+                            <p class="ml-4">(3) 调离岗位,构成犯罪追究刑责 (如指使作弊、泄露试题、评分不公、监管不严致大面积作弊等)。</p>
+                            <p class="font-semibold mt-2">3. 处理程序:</p>
+                            <p class="ml-4">制止 -> 收集保存证据 -> 陈述与申辩 -> 决定与送达。</p>
+                            <p class="font-semibold mt-2">4. 救济:</p>
+                            <p class="ml-4">应聘人员对处理决定不服可申请行政复议或提起行政诉讼。招聘工作人员对处分不服可申请复核或申诉。</p>
+                        </div>
+                    </details>
+                     <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(四) 工作人员的交流 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p>事业单位工作人员可以按照国家有关规定进行交流。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="topic4" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">聘用合同</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">(一) 合同期限 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1. 事业单位与工作人员订立的聘用合同,期限一般不低于3年。</p>
+                            <p>2. 类型: 短期 (3年及以下,适用流动性强、技术含量低岗位), 中期 (3年以上), 长期 (至职工退休), 项目合同 (以完成一定工作为期限)。</p>
+                            <p>3. 连续工作满10年且距法定退休年龄不足10年者,提出订立聘用至退休合同的,单位应与其订立。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(二) 试用期 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1. 初次就业且合同期3年以上者,试用期为12个月。</p>
+                            <p>2. 公开招聘人员实行试用期制度,包括在合同期内。</p>
+                            <p>3. 试用期满合格则正式聘用,不合格取消聘用。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(三) 解除聘用合同 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 事业单位解除:</strong> 连续旷工超15个工作日或1年内累计旷工超30日；年度考核不合格且不同意调岗,或连续两年不合格 (提前30日书面通知)。</p>
+                            <p><strong>2. 工作人员解除:</strong> 提前30日书面通知 (双方另有约定除外)。</p>
+                            <p><strong>3. 处分解除:</strong> 受到开除处分的,解除聘用合同。</p>
+                            <p><strong>4. 法律效果:</strong> 合同解除/终止之日起,人事关系终止。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="topic5" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">考核和培训</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">(一) 考核 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 考核的原则与方式:</strong></p>
+                            <p class="ml-4">(1) 原则: 党管干部、党管人才; 德才兼备、以德为先; 事业为上、公道正派; 注重实绩、群众公认; 分级分类、简便有效; 考用结合、奖惩分明。</p>
+                            <p class="ml-4">(2) 方式: 年度考核和聘期考核为主,辅以平时考核、专项考核。</p>
+                            <p><strong>2. 考核内容:</strong> 以岗位职责和工作任务为基本依据,全面考核德、能、勤、绩、廉,突出德和绩。</p>
+                            <p><strong>3. 年度考核:</strong></p>
+                            <p class="ml-4">(1) 结果档次: 优秀、合格、基本合格、不合格。</p>
+                            <p class="ml-4">(2) 优秀档次人数: 一般不超单位应参加考核总人数的20% (特殊情况可提高至25%)。向一线、艰苦岗位及获奖人员倾斜。</p>
+                            <p class="ml-4">(3) 程序: 制定方案 -> 总结述职 -> 测评、核实与评价 -> 确定档次 (优秀需公示不少于5工作日) -> 书面告知本人签署意见。</p>
+                            <p><strong>4. 聘期考核:</strong></p>
+                            <p class="ml-4">(1) 概念和内容: 对一个完整聘期内总体表现的全方位考核,以合同为依据,年度考核为基础,侧重考核聘期任务目标完成情况。</p>
+                            <p class="ml-4">(2) 结果档次: 一般分合格和不合格。完成目标且年度考核均合格及以上者为合格；无正当理由未完成目标者为不合格。</p>
+                            <p><strong>5. 考核结果运用:</strong> 作为调整岗位、职务、工资、职称、奖惩及合同变更、续订、解除等的依据。</p>
+                            <p class="ml-4"><strong>(1) 年度考核结果的运用:</strong> 薪级工资、绩效工资、岗位等级调整、任职年限计算等均受考核结果影响。连续两年基本合格或不合格可解除合同。</p>
+                            <p class="ml-4"><strong>(2) 聘期考核结果的运用:</strong> 合格者可协商续订合同；不合格者一般不再续聘。</p>
+                            <p class="ml-4"><strong>(3) 其他相关事宜 (不确定档次情形):</strong> 初次就业不满半年、非初次就业合并工作不满半年、病事假超半年 (产假除外)、涉嫌违纪违法未结案等。</p>
+                            <p class="ml-4"><strong>(4) 相关救济:</strong> 对基本合格或不合格不服可申请复核、申诉。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(二) 培训 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>事业单位应编培训计划,对工作人员分级分类培训 (岗前、在岗、转岗、专项培训)。培训经费按国家规定列支。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="topic6" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">奖励和处分</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">(一) 奖励 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 奖励的情形:</strong> 长期服务基层表现突出、执行国家重要任务/应对重大突发事件表现突出、工作中有重大发明创造/技术革新、培养人才/传播先进文化有突出贡献、其他突出贡献。</p>
+                            <p><strong>2. 奖励的原则:</strong> 党管干部人才; 德才兼备以德为先; 事业为上突出业绩; 公开公平公正严格标准程序; 精神与物质奖励结合以精神为主; 定期与及时奖励结合以定期为主。</p>
+                            <p><strong>3. 奖励的种类:</strong> 嘉奖、记功、记大功、授予荣誉称号。</p>
+                            <p><strong>4. 奖励的权限:</strong> 中央和地方分级管理,具体权限见原文。</p>
+                            <p><strong>5. 定期奖励:</strong> 一般以年度或聘期为周期,年度考核/聘期考核结果为主要依据。嘉奖、记功比例一般不超总人数20%、2% (整体表现突出可至25%)。向基层、艰苦边远地区及一线倾斜。程序: 定方案 -> 提名单 -> 审批 (听取意见、公示) -> 作决定公布。</p>
+                            <p><strong>6. 及时奖励:</strong> 对在应对重大突发事件、完成重大专项工作等有显著成绩和贡献者及时给予。可作定期奖励参考。</p>
+                            <p><strong>7. 奖励的实施:</strong> 颁发证书、奖章/奖牌；给予一次性奖金 (不计入单位绩效工资总额)；可同时奖励集体中突出个人；可追授已故人员。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(二) 处分 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 处分的情形:</strong> 违规违纪违法,应承担纪律责任。</p>
+                            <p><strong>2. 处分的原则:</strong> 党管干部人才; 公正公平; 惩治与教育结合。与行为性质、情节、危害程度适应。事实清楚、证据确凿、定性准确、处理恰当、程序合法、手续完备。</p>
+                            <p><strong>3. 处分的种类和期间:</strong> 警告 (6个月), 记过 (12个月), 降低岗位等级 (24个月), 开除。</p>
+                            <p><strong>4. 处分的影响:</strong> 警告 (当年年度考核不为优秀); 记过 (当年年度考核不确定档次); 降低岗位等级 (当年及次年不确定档次,降级聘用,影响工资待遇); 开除 (终止人事关系)。记过以上处分影响职称评审/技能等级认定。</p>
+                            <p><strong>5. 处分的适用:</strong> 从重 (如处分期内再犯、起主要作用、销毁证据等); 从轻/减轻 (如主动交代、配合调查、挽回损失、起次要作用等); 减轻/免予/不予 (如情节轻微且有从轻情节、被裹挟胁迫且悔改)。</p>
+                            <p><strong>6. 违法违纪行为及其适用的处分:</strong> (详细列举了违反政治纪律、组织人事纪律、工作纪律失职渎职、廉洁从业纪律、财经纪律、职业道德、公共秩序社会公德及犯罪与刑罚等行为的具体处分标准，内容较多，此处从略，详见PDF原文)</p>
+                            <p><strong>7. 处分的权限和程序:</strong></p>
+                            <p class="ml-4">(1) 权限: 由事业单位或主管部门按干部人事管理权限决定。开除由主管部门定并报同级人事部门备案。</p>
+                            <p class="ml-4">(2) 程序: 调查取证 (2人以上, 不得以非法方式取证, 被调查人立案期间不得解除合同/出境/交流/晋升/奖励/退休) -> 办案期限 (一般6个月,最长不超12个月) -> 处分决定与通知 (书面通知本人和单位, 存档)。已退休人员不再作处分决定,但可立案调查并调整待遇。</p>
+                            <p><strong>8. 处分的确定与手续变更:</strong></p>
+                            <p class="ml-4">(1) 确定: 多种行为分别确定,执行最重。多个相同种类处分(开除外),执行该处分,处分期可累加但不超48个月。受处分期内又受新处分,处分期合并计算不超48个月。共同违纪分别处分。</p>
+                            <p class="ml-4">(2) 手续变更: 处分决定后1个月内办理岗位、工资等变更 (特殊情况最长不超6个月)。</p>
+                            <p><strong>9. 处分的解除:</strong> 受开除以外处分,期满有悔改表现且无再犯,自动解除。解除后考核晋升等待遇按国家规定执行,不再受原处分影响 (但降低岗位等级/薪级工资不恢复原待遇)。</p>
+                            <p><strong>10. 处分的复核和申诉:</strong></p>
+                            <p class="ml-4">(1) 期限和部门: 知处分决定30日内向原处分单位申复核。对复核结果不服30日内向主管部门或同级人事部门申诉。</p>
+                            <p class="ml-4">(2) 处理期限: 复核30日内, 申诉60日内 (复杂可延长不超30日)。复核申诉期间不停止处分执行。不因申诉加重处分。</p>
+                            <p class="ml-4">(3) 复核申诉处理决定: 可撤销 (事实不清、程序违法、越权等), 可变更 (适用法律错、情节认定有误、处分不当)。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="topic7" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">工资福利和社会保险</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p>国家建立激励与约束相结合的事业单位工资制度。事业单位工作人员工资包括基本工资、绩效工资和津贴补贴。工资分配应结合行业特点,体现岗位职责、工作业绩、实际贡献等因素。</p>
+                    <p>国家建立事业单位工作人员工资的正常增长机制。工资水平应与国民经济发展相协调、与社会进步相适应。</p>
+                    <p>事业单位工作人员享受国家规定的福利待遇。执行国家规定的工时制度和休假制度。</p>
+                    <p>事业单位及其工作人员依法参加社会保险,工作人员依法享受社会保险待遇。</p>
+                </div>
+            </section>
+
+            <section id="topic8" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">人事争议处理</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p>事业单位工作人员与所在单位发生人事争议的,依照《中华人民共和国劳动争议调解仲裁法》等有关规定处理。</p>
+                    <p>对涉及本人的考核结果、处分决定等不服的,可按国家规定申请复核、提出申诉。</p>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(一) 申诉处理原则 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>坚持合法、公正、公平、及时的原则,依照规定的权限、条件和程序进行。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(二) 受理的范围 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>对涉及本人的人事处理不服,可申请复核;对复核结果不服,可申诉、再申诉。包括:①处分;②清退违规进人;③撤销奖励;④考核定为基本合格或不合格;⑤未按国家规定确定或扣减工资福利待遇;⑥法律法规规章规定可申诉的其他处理。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(三) 管辖 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 复核:</strong> 由原处理单位管辖。</p>
+                            <p><strong>2. 申诉:</strong> 对中央和地方直属单位复核决定不服,由同级人事部门管辖。对各部门所属单位复核决定不服,由主管部门管辖。对主管部门或其他部门复核决定不服,由同级人事部门管辖。对乡镇复核决定不服,由县级人事部门管辖。</p>
+                            <p><strong>3. 再申诉:</strong> 对主管部门申诉处理决定不服,由同级人事部门管辖。对市、县级人事部门申诉处理决定不服,由上一级人事部门管辖。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(四) 申请 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 申请人:</strong> 本人,或其近亲属/监护人(如本人丧失行为能力或死亡)。</p>
+                            <p><strong>2. 申请时效:</strong> 30日。复核自知道或应知道处理起算；申诉、再申诉自收到复核/申诉决定起算。不可抗力等正当理由可延期。</p>
+                            <p><strong>3. 申请方式:</strong> 提交申请书及相关材料复印件 (当面、邮寄、传真)。当面交出具回执。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(五) 受理 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>受理单位15日内审查,作出受理或不予受理决定,书面通知。不予受理说明理由。</p>
+                        </div>
+                    </details>
+                     <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(六) 撤回申请 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>处理决定作出前,可书面撤回。受理单位可决定终结处理,并书面告知。</p>
+                        </div>
+                    </details>
+                     <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(七) 审理 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 申诉公正委员会:</strong> 受理申诉、再申诉单位组成,审理案件。人数单数,不少于3人。</p>
+                            <p><strong>2. 调查:</strong> 受理单位有权要求答辩、调查。调查2人以上进行。</p>
+                            <p><strong>3. 审议:</strong> 审议事实、证据、法律适用、程序、公正性、职权等。允许申请人陈述申辩。少数服从多数提审理意见。</p>
+                            <p><strong>4. 决定:</strong></p>
+                            <p class="ml-4">(1) 审理期限: 复核30日内；申诉、再申诉60日内 (复杂可延长不超30日)。</p>
+                            <p class="ml-4">(2) 处理决定: 维持；撤销；变更；责令重新处理。</p>
+                            <p><strong>5. 送达:</strong> 及时送达相关方。送达方式包括直接送达、邮寄送达、公告送达。</p>
+                            <p><strong>6. 执行:</strong> 发生效力后30日内执行。最终决定包括：过期未申诉复核决定、过期未再申诉的申诉处理决定、中央和省级人事部门申诉处理决定、再申诉处理决定。执行情况需备案。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="topic9" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">回避</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">(一) 人事管理回避 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>包括岗位回避和履职回避。由事业单位、主管部门、人事综合管理部门按权限负责执行和监督。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(二) 岗位回避 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 回避的情形:</strong> 凡有夫妻关系；直系血亲；三代以内旁系血亲；近姻亲；其他亲属关系 (养父母子女、形成抚养关系的继父母子女等) 的, 不得在同一事业单位聘用至具有直接上下级领导关系的管理岗位, 不得在其中一方担任领导人员的单位聘用至从事组织(人事)、纪检监察、审计、财务工作的岗位, 也不得聘用至双方直接隶属于同一领导人员的从事组织(人事)、纪检监察、审计、财务工作的内设机构正职岗位。</p>
+                            <p><strong>2. 岗位回避程序与处理:</strong> 本人申请或单位/人员提出 -> 单位或主管部门1个月内作决定 (听取意见) -> 通知申请人, 需回避者1个月内调整岗位并变更/重订合同。岗位等级不同一般由较低一方回避；相同或类别不同据实际情况决定一方回避。特殊情况可由省级以上人事部门或中央部门作具体规定。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(三) 履职回避 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 回避的情形:</strong> ①涉及本人利害关系；②涉及与本人有规定亲属关系人员的利害关系；③其他可能影响公正履行职责的。不得参加相关调查、考察、讨论、评议、投票、评分、审核、决定等活动, 也不得以任何方式施加影响。</p>
+                            <p><strong>2. 回避的程序:</strong> 本人/利害关系人申请或单位提出 -> 本人单位或主管部门作决定 (专项工作组织负责人回避由成立单位定, 其他成员可授权负责人定；听取意见) -> 需回避者自决定起退出相关工作。回避决定作出前可视情况先行退出。外请专家等亦适用。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="topic10" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">法律责任</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p>对事业单位人事管理工作中的违法违纪行为,任何单位或者个人可以向事业单位人事综合管理部门、主管部门或者监察机关投诉、举报,有关部门和机关应当及时调查处理。</p>
+                    <p>事业单位违反条例规定的,由县级以上事业单位人事综合管理部门或者主管部门责令限期改正;逾期不改正的,对直接负责的主管人员和其他直接责任人员依法给予处分。</p>
+                </div>
+            </section>
+
+            <section id="topic11" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">事业单位领导人员管理规定</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">(一) 基本原则 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>适应事业单位特点,遵循领导人员成长规律,激发活力,推动公益事业高质量发展。原则: ①党管干部、党管人才; ②德才兼备、以德为先,五湖四海、任人唯贤; ③事业为上、人岗相适、人事相宜; ④注重实干担当和工作实绩、群众公认; ⑤分级分类管理; ⑥民主集中制; ⑦依规依法办事。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(二) 任职条件和资格 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p><strong>1. 基本条件:</strong> 不同行业有不同要求 (如宣传思想文化系统、高校中小学、科研单位、公立医院等)。</p>
+                             <p><strong>2. 基本资格:</strong> ①一般大学本科以上文化程度。②提任六级以上管理岗领导职务,一般5年以上工作经历。③副职提正职需副职岗2年以上；下级正职提上级副职需下级正职岗3年以上。④主要以专业技术提供公益服务的单位领导班子行政正职、分管业务副职一般应有本行业专业工作经历。⑤正常履职身体条件。⑥符合其他规定。</p>
+                             <p class="ml-4">可适当放宽资格情形: 特别优秀,或因国家重大战略等选拔高精尖缺人才,需从严掌握并报上级组织(人事)部门同意。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(三) 选拔任用 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 选拔方式:</strong> 一般采取单位内部推选、外部选派。可采取竞争(聘)上岗、公开选拔(聘)、委托相关机构遴选等。</p>
+                            <p><strong>2. 推荐方式:</strong> 需经民主推荐,规范谈话调研和会议推荐。</p>
+                            <p><strong>3. 任用方式:</strong> 全面考察德能勤绩廉,严把五关。实行选任制、委任制、聘任制。行政领导人员逐步加大聘任制力度。</p>
+                            <p><strong>4. 公示与试用期:</strong> 提任三级以下管理岗领导职务,任前公示不少于5工作日。提任非选举产生的三级以下管理岗领导职务,试用期一般1年。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(四) 任期和任期目标责任 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 任期:</strong> 一般实行任期制,每任期3-5年。同一岗位连续任职一般不超10年 (特殊需要可延长)。</p>
+                            <p><strong>2. 任期目标责任:</strong> 领导班子集体研究确定,一般报主管机关(部门)批准或备案。制定时充分听取职工代表大会或职工代表意见,体现服务对象意见。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(五) 考核评价 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 考核方式:</strong> 年度考核和任期考核为主,辅以平时、专项考核。以岗位职责、任期目标为依据,日常管理为基础,注重政治素质、业绩导向、社会效益,突出党建实效。</p>
+                            <p><strong>2. 评价等次:</strong> 领导班子年度和任期考核: 优秀、良好、一般、较差。领导人员年度和任期考核: 优秀、合格、基本合格、不合格。</p>
+                            <p><strong>3. 考核评价结果:</strong> 反馈并作为管理重要依据。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(六) 交流、回避 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 交流:</strong> 完善交流制度。重点对象: 正职领导,专职党务、分管人财物副职,其他需交流人员。</p>
+                            <p><strong>2. 回避:</strong></p>
+                            <p class="ml-4">(1) 任职回避: 有规定亲属关系的,不得在同一领导班子任职,不得在同一单位担任双方直接隶属同一领导人员或有直接上下级领导关系的职务,不得在领导人员所在单位本级内设管理机构及分管联系单位从事组织(人事)、纪检监察、审计、财务部门负责工作。</p>
+                            <p class="ml-4">(2) 履职回避: 涉及本人及其近亲属利害关系或其他可能影响公正履职情况的,本人应回避。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(七) 培训 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p>统筹各类培训,原则上每5年对事业单位领导人员培训全覆盖。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">(八) 退出 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 免职:</strong> 情形包括达到任职/退休年龄界限；年度/任期考核不合格或连续2年基本合格；解除聘任关系/期满不续聘；受责任追究应免职；不适宜担任现职；违规违纪违法应免职；健康原因无法履职1年以上；工作需要或其他原因。</p>
+                            <p><strong>2. 辞职:</strong> 包括因公辞职、自愿辞职、引咎辞职、责令辞职。程序和从业限制按规定执行。</p>
+                            <p><strong>3. 退休:</strong> 按规定执行。正职领导特别优秀可经批准延迟免职(退休)。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="exercises_ch10" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">相关习题 (事业单位管理制度)</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="example-box">
+                        <p class="font-medium">1.【多选】《事业单位人事管理条例》指出,事业单位人事管理,全面准确贯彻()的方针。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 民主</li><li>B. 公开</li><li>C. 竞争</li><li>D. 择优</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：A, B, C, D</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">2.【多选】事业单位在整个国民经济体系中占有重要的地位,以下()属于事业单位的特点。</p>
+                        <ul class="list-disc list-inside ml-4 my-1">
+                            <li>A. 事业单位职业活动的领域是对全社会的某些专门需要提供服务</li>
+                            <li>B. 事业单位以经济效益和社会效益为主要目的</li>
+                            <li>C. 具有较强的专业性,其职业特点是以脑力劳动为主</li>
+                            <li>D. 事业单位的职业岗位以各类专业技术人员为主,一般实行专业技术人员聘任制</li>
+                        </ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：A, C, D</strong> (B错误, 事业单位以社会效益为主要目的)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">3.【多选】事业单位申请事业单位法人登记,应当具备的条件包括( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1">
+                            <li>A. 经审批机关批准设立</li>
+                            <li>B. 有自己的名称、组织机构和场所</li>
+                            <li>C. 能够独立承担各种责任</li>
+                            <li>D. 有与其业务活动相适应的从业人员的经费来源</li>
+                        </ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：A, B, D</strong> (C应为能够独立承担民事责任，D选项原文为“有与其业务活动相适应的从业人员”和“有与其业务活动相适应的经费来源”是分开的两条，此处合并表述但核心意思符合)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">4.【多选】事业单位人事管理规定,事业单位人事管理坚持的原则包括( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 公平竞争</li><li>B. 党管干部</li><li>C. 择优录取</li><li>D. 党管人才</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：B, D</strong> (A, C是方针的具体体现，原则主要是党管干部、党管人才)</p></div>
+                    </div>
+                     <div class="example-box">
+                        <p class="font-medium">【岗位设置习题】1.【多选】《事业单位岗位设置管理试行办法》规定,国家对事业单位岗位设置实行( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 宏观调控</li><li>B. 分类指导</li><li>C. 分步推进</li><li>D. 分级管理</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：A, B, D</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【公开招聘习题】1. 下列关于事业单位招聘和聘用的表述,错误的是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1">
+                            <li>A. 招聘考试可以由事业单位自行组织,也可以由政府人事行政部门、事业单位上级主管部门统一组织</li>
+                            <li>B. 急需引进的高层次、短缺专业人才,具有高级专业技术职务或者博士学位的人员,可以采取直接考核的方式招聘</li>
+                            <li>C. 事业单位公开招聘的人员按照规定实行试用期制度,试用期包括在聘用合同期限内</li>
+                            <li>D. 对拟聘人员应当在适当范围进行公示,公示期一般为15~30日</li>
+                        </ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：D</strong> (公示期一般为7至15日)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【聘用合同习题】1.【多选】事业单位与受聘人员建立聘用关系应当依法订立聘用合同。聘用合同的类型主要包括()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 短期合同</li><li>B. 中期合同</li><li>C. 长期合同</li><li>D. 项目合同</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：A, B, C, D</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【考核和培训习题】1. 依据事业单位人事管理条例,事业单位人员考核不包括( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 平时考核</li><li>B. 年度考核</li><li>C. 聘期考核</li><li>D. 离任考核</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：D</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【奖励和处分习题】1. 根据相关规定,事业单位工作人员的开除处分,由事业单位主管部门决定,应当报()备案。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 同级事业单位人事综合管理部门</li><li>B. 上级主管部门</li><li>C. 单位党支部</li><li>D. 市级人民政府</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：A</strong></p></div>
+                    </div>
+                     <div class="example-box">
+                        <p class="font-medium">【人事争议处理习题】1. 下列关于事业单位工作人员申诉的说法,正确的是( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1">
+                            <li>A. 申诉期间不停止人事处理的执行</li>
+                            <li>B. 申诉必须由事业单位工作人员本人申请</li>
+                            <li>C. 事业单位工作人员对涉及本人的人事处理不服的,可以直接提起诉讼</li>
+                            <li>D. 事业单位工作人员对人事处理不服提起申诉的,由上级主管部门管辖</li>
+                        </ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：A</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【回避习题】1.【判断】事业单位工作人员岗位回避要求岗位等级不同的由岗位等级较高的一方回避。( )</p>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：错误</strong> (一般由岗位等级较低的一方回避)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【法律责任习题】1.【多选】关于事业单位管理及事业单位人员管理,下列说法正确的是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1">
+                            <li>A. 对备案的事业单位,登记管理机关应当自收到备案文件之日起30日内发给《事业单位法人证书》</li>
+                            <li>B. 事业单位应当自清算结束之日起30日内,向登记管理机关办理注销登记</li>
+                            <li>C. 事业单位工作人员1年内累计旷工超过30个工作日的,事业单位可以解除聘用合同</li>
+                            <li>D. 事业单位工作人员提前30日书面通知事业单位,可以解除聘用合同</li>
+                        </ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：A, C, D</strong> (B错误, 应为15日内)</p></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Function to toggle visibility of explanation for exercises
+        function toggleExplanation(button) {
+            const explanationDiv = button.nextElementSibling;
+            if (explanationDiv.style.display === 'none' || explanationDiv.style.display === '') {
+                explanationDiv.style.display = 'block';
+                button.textContent = '隐藏答案与解析';
+            } else {
+                explanationDiv.style.display = 'none';
+                button.textContent = '显示答案与解析';
+            }
+        }
+
+        const mainContentSections = document.querySelectorAll('main > section.content-section');
+        const allSidebarLinks = document.querySelectorAll('aside nav a.sidebar-link');
+        const bodyEl = document.body;
+        const menuButton = document.getElementById('menu-button');
+        
+        function showSection(sectionIdToShow) {
+            mainContentSections.forEach(section => {
+                section.classList.toggle('active', section.id === sectionIdToShow);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.innerWidth >= 768) { 
+                bodyEl.classList.add('sidebar-visible');
+                bodyEl.classList.remove('sidebar-globally-hidden');
+            } else {
+                bodyEl.classList.remove('sidebar-visible');
+                bodyEl.classList.add('sidebar-globally-hidden'); 
+            }
+
+            const hash = window.location.hash.substring(1);
+            let sectionToActivate = 'introduction'; 
+            let specificElementToScrollTo = null;
+
+            if (hash) {
+                const targetElementByHash = document.getElementById(hash);
+                if (targetElementByHash && targetElementByHash.classList.contains('content-section')) {
+                    sectionToActivate = hash; 
+                    specificElementToScrollTo = targetElementByHash;
+                } else if (targetElementByHash) { 
+                    const parentSection = targetElementByHash.closest('section.content-section');
+                    if (parentSection) {
+                        sectionToActivate = parentSection.id;
+                        specificElementToScrollTo = targetElementByHash;
+                    }
+                }
+            }
+            
+            showSection(sectionToActivate);
+
+            allSidebarLinks.forEach(link => {
+                const linkHrefId = link.getAttribute('href').substring(1);
+                const isActive = linkHrefId === sectionToActivate || linkHrefId === hash;
+                link.classList.toggle('active', isActive);
+            });
+            
+            if (specificElementToScrollTo) {
+                if (specificElementToScrollTo.tagName === 'SUMMARY') {
+                    specificElementToScrollTo.parentElement.open = true;
+                } else if (specificElementToScrollTo.tagName === 'DETAILS' && !specificElementToScrollTo.open) {
+                    // specificElementToScrollTo.open = true; 
+                }
+                setTimeout(() => { 
+                    specificElementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            } else if (document.getElementById(sectionToActivate)) { 
+                 setTimeout(() => {
+                    document.getElementById(sectionToActivate).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        });
+
+        allSidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                
+                let targetId = this.getAttribute('href').substring(1);
+                let sectionToDisplayId = targetId; 
+                const targetElement = document.getElementById(targetId);
+                
+                allSidebarLinks.forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+
+                showSection(sectionToDisplayId);
+                window.location.hash = targetId; 
+
+                if (targetElement) {
+                     setTimeout(() => { 
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 50); 
+                }
+                
+                if (window.innerWidth < 768 && bodyEl.classList.contains('sidebar-visible')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                     bodyEl.classList.add('sidebar-globally-hidden');
+                }
+            });
+        });
+        
+        menuButton.addEventListener('click', () => {
+            bodyEl.classList.toggle('sidebar-globally-hidden');
+            bodyEl.classList.toggle('sidebar-visible', !bodyEl.classList.contains('sidebar-globally-hidden'));
+        });
+        
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) { 
+                if (!bodyEl.classList.contains('sidebar-globally-hidden')) { 
+                    bodyEl.classList.add('sidebar-visible');
+                } else { 
+                    bodyEl.classList.remove('sidebar-visible');
+                }
+            } else { 
+                if (bodyEl.classList.contains('sidebar-globally-hidden')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                }
+            }
+        });
+
+        document.querySelectorAll('details > summary').forEach(summary => {
+            const marker = summary.querySelector('.details-marker');
+            const detailsElement = summary.parentElement;
+            
+            if (marker) { 
+                 marker.style.transform = detailsElement.open ? 'rotate(90deg)' : 'rotate(0deg)';
+            }
+
+            detailsElement.addEventListener('toggle', function() {
+                if (marker) {
+                    marker.style.transform = this.open ? 'rotate(90deg)' : 'rotate(0deg)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

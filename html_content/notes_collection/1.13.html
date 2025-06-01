@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刑法知识学习网页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: padding-left 0.3s ease-in-out;
+        }
+        .content-section {
+            scroll-margin-top: 70px; 
+            display: none; 
+        }
+        .content-section.active {
+            display: block;
+        }
+        details > summary { 
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            background-color: #065f46; 
+            color: white;
+            border-radius: 0.375rem; 
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            list-style: none; 
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        details > summary::-webkit-details-marker {
+            display: none; 
+        }
+        details > summary:hover {
+            background-color: #047857; 
+        }
+        details[open] > summary {
+            background-color: #047857; 
+            border-radius: 0.375rem 0.375rem 0 0;
+        }
+        details > div.p-4 { 
+             border: 1px solid #047857; 
+             border-top: none;
+             border-radius: 0 0 0.375rem 0.375rem;
+             background-color: #f0fdfa; 
+        }
+        .key-point {
+            background-color: #d1fae5; 
+            border-left: 4px solid #10b981; 
+            color: #047857; 
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0 0.375rem 0.375rem 0; 
+        }
+        .example-box { 
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.5rem; 
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); 
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .explanation {
+            display: none;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background-color: #ecfdf5; 
+            border: 1px solid #a7f3d0; 
+            border-radius: 0.375rem; 
+        }
+        .btn {
+            background-color: #10b981; 
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; 
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #059669; 
+        }
+        
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+            height: calc(100vh - 4rem); 
+            transform: translateX(-100%); 
+            width: 22rem; 
+        }
+        main {
+            transition: margin-left 0.3s ease-in-out;
+            width: 100%; 
+            margin-left: 0;
+        }
+
+        body.sidebar-visible #sidebar {
+            transform: translateX(0);
+        }
+        body.sidebar-visible main {
+           margin-left: 22rem; 
+        }
+         @media (min-width: 768px) { 
+            body:not(.sidebar-globally-hidden) #sidebar {
+                transform: translateX(0);
+            }
+            body:not(.sidebar-globally-hidden) main {
+                margin-left: 22rem; 
+            }
+            body.sidebar-globally-hidden #sidebar {
+                transform: translateX(-100%);
+            }
+            body.sidebar-globally-hidden main {
+                margin-left: 0;
+            }
+        }
+
+        .sidebar-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            color: #d1fae5; 
+            text-decoration: none;
+            border-radius: 0.375rem; 
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: 600; 
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #10b981; 
+            color: white;
+        }
+         .details-marker { 
+            font-size: 0.8em;
+            margin-left: 0.5rem;
+            transition: transform 0.2s ease-in-out;
+        }
+        details[open] > summary > .details-marker {
+            transform: rotate(90deg);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        th, td {
+            border: 1px solid #a1a1aa; 
+            padding: 0.5rem;
+            text-align: left;
+        }
+        th {
+            background-color: #e4e4e7; 
+            font-weight: 600;
+        }
+        .image-placeholder {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 500px; 
+            min-height: 150px; 
+            margin: 1rem auto;
+            padding: 1rem;
+            background-color: #f4f4f5; 
+            border: 1px dashed #a1a1aa; 
+            border-radius: 0.375rem;
+            text-align: center;
+            color: #71717a; 
+        }
+    </style>
+</head>
+<body class="bg-slate-100">
+    <header class="bg-emerald-700 text-white p-4 fixed w-full top-0 z-50 shadow-md flex justify-between items-center">
+        <button id="menu-button" class="p-2 rounded-md text-emerald-200 hover:text-white hover:bg-emerald-600">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </button>
+        <h1 class="text-xl font-bold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">刑法知识学习网页</h1>
+    </header>
+
+    <div class="flex pt-16">
+        <aside id="sidebar" class="bg-emerald-800 text-white p-4 space-y-1 fixed top-16 left-0 z-40 overflow-y-auto">
+            <nav>
+                <a href="#introduction_ch3_criminal_law" class="sidebar-link">刑法概览</a>
+                <a href="#section1_criminal_law_overview" class="sidebar-link">第一节 刑法概述</a>
+                <a href="#section2_crime_overview" class="sidebar-link">第二节 犯罪概述</a>
+                <a href="#section3_penalty_overview" class="sidebar-link">第三节 刑罚概述</a>
+                <a href="#section4_criminal_law_specific_provisions" class="sidebar-link">第四节 刑法分则 (重点罪名)</a>
+                <a href="#exercises_ch3_criminal_law" class="sidebar-link">相关习题</a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-6">
+            <section id="introduction_ch3_criminal_law" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第三章 刑法概览</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="mb-3 text-gray-700 leading-relaxed">
+                        本章主要介绍刑法的基本概念、原则、适用范围，犯罪的构成要件、故意犯罪的停止形态、共同犯罪，以及刑罚的种类和具体应用，最后列举刑法分则中的重点罪名。
+                        （注意：本内容基于2020年视频课程时的刑法，刑法修正案(十一)的相关更新已在文档末尾补充。）
+                    </p>
+                    <div class="key-point">
+                        <h4 class="font-semibold text-lg mb-2">核心内容：</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>刑法的概念及基本原则（罪刑法定、刑法面前人人平等、罪责刑相适应）。</li>
+                            <li>刑法的空间效力（属地、属人、保护、普遍管辖）和时间效力（从旧兼从轻）。</li>
+                            <li>犯罪的概念、特征及构成四要件（主体、主观方面、客体、客观方面）。</li>
+                            <li>正当防卫与紧急避险的构成要件及法律后果。</li>
+                            <li>故意犯罪的停止形态（预备、未遂、中止、既遂）。</li>
+                            <li>共同犯罪的含义、种类及刑事责任。</li>
+                            <li>刑罚的种类（主刑、附加刑）及其具体内容。</li>
+                            <li>刑罚的具体应用（累犯、自首、立功、缓刑、减刑、假释、追诉时效）。</li>
+                            <li>刑法分则中十类犯罪及重点罪名概述，包括刑法修正案(十一)增补罪名。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section1_criminal_law_overview" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第一节 刑法概述</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、刑法的概念 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>刑法是规定犯罪、刑事责任和刑罚的法律。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、我国刑法的基本原则 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>(一) 罪刑法定原则:</strong> 法律明文规定为犯罪行为的,依照法律定罪处刑;法律没有明文规定为犯罪行为的,不得定罪处刑。“法无明文规定不为罪”,“法无明文规定不处罚”。</p>
+                            <p><strong>(二) 刑法面前人人平等原则:</strong> 对合法权益平等保护；对事实犯罪的任何人依法认定；对任何犯罪人根据事实法律量刑；对被判刑罚的任何人依法执行。</p>
+                            <p><strong>(三) 罪责刑相适应原则:</strong> 刑罚的轻重,应当与犯罪分子所犯罪行和承担的刑事责任相适应。重罪重罚、轻罪轻罚、罚刑相称、罚当其罪。</p>
+                        </div>
+                    </details>
+                     <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、我国刑法的适用范围 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 刑法的空间效力 (以属地管辖为主,兼采其他原则):</p>
+                            <p class="ml-4"><strong>1. 属地管辖原则:</strong> 在我国领域内犯罪的适用本法 (例外: 外交特权和豁免权)。我国船舶或航空器内犯罪也适用。行为或结果有一项在我国领域内即认为在我国领域内犯罪。</p>
+                            <p class="ml-4"><strong>2. 属人管辖原则:</strong> 我国公民在我国领域外犯本法规定之罪的适用本法 (最高刑3年以下有期徒刑可不追究)。国家工作人员和军人在领域外犯罪适用本法。</p>
+                            <p class="ml-4"><strong>3. 保护管辖原则:</strong> 外国人在我国领域外对我国国家或公民犯罪,按我国刑法最低刑为3年以上有期徒刑,且按犯罪地法律也受处罚的,适用本法。</p>
+                            <p class="ml-4"><strong>4. 普遍管辖原则:</strong> 对国际条约规定的国际犯罪 (毒品、劫机、恐怖主义等),我国在承担条约义务范围行使管辖权时适用本法。</p>
+                            <p class="font-semibold mt-2">(二) 刑法的时间效力:</p>
+                            <p class="ml-4"><strong>1. 溯及力:</strong> 刑法生效后,对生效前未经审判或判决未确定的行为是否适用。我国采从旧兼从轻原则。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section2_crime_overview" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第二节 犯罪概述</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、犯罪的概念、特征 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>犯罪是指违反刑法的规定,危害社会的,依法应当受到刑法惩罚的行为。三特征: 严重的社会危害性 (本质特征)、刑事违法性、应受惩罚性。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、犯罪构成 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>四要件: 犯罪主体、犯罪主观方面、犯罪客体、犯罪客观方面。</p>
+                            <p class="font-semibold">(一) 犯罪主体:</p>
+                            <p class="ml-4">实施危害社会行为,依法应负刑事责任的自然人或单位。</p>
+                            <p class="ml-4"><strong>1. 自然人:</strong></p>
+                            <p class="ml-8">(1) 刑事责任年龄: 已满16周岁负全责。已满14不满16,犯故意杀人、故意伤害致重伤/死亡、强奸、抢劫、贩毒、放火、爆炸、投放危险物质罪的负刑责。已满12不满14,犯故意杀人、故意伤害罪,致人死亡或以特别残忍手段致重伤造成严重残疾,情节恶劣,经最高检核准追诉的负刑责。不满18周岁从轻或减轻。满75周岁不适用死刑 (特别残忍手段致死除外),故意犯罪可从轻减轻,过失犯罪应从轻减轻。</p>
+                            <p class="ml-8">(2) 精神病人: 不能辨认或控制行为时不负刑责 (可强制医疗)。间歇性精神病人在精神正常时犯罪负刑责。尚未完全丧失辨认或控制能力的精神病人犯罪负刑责 (可从轻减轻)。</p>
+                            <p class="ml-8">(3) 其他: 醉酒人犯罪负刑责。又聋又哑或盲人犯罪可从轻、减轻或免除处罚。</p>
+                            <p class="ml-4"><strong>2. 单位:</strong> 公司、企业、事业单位、机关、团体。特征: 单位意志支配,为本单位谋非法利益故意。处罚: 双罚制为主 (罚单位金,罚主管/直接责任人刑), 单罚制为辅。</p>
+                            <p class="font-semibold mt-2">(二) 犯罪主观方面:</p>
+                            <p class="ml-4">行为人对自己行为结果所持心理态度。</p>
+                            <p class="ml-4"><strong>1. 故意:</strong> (1)直接故意 (明知+希望); (2)间接故意 (明知+放任)。</p>
+                            <p class="ml-4"><strong>2. 过失:</strong> (1)疏忽大意的过失 (应预见未预见); (2)过于自信的过失 (已预见轻信能避免)。</p>
+                            <p class="font-semibold mt-2">(三) 犯罪客体:</p>
+                            <p class="ml-4">为犯罪行为所侵害,而为我国刑法所保护的社会主义社会关系。</p>
+                            <p class="font-semibold mt-2">(四) 犯罪客观方面:</p>
+                            <p class="ml-4">说明侵犯客体行为及其危害结果的诸客观事实特征。</p>
+                            <p class="ml-4"><strong>1. 危害行为:</strong> 特征 (有体性、有意性、危害性)。分类: 作为 (不当为而为之); 不作为 (当为而不为,义务来源:法律规定、先行行为、职务业务)。</p>
+                            <p class="ml-4"><strong>2. 危害结果:</strong> 对社会关系造成的具体侵害事实。</p>
+                            <p class="ml-4"><strong>3. 刑法上的因果关系:</strong> 结果与行为有必然的客观的法律联系。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、正当防卫与紧急避险 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 正当防卫:</p>
+                            <p class="ml-4"><strong>1. 概念:</strong> 为保护国家、公共利益、他人或本人合法权利免受正在进行的不法侵害,对不法侵害者造成一定损害的自卫行为。</p>
+                            <p class="ml-4"><strong>2. 构成要件:</strong> ①起因:现实不法侵害; ②时间:不法侵害正在进行; ③主观:防卫意图; ④对象:针对不法侵害者本人; ⑤限度:未超必要限度。</p>
+                            <p class="ml-4"><strong>3. 防卫过当:</strong> 明显超必要限度造成重大损害,应负刑责但应减轻或免除处罚。</p>
+                            <p class="ml-4"><strong>4. 特殊防卫 (无限防卫):</strong> 对正在进行行凶、杀人、抢劫、强奸、绑架等严重危及人身安全暴力犯罪,造成不法侵害者伤亡,不属防卫过当,不负刑责。</p>
+                            <p class="font-semibold mt-2">(二) 紧急避险:</p>
+                            <p class="ml-4"><strong>1. 概念:</strong> 合法权益遭危险无法用其他措施避免时,不得已损害另一较小权益保护较大权益的行为。</p>
+                            <p class="ml-4"><strong>2. 构成要件:</strong> ①起因:合法权益面临现实危险; ②时间:危险正在发生; ③对象:无辜第三者权益; ④主观:避险意图; ⑤限度:损害利益 < 所保全利益。</p>
+                            <p class="ml-4"><strong>3. 避险过当:</strong> 超必要限度造成不应有损害,应负刑责但应减轻或免除处罚。</p>
+                            <p class="ml-4"><strong>4. 不适用人群:</strong> 职务上、业务上负有特定责任的人。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、故意犯罪的停止形态 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <div class="image-placeholder"><p>[犯罪停止形态时间轴图占位符]</p></div>
+                            <p class="font-semibold">(一) 犯罪预备:</p>
+                            <p class="ml-4">为实施犯罪,准备工具、制造条件,但因意志以外原因未能着手实行。可比照既遂犯从轻、减轻或免除处罚。</p>
+                            <p class="font-semibold mt-2">(二) 犯罪未遂:</p>
+                            <p class="ml-4">已着手实行犯罪,因犯罪分子意志以外原因未得逞。可比照既遂犯从轻或减轻处罚。</p>
+                            <p class="font-semibold mt-2">(三) 犯罪中止:</p>
+                            <p class="ml-4">犯罪过程中,自动放弃犯罪或自动有效防止犯罪结果发生。没有造成损害的应免除处罚；造成损害的应减轻处罚。</p>
+                            <p class="font-semibold mt-2">(四) 犯罪既遂:</p>
+                            <p class="ml-4">行为已齐备刑法分则对某罪规定的全部构成要件。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">五、共同犯罪 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 含义:</p>
+                            <p class="ml-4">二人以上共同故意犯罪。要求: 二人以上 (自然人/单位), 共同意思联络, 主观为故意。</p>
+                            <p class="font-semibold mt-2">(二) 种类:</p>
+                            <p class="ml-4"><strong>1. 主犯:</strong> 组织、领导犯罪集团或在共同犯罪中起主要作用。处罚: 组织领导犯罪集团首要分子按集团所犯全部罪行处罚；其他主犯按其所参与或组织指挥的全部犯罪处罚。</p>
+                            <p class="ml-4"><strong>2. 从犯:</strong> 起次要或辅助作用。应从轻、减轻或免除处罚。</p>
+                            <p class="ml-4"><strong>3. 胁从犯:</strong> 被胁迫参加犯罪。应按犯罪情节减轻或免除处罚。</p>
+                            <p class="ml-4"><strong>4. 教唆犯:</strong> 教唆他人犯罪。处罚: 如起主要作用按主犯罚,次要按从犯罚。被教唆人未犯被教唆罪,可从轻减轻处罚。教唆不满18周岁人犯罪从重处罚。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section3_penalty_overview" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第三节 刑罚概述</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、刑罚的概念 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>刑法规定的由国家审判机关依法对犯罪的人适用的限制或剥夺其一定权益的强制性法律制裁方法。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、刑罚的种类 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>分主刑和附加刑。</p>
+                            <p class="font-semibold">1. 主刑 (只能独立适用):</p>
+                            <p class="ml-4">管制、拘役、有期徒刑、无期徒刑、死刑。</p>
+                            <table class="min-w-full divide-y divide-gray-200 my-2">
+                                <thead class="bg-gray-50"><tr><th>刑种</th><th>性质</th><th>是否关押</th><th>待遇/限制</th><th>期限</th><th>折抵</th></tr></thead>
+                                <tbody>
+                                    <tr><td>管制</td><td>限制自由,社区矫正</td><td>否</td><td>同工同酬,遵守义务</td><td>3个月-2年(并罚不超3年)</td><td>1:2</td></tr>
+                                    <tr><td>拘役</td><td>剥夺自由</td><td>就近关押(看守所)</td><td>可酌发报酬,每月可回家1-2天</td><td>1个月-6个月(并罚不超1年)</td><td>1:1</td></tr>
+                                    <tr><td>有期徒刑</td><td>剥夺自由</td><td>关押(监狱)</td><td>强制劳动改造</td><td>6个月-15年(并罚20年/25年)</td><td>1:1</td></tr>
+                                    <tr><td>无期徒刑</td><td>剥夺自由</td><td>关押(监狱)</td><td>强制劳动改造</td><td>终身</td><td>无</td></tr>
+                                    <tr><td>死刑</td><td>剥夺生命</td><td>关押(法院执行)</td><td>死缓2年/立即执行</td><td>-</td><td>无</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="ml-4"><strong>死刑:</strong> 分立即执行和死缓两年。不适用对象: ①犯罪时不满18周岁；②审判时怀孕妇女；③审判时已满75周岁 (特别残忍手段致死除外)。核准: 立即执行需最高法核准 (最高法判决除外)；死缓可由高法核准。</p>
+                            <p class="font-semibold mt-2">2. 附加刑 (可独立或附加适用):</p>
+                            <p class="ml-4">罚金、剥夺政治权利、没收财产、驱逐出境 (只适用外国人)。</p>
+                            <p class="ml-4"><strong>剥夺政治权利:</strong> 剥夺选举权与被选举权；言论出版集会结社游行示威自由；任国家机关职务权；任国企等领导职务权。适用对象: 危害国家安全罪犯,严重破坏社会秩序罪犯。死刑、无期徒刑必须剥夺。期限: 附加于管制与管制期同；附加于拘役、有期徒刑为1-5年；附加于死刑、无期为终身 (减刑后改为3-10年)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、刑罚的具体应用 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 累犯 (一般累犯与特殊累犯):</p>
+                            <p class="ml-4"><strong>1. 一般累犯:</strong> ①前后罪均故意；②犯前罪时满18周岁；③前罪判有期徒刑以上,后罪应判有期徒刑以上；④后罪发生在前罪刑罚执行完毕或赦免后5年内。</p>
+                            <p class="ml-4"><strong>2. 特殊累犯:</strong> ①前后罪均为危害国家安全罪、恐怖活动犯罪、黑社会性质组织犯罪；②刑种轻重不限；③后罪发生在前罪刑罚执行完毕或赦免后任何时候。</p>
+                            <p class="ml-4"><strong>3. 法律后果:</strong> 从重处罚,不得缓刑、假释。</p>
+                            <p class="font-semibold mt-2">(二) 自首 (一般自首与特别自首):</p>
+                            <p class="ml-4"><strong>1. 一般自首:</strong> 犯罪后自动投案,如实供述罪行。</p>
+                            <p class="ml-4"><strong>2. 特别自首 (准自首):</strong> 被采取强制措施的罪犯等,如实供述司法机关尚未掌握的本人其他罪行。</p>
+                            <p class="ml-4"><strong>3. 法律后果:</strong> 可从轻或减轻处罚；犯罪较轻可免除处罚。</p>
+                            <p class="font-semibold mt-2">(三) 立功: (PDF中未详述，通常指揭发他人犯罪行为查证属实等)</p>
+                            <p class="font-semibold mt-2">(四) 缓刑:</p>
+                            <p class="ml-4">对原判刑罚附条件不执行。构成要件: ①被判拘役或3年以下有期徒刑；②犯罪情节较轻,有悔罪表现,无再犯危险,对社区无重大不良影响 (不满18岁、孕妇、满75岁应宣告缓刑)；③非累犯和犯罪集团首要分子。考验期限: 拘役 (原判刑期以上1年以下,不少于2个月)；有期徒刑 (原判刑期以上5年以下,不少于1年)。依法实行社区矫正。</p>
+                            <p class="font-semibold mt-2">(五) 减刑:</p>
+                            <p class="ml-4">对被判管制、拘役、有期徒刑、无期徒刑罪犯,执行期间认真遵守监规,接受改造,确有悔改或立功表现,适当减轻原判。减刑后实际执行刑期有最低限制。</p>
+                            <p class="font-semibold mt-2">(六) 假释:</p>
+                            <p class="ml-4">对被判有期徒刑、无期徒刑部分罪犯,执行一定刑罚后,确有悔改表现,不致再危害社会,附条件提前释放。条件: 有期徒刑执行原判1/2以上；无期徒刑实际执行13年以上。不得假释情形: 累犯及因故意杀人、强奸等严重暴力犯罪被判10年以上/无期徒刑者。考验期限: 有期徒刑为未执行完毕刑期；无期徒刑为10年。依法实行社区矫正。</p>
+                        </div>
+                    </details>
+                     <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、追诉时效 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 概念:</strong> 刑法规定的,追究犯罪人刑事责任的有效期限。</p>
+                            <p><strong>2. 期限:</strong> 最高刑不满5年 -> 过5年；5-10年 -> 过10年；10年以上 -> 过15年；无期、死刑 -> 过20年 (20年后认为须追诉报最高检核准)。</p>
+                            <p><strong>3. 计算:</strong> 一般从犯罪之日起算；连续或继续犯罪从行为终了之日起算。</p>
+                            <p><strong>4. 延长:</strong> 立案侦查或受理案件后逃避侦查审判的,不受追诉期限限制。被害人在追诉期内控告应立案未立案的,不受限。</p>
+                            <p><strong>5. 中断:</strong> 追诉期内又犯罪,前罪追诉期从犯后罪之日起重新计算。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section4_criminal_law_specific_provisions" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第四节 刑法分则 (重点罪名)</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p>我国刑法分则主要根据犯罪行为所侵犯的同类客体进行分类,将各种具体的犯罪分10大类。</p>
+                    <p class="font-semibold">重点罪名概述 (详见PDF原文，此处列举部分类别和新增罪名):</p>
+                    <ul class="list-disc list-inside ml-4">
+                        <li><strong>危害国家安全罪:</strong> 背叛国家罪, 分裂国家罪等。</li>
+                        <li><strong>危害公共安全罪:</strong> 危险驾驶罪, 交通肇事罪, 投放危险物质罪, 重大责任事故罪等。</li>
+                        <li><strong>破坏社会主义市场经济秩序罪:</strong> 集资诈骗罪, 非法吸收公众存款罪, 信用卡诈骗罪, 保险诈骗罪等。</li>
+                        <li><strong>侵犯公民人身权利、民主权利罪:</strong> 故意杀人罪, 故意伤害罪, 强奸罪, 强制猥亵罪, 非法拘禁罪, 绑架罪, 拐卖妇女、儿童罪, 刑讯逼供罪, 虐待罪, 遗弃罪等。</li>
+                        <li><strong>侵犯财产罪:</strong> 抢劫罪, 盗窃罪, 抢夺罪, 诈骗罪, 敲诈勒索罪, 侵占罪, 职务侵占罪, 挪用资金罪等。</li>
+                        <li><strong>贪污贿赂罪:</strong> 贪污罪, 挪用公款罪, 受贿罪, 行贿罪, 巨额财产来源不明罪等。</li>
+                    </ul>
+                    <p class="font-semibold mt-2">刑法修正案(十一)增补罪名:</p>
+                     <ul class="list-disc list-inside ml-4">
+                        <li>妨害安全驾驶罪</li>
+                        <li>袭警罪</li>
+                        <li>冒名顶替罪</li>
+                        <li>高空抛物罪</li>
+                        <li>催收非法债务罪</li>
+                        <li>侵害英雄烈士名誉、荣誉罪</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="exercises_ch3_criminal_law" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">相关习题 (刑法)</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="example-box">
+                        <p class="font-medium">1. 根据我国刑法的规定,一个A国人在一列行驶于我国境内的B国列车上对C国公民实施故意杀人的行为,应当适用()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. A国刑法</li><li>B. B国刑法</li><li>C. C国刑法</li><li>D. 我国刑法</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong> (属地管辖)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">2. 甲与乙共谋枪杀丙,两人先后开枪,甲未击中丙,乙击中丙,造成丙死亡,甲构成()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 故意杀人未遂</li><li>B. 故意杀人既遂</li><li>C. 犯罪终止</li><li>D. 犯罪预备</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong> (共同犯罪，一人既遂则整体既遂)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">3. 楚某2008年3月5日犯甲罪,追诉期限应为10年,2013年3月5日又犯乙罪,乙罪的追诉期限也是10年。这时甲罪的追诉期限应()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 从犯乙罪之日起计算,共计10年...</li><li>B. 从犯乙罪之日起计算,共计15年...</li><li>C. 从犯乙罪之日起计算,还有5年</li><li>D. 从犯乙罪之日起计算,还是10年</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong> (追诉时效中断，从犯后罪之日起重新计算前罪的追诉期限)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">11. 甲因盗窃被公安机关逮捕,在审讯期间,甲主动交代出曾实施过抢劫犯罪。甲交代抢劫犯罪的行为属于( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 自首</li><li>B. 洗白</li><li>C. 立功</li><li>D. 悔过</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong> (属于特别自首或准自首)</p></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function toggleExplanation(button) {
+            const explanationDiv = button.nextElementSibling;
+            if (explanationDiv.style.display === 'none' || explanationDiv.style.display === '') {
+                explanationDiv.style.display = 'block';
+                button.textContent = '隐藏答案与解析';
+            } else {
+                explanationDiv.style.display = 'none';
+                button.textContent = '显示答案与解析';
+            }
+        }
+
+        const mainContentSections = document.querySelectorAll('main > section.content-section');
+        const allSidebarLinks = document.querySelectorAll('aside nav a.sidebar-link');
+        const bodyEl = document.body;
+        const menuButton = document.getElementById('menu-button');
+        
+        function showSection(sectionIdToShow) {
+            mainContentSections.forEach(section => {
+                section.classList.toggle('active', section.id === sectionIdToShow);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.innerWidth >= 768) { 
+                bodyEl.classList.add('sidebar-visible');
+                bodyEl.classList.remove('sidebar-globally-hidden');
+            } else {
+                bodyEl.classList.remove('sidebar-visible');
+                bodyEl.classList.add('sidebar-globally-hidden'); 
+            }
+
+            const hash = window.location.hash.substring(1);
+            let sectionToActivate = 'introduction_ch3_criminal_law'; 
+            let specificElementToScrollTo = null;
+
+            if (hash) {
+                const targetElementByHash = document.getElementById(hash);
+                if (targetElementByHash && targetElementByHash.classList.contains('content-section')) {
+                    sectionToActivate = hash; 
+                    specificElementToScrollTo = targetElementByHash;
+                } else if (targetElementByHash) { 
+                    const parentSection = targetElementByHash.closest('section.content-section');
+                    if (parentSection) {
+                        sectionToActivate = parentSection.id;
+                        specificElementToScrollTo = targetElementByHash;
+                    }
+                }
+            }
+            
+            showSection(sectionToActivate);
+
+            allSidebarLinks.forEach(link => {
+                const linkHrefId = link.getAttribute('href').substring(1);
+                const isActive = linkHrefId === sectionToActivate || linkHrefId === hash;
+                link.classList.toggle('active', isActive);
+            });
+            
+            if (specificElementToScrollTo) {
+                 if (specificElementToScrollTo.tagName === 'SUMMARY') {
+                    specificElementToScrollTo.parentElement.open = true;
+                } else if (specificElementToScrollTo.tagName === 'DETAILS' && !specificElementToScrollTo.open) {
+                    // specificElementToScrollTo.open = true; 
+                }
+                setTimeout(() => { 
+                    specificElementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            } else if (document.getElementById(sectionToActivate)) { 
+                 setTimeout(() => {
+                    document.getElementById(sectionToActivate).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        });
+
+        allSidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                
+                let targetId = this.getAttribute('href').substring(1);
+                let sectionToDisplayId = targetId; 
+                const targetElement = document.getElementById(targetId);
+                
+                allSidebarLinks.forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+
+                showSection(sectionToDisplayId);
+                window.location.hash = targetId; 
+
+                if (targetElement) {
+                     setTimeout(() => { 
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 50); 
+                }
+                
+                if (window.innerWidth < 768 && bodyEl.classList.contains('sidebar-visible')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                     bodyEl.classList.add('sidebar-globally-hidden');
+                }
+            });
+        });
+        
+        menuButton.addEventListener('click', () => {
+            bodyEl.classList.toggle('sidebar-globally-hidden');
+            bodyEl.classList.toggle('sidebar-visible', !bodyEl.classList.contains('sidebar-globally-hidden'));
+        });
+        
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) { 
+                if (!bodyEl.classList.contains('sidebar-globally-hidden')) { 
+                    bodyEl.classList.add('sidebar-visible');
+                } else { 
+                    bodyEl.classList.remove('sidebar-visible');
+                }
+            } else { 
+                if (bodyEl.classList.contains('sidebar-globally-hidden')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                }
+            }
+        });
+
+        document.querySelectorAll('details > summary').forEach(summary => {
+            const marker = summary.querySelector('.details-marker');
+            const detailsElement = summary.parentElement;
+            
+            if (marker) { 
+                 marker.style.transform = detailsElement.open ? 'rotate(90deg)' : 'rotate(0deg)';
+            }
+
+            detailsElement.addEventListener('toggle', function() {
+                if (marker) {
+                    marker.style.transform = this.open ? 'rotate(90deg)' : 'rotate(0deg)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

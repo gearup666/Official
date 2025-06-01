@@ -3,459 +3,643 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>毛泽东思想学习 - 第三章</title>
+    <title>毛泽东思想学习网页</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Noto Sans SC', 'Inter', sans-serif;
-            line-height: 1.7;
-            color: #4A5568; /* Tailwind gray-700 */
+            font-family: 'Inter', sans-serif;
+            transition: padding-left 0.3s ease-in-out;
         }
-        .tab-content {
-            display: none;
+        .content-section {
+            scroll-margin-top: 70px; 
+            display: none; 
         }
-        .tab-content.active {
+        .content-section.active {
             display: block;
         }
-        .accordion-content {
-            display: none;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-in-out, padding 0.3s ease-in-out;
-            padding: 0 1.5rem; 
-        }
-        .accordion-item.active .accordion-content {
-            display: block;
-            max-height: 5000px; /* Increased max-height for potentially very long content */
-            padding: 1.5rem; 
-        }
-        .accordion-title {
+        details > summary { 
             cursor: pointer;
+            padding: 0.75rem 1rem;
+            background-color: #065f46; 
+            color: white;
+            border-radius: 0.375rem; 
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            list-style: none; 
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
         }
-        .tab-button.active {
-            border-color: #14B8A6; /* Tailwind teal-500 */
-            color: #0D9488; /* Tailwind teal-600 */
-            background-color: #F0FDFA; /* Tailwind teal-50 */
+        details > summary::-webkit-details-marker {
+            display: none; 
         }
-        .tab-button {
-            transition: all 0.3s ease;
+        details > summary:hover {
+            background-color: #047857; 
         }
-        .placeholder-block {
-            background-color: #ECFDF5; /* Tailwind green-50 */
-            border: 1px dashed #A7F3D0; /* Tailwind green-200 */
-            color: #065F46; /* Tailwind green-800 */
-            text-align: center;
-            padding: 2rem 1rem; 
-            margin: 1rem 0; 
+        details[open] > summary {
+            background-color: #047857; 
+            border-radius: 0.375rem 0.375rem 0 0;
+        }
+        details > div.p-4 { 
+             border: 1px solid #047857; 
+             border-top: none;
+             border-radius: 0 0 0.375rem 0.375rem;
+             background-color: #f0fdfa; 
+        }
+        .key-point {
+            background-color: #d1fae5; 
+            border-left: 4px solid #10b981; 
+            color: #047857; 
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0 0.375rem 0.375rem 0; 
+        }
+        .example-box { 
+            background-color: white;
+            padding: 1rem;
             border-radius: 0.5rem; 
-            font-style: italic;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); 
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
         }
-        .concept-card {
-            background-color: #F8FAFC; /* Tailwind slate-50 */
-            border-left: 4px solid #2DD4BF; /* Tailwind teal-400 */
-            padding: 1rem; 
-            margin-bottom: 0.75rem; 
+        .explanation {
+            display: none;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background-color: #ecfdf5; 
+            border: 1px solid #a7f3d0; 
             border-radius: 0.375rem; 
         }
-        .concept-card strong {
-            color: #047857; /* Tailwind green-700 */
+        .highlight { 
+            background-color: #fef3c7; 
+            padding: 0.125rem 0.25rem; 
+            border-radius: 0.125rem; 
         }
-        .event-table th, .event-table td {
-            border: 1px solid #E5E7EB; /* Tailwind gray-200 */
-            padding: 0.75rem; /* p-3 */
+        .btn {
+            background-color: #10b981; 
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; 
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #059669; 
+        }
+        
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+            height: calc(100vh - 4rem); 
+            transform: translateX(-100%); 
+            width: 22rem; 
+        }
+        main {
+            transition: margin-left 0.3s ease-in-out;
+            width: 100%; 
+            margin-left: 0;
+        }
+
+        body.sidebar-visible #sidebar {
+            transform: translateX(0);
+        }
+        body.sidebar-visible main {
+           margin-left: 22rem; 
+        }
+         @media (min-width: 768px) { 
+            body:not(.sidebar-globally-hidden) #sidebar {
+                transform: translateX(0);
+            }
+            body:not(.sidebar-globally-hidden) main {
+                margin-left: 22rem; 
+            }
+            body.sidebar-globally-hidden #sidebar {
+                transform: translateX(-100%);
+            }
+            body.sidebar-globally-hidden main {
+                margin-left: 0;
+            }
+        }
+
+        .sidebar-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            color: #d1fae5; 
+            text-decoration: none;
+            border-radius: 0.375rem; 
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: 600; 
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #10b981; 
+            color: white;
+        }
+         .details-marker { 
+            font-size: 0.8em;
+            margin-left: 0.5rem;
+            transition: transform 0.2s ease-in-out;
+        }
+        details[open] > summary > .details-marker {
+            transform: rotate(90deg);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        th, td {
+            border: 1px solid #a1a1aa; 
+            padding: 0.5rem;
             text-align: left;
         }
-        .event-table th {
-            background-color: #D1FAE5; /* Tailwind green-100 */
-            color: #065F46; /* Tailwind green-800 */
+        th {
+            background-color: #e4e4e7; 
             font-weight: 600;
         }
-        .key-work {
-            background-color: #F0FDFA; /* Tailwind teal-50 */
-            padding: 0.5rem 1rem;
+        .image-placeholder {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 500px; 
+            min-height: 150px; 
+            margin: 1rem auto;
+            padding: 1rem;
+            background-color: #f4f4f5; 
+            border: 1px dashed #a1a1aa; 
             border-radius: 0.375rem;
-            margin-bottom: 0.5rem;
-            border-left: 3px solid #0D9488; /* Tailwind teal-600 */
-        }
-        .key-work-title {
-            font-weight: 500;
-            color: #0F766E; /* Tailwind teal-700 */
+            text-align: center;
+            color: #71717a; 
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-green-50 via-teal-50 to-cyan-50 p-4 md:p-8 min-h-screen">
-    <div class="container mx-auto bg-white p-6 md:p-8 rounded-xl shadow-2xl max-w-6xl">
-        <header class="text-center mb-10">
-            <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-green-500 pb-2">
-                第三章 毛泽东思想
-            </h1>
-            <p class="text-gray-500 text-lg">理论形成、核心内容与历史地位</p>
-        </header>
+<body class="bg-slate-100">
+    <header class="bg-emerald-700 text-white p-4 fixed w-full top-0 z-50 shadow-md flex justify-between items-center">
+        <button id="menu-button" class="p-2 rounded-md text-emerald-200 hover:text-white hover:bg-emerald-600">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </button>
+        <h1 class="text-xl font-bold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">毛泽东思想学习网页</h1>
+    </header>
 
-        <div class="mb-8 border-b border-gray-300">
-            <nav class="flex flex-wrap -mb-px" aria-label="Tabs">
-                <button class="tab-button text-base md:text-lg whitespace-nowrap py-3 px-3 md:py-4 md:px-5 border-b-2 font-medium border-transparent hover:text-teal-600 hover:border-teal-400 focus:outline-none rounded-t-md active" data-target="tabMaoFormation">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 7.586V6z" clip-rule="evenodd" /></svg>
-                    形成和发展
-                </button>
-                <button class="tab-button text-base md:text-lg whitespace-nowrap py-3 px-3 md:py-4 md:px-5 border-b-2 font-medium border-transparent hover:text-teal-600 hover:border-teal-400 focus:outline-none rounded-t-md" data-target="tabNewDemocracy">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd" /></svg>
-                    新民主主义革命理论
-                </button>
-                <button class="tab-button text-base md:text-lg whitespace-nowrap py-3 px-3 md:py-4 md:px-5 border-b-2 font-medium border-transparent hover:text-teal-600 hover:border-teal-400 focus:outline-none rounded-t-md" data-target="tabSocialistTransformation">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 001.414 1.414L9 9.414V12a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414l-3-3zM10 3a7 7 0 100 14 7 7 0 000-14z" clip-rule="evenodd" /></svg>
-                    社会主义改造理论
-                </button>
-                 <button class="tab-button text-base md:text-lg whitespace-nowrap py-3 px-3 md:py-4 md:px-5 border-b-2 font-medium border-transparent hover:text-teal-600 hover:border-teal-400 focus:outline-none rounded-t-md" data-target="tabSocialistConstruction">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" /><path d="M12 2.252A8.014 8.014 0 0117.748 12H12V2.252z" /></svg>
-                    社会主义建设理论
-                </button>
-                <button class="tab-button text-base md:text-lg whitespace-nowrap py-3 px-3 md:py-4 md:px-5 border-b-2 font-medium border-transparent hover:text-teal-600 hover:border-teal-400 focus:outline-none rounded-t-md" data-target="tabLivingSoul">
-                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 7a1 1 0 000 2h6a1 1 0 100-2H7zm1 4a1 1 0 11-2 0 1 1 0 012 0zm2 0a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 100-2h-2a1 1 0 100 2h2z" clip-rule="evenodd" /></svg>
-                    毛泽东思想的活的灵魂
-                </button>
+    <div class="flex pt-16">
+        <aside id="sidebar" class="bg-emerald-800 text-white p-4 space-y-1 fixed top-16 left-0 z-40 overflow-y-auto">
+            <nav>
+                <a href="#introduction_ch3" class="sidebar-link">毛泽东思想概览</a>
+                <a href="#section1_formation_development" class="sidebar-link">第一节 毛泽东思想的形成和发展</a>
+                <a href="#section2_new_democratic_revolution" class="sidebar-link">第二节 新民主主义革命理论</a>
+                <a href="#section3_socialist_transformation" class="sidebar-link">第三节 社会主义改造理论</a>
+                <a href="#section4_socialist_construction_theory" class="sidebar-link">第四节 社会主义建设理论</a>
+                <a href="#section5_living_soul_mao_thought" class="sidebar-link">第五节 毛泽东思想的活的灵魂</a>
+                <a href="#exercises_ch3" class="sidebar-link">相关习题</a>
             </nav>
-        </div>
+        </aside>
 
-        <div id="tabMaoFormation" class="tab-content active">
-            <h2 class="text-3xl font-semibold mb-6 text-teal-600 border-l-4 border-teal-500 pl-3">第一节 毛泽东思想的形成和发展</h2>
-            <div class="accordion-item bg-teal-50 p-4 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <h3 class="accordion-title text-xl font-semibold text-teal-700 flex justify-between items-center">
-                    <span>一、毛泽东思想形成条件</span>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </h3>
-                <div class="accordion-content mt-3 text-teal-600 space-y-2">
-                    <p><strong>1. 时代背景：</strong>俄国十月革命开辟了世界无产阶级社会主义革命的新时代。</p>
-                    <p><strong>2. 物质基础：</strong>中国社会新的生产力的增长。</p>
-                    <p><strong>3. 阶级条件：</strong>中国工人运动的发展。</p>
-                    <p><strong>4. 理论基础：</strong>马克思主义在中国的广泛传播及其与中国优秀传统文化的融合。</p>
-                    <p><strong>5. 实践基础：</strong>中国共产党领导的革命和建设的实践。</p>
-                    <p><strong>6. 主观条件：</strong>毛泽东和以毛泽东为代表的共产党人的个人因素。</p>
-                </div>
-            </div>
-
-            <div class="accordion-item bg-teal-50 p-4 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <h3 class="accordion-title text-xl font-semibold text-teal-700 flex justify-between items-center">
-                    <span>二、毛泽东思想形成和发展历史进程</span>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </h3>
-                <div class="accordion-content mt-3 text-teal-600 space-y-3">
-                    <div class="concept-card">
-                        <p><strong>(一) 萌芽时期 (1921.7 - 1927.7，国民大革命时期)</strong></p>
-                        <p>新民主主义基本思想提出，标志着毛泽东思想的萌芽。</p>
-                        <p>代表作：</p>
-                        <ul class="list-disc list-inside ml-4">
-                            <li class="key-work"><span class="key-work-title">《中国社会各阶级的分析》 (1925.12):</span> 指出分清敌友是革命的首要问题，农民是革命的主力军。该文章是毛泽东思想萌芽的标志。</li>
-                            <li class="key-work"><span class="key-work-title">《国民革命和农民运动》 (1926.9):</span> 指出农民问题是国民革命的中心问题。</li>
-                            <li class="key-work"><span class="key-work-title">《湖南农民运动考察报告》 (1927.3):</span> 肯定农民的作用及党领导农民革命的重要性。</li>
-                        </ul>
-                    </div>
-                    <div class="concept-card">
-                        <p><strong>(二) 形成时期 (1927.7 - 1935.1，土地革命战争前期)</strong></p>
-                        <p>独创性地探索了适合中国特点的农村包围城市、武装夺取政权的新道路，标志着毛泽东思想的基本形成。</p>
-                        <p>代表作：</p>
-                        <ul class="list-disc list-inside ml-4">
-                            <li class="key-work"><span class="key-work-title">《中国的红色政权为什么能够存在？》 (1928.10):</span> 提出红色政权存在发展的原因和主客观条件，提出“工农武装割据”思想。</li>
-                            <li class="key-work"><span class="key-work-title">《星星之火，可以燎原》 (1930.1):</span> 提出了走“农村包围城市，武装夺取政权”的道路。</li>
-                            <li class="key-work"><span class="key-work-title">《反对本本主义》 (1930.5):</span> 党内第一篇反对教条主义、提出思想路线的文献。“没有调查就没有发言权”。</li>
-                        </ul>
-                    </div>
-                    <div class="concept-card">
-                        <p><strong>(三) 成熟时期 (1935.1 - 1945.8，遵义会议后至抗战胜利)</strong></p>
-                         <p>系统阐述了新民主主义革命的理论、路线、方针、政策，标志着毛泽东思想的成熟。</p>
-                        <p>代表作：</p>
-                        <ul class="list-disc list-inside ml-4">
-                            <li class="key-work"><span class="key-work-title">《实践论》、《矛盾论》 (1937.7):</span> 奠定了实事求是的思想路线。</li>
-                            <li class="key-work"><span class="key-work-title">《论持久战》 (1938.6):</span> 揭示抗日战争发展规律，论述人民战争思想。</li>
-                            <li class="key-work"><span class="key-work-title">《〈共产党人〉发刊词》 (1939.10):</span> 提出三大法宝：统一战线、武装斗争、党的建设。</li>
-                            <li class="key-work"><span class="key-work-title">《中国革命和中国共产党》 (1939.12):</span> 首次提出“新民主主义革命”的科学概念和总路线。</li>
-                            <li class="key-work"><span class="key-work-title">《新民主主义论》 (1940.1):</span> 提出新民主主义革命理论，标志着新民主主义理论体系的完整形成。</li>
-                            <li class="key-work"><span class="key-work-title">《改造我们的学习》、《反对党八股》 (1941-1942):</span> 延安整风运动，反对主观主义。</li>
-                            <li class="key-work"><span class="key-work-title">《关于领导方法的若干问题》 (1943.6):</span> 最早完整提出群众路线。</li>
-                            <li class="key-work"><span class="key-work-title">《论联合政府》 (1945.4，中共七大政治报告):</span> 概括三大作风。</li>
-                        </ul>
-                    </div>
-                     <div class="concept-card">
-                        <p><strong>(四) 继续发展 (1945.9 - 1976，解放战争和社会主义革命和建设时期)</strong></p>
-                        <p>创造性地提出了人民民主专政理论、社会主义改造理论和社会主义建设理论。</p>
-                        <p>代表作：</p>
-                        <ul class="list-disc list-inside ml-4">
-                            <li class="key-work"><span class="key-work-title">《目前形势和我们的任务》 (1947.12):</span> 第一次提出新民主主义的三大经济纲领。</li>
-                            <li class="key-work"><span class="key-work-title">《在晋绥干部会议上的讲话》 (1948.4):</span> 完整提出新民主主义革命的总路线和土改总路线。</li>
-                            <li class="key-work"><span class="key-work-title">《论人民民主专政》 (1949.6):</span> 阐述人民民主专政的理论。</li>
-                            <li class="key-work"><span class="key-work-title">《论十大关系》 (1956.4):</span> 探索中国社会主义建设道路的基本方针。</li>
-                            <li class="key-work"><span class="key-work-title">《关于正确处理人民内部矛盾的问题》 (1957.6):</span> 提出社会主义社会两类不同性质矛盾的学说。</li>
+        <main class="flex-1 p-6">
+            <section id="introduction_ch3" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第三章 毛泽东思想概览</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="mb-3 text-gray-700 leading-relaxed">
+                        本章主要探讨毛泽东思想的形成条件、历史进程、核心理论及其活的灵魂。
+                    </p>
+                    <div class="image-placeholder"><p>[新民主主义革命时间轴图占位符]</p></div>
+                    <div class="key-point">
+                        <h4 class="font-semibold text-lg mb-2">核心内容：</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>毛泽东思想形成的时代背景、理论基础和实践基础。</li>
+                            <li>毛泽东思想在萌芽、形成、成熟和继续发展时期的主要代表作和思想。</li>
+                            <li>新民主主义革命理论，包括国情、总路线、基本纲领、道路和基本经验。</li>
+                            <li>社会主义改造理论，包括过渡时期总路线和三大改造的经验。</li>
+                            <li>社会主义建设理论，包括对建设道路的探索和社会主义矛盾学说。</li>
+                            <li>毛泽东思想活的灵魂：实事求是、群众路线、独立自主。</li>
                         </ul>
                     </div>
                 </div>
-            </div>
-        </div>
+            </section>
 
-        <div id="tabNewDemocracy" class="tab-content">
-            <h2 class="text-3xl font-semibold mb-6 text-teal-600 border-l-4 border-teal-500 pl-3">第二节 新民主主义革命理论</h2>
-            <div class="accordion-item bg-teal-50 p-4 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <h3 class="accordion-title text-xl font-semibold text-teal-700 flex justify-between items-center">
-                    <span>一、近代中国国情与资产阶级民主主义革命</span>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </h3>
-                <div class="accordion-content mt-3 text-teal-600 space-y-3">
-                    <p><strong>(一) 近代中国国情 (1840-1949)</strong></p>
-                    <ul class="list-disc list-inside ml-4">
-                        <li><strong>社会性质：</strong>半殖民地半封建社会。</li>
-                        <li><strong>主要矛盾：</strong>帝国主义与中华民族的矛盾（最主要）、封建主义和人民大众的矛盾。</li>
-                        <li><strong>革命的根本任务：</strong>推翻帝国主义、封建主义和官僚资本主义的统治。</li>
-                        <li><strong>革命性质：</strong>资产阶级民主革命。</li>
-                        <li><strong>两大历史任务：</strong>求得民族独立和人民解放；实现国家繁荣富强和人民共同富裕。</li>
-                    </ul>
-                    <p><strong>(二) 资产阶级的民主革命</strong></p>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full event-table">
-                            <thead>
-                                <tr>
-                                    <th>比较点</th>
-                                    <th>旧民主主义革命 (1840-1919)</th>
-                                    <th>新民主主义革命 (1919-1949)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>社会性质</td><td>半殖民地半封建社会</td><td>半殖民地半封建社会</td></tr>
-                                <tr><td>革命任务</td><td>反帝反封建</td><td>反帝反封建反官僚资本主义</td></tr>
-                                <tr><td>革命性质</td><td>资产阶级民主革命</td><td>资产阶级民主革命 (无产阶级领导)</td></tr>
-                                <tr><td><strong>领导力量 (根本区别)</strong></td><td>资产阶级</td><td><strong>无产阶级</strong></td></tr>
-                                <tr><td>指导思想</td><td>资产阶级民主思想</td><td>马克思列宁主义</td></tr>
-                                <tr><td>革命前途</td><td>建立资产阶级共和国</td><td>建立新民主主义社会，并向社会主义过渡</td></tr>
-                                <tr><td>结果</td><td>失败</td><td>胜利</td></tr>
-                            </tbody>
-                        </table>
+            <section id="section1_formation_development" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第一节 毛泽东思想的形成和发展</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、毛泽东思想形成条件 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <ol class="list-decimal list-inside ml-4">
+                                <li>时代背景: 俄国十月革命开辟了世界无产阶级社会主义革命的新时代。</li>
+                                <li>物质基础: 中国社会新的生产力的增长。</li>
+                                <li>阶级条件: 中国工人运动的发展。</li>
+                                <li>理论基础: 马克思主义在中国的广泛传播及其与中国优秀传统文化的融合。</li>
+                                <li>实践基础: 中国共产党领导的革命和建设的实践。</li>
+                                <li>主观条件: 毛泽东和以毛泽东为代表的共产党人的个人因素。</li>
+                            </ol>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、毛泽东思想形成和发展历史进程 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 萌芽时期 (1921.7-1927.7, 国民大革命时期)</p>
+                            <p class="ml-4">1. 新民主主义基本思想提出,标志着毛泽东思想的萌芽。</p>
+                            <p class="ml-4">2. 代表作:</p>
+                            <ul class="list-disc list-inside ml-8">
+                                <li>1925.12 《中国社会各阶级的分析》: 指出分清敌友是革命的首要问题,农民是革命的主力军。该文章是毛泽东思想萌芽的标志。</li>
+                                <li>1926.9 《国民革命和农民运动》: 指出农民问题是国民革命的中心问题。</li>
+                                <li>1927.3 《湖南农民运动考察报告》: 肯定农民的作用及党领导农民革命的重要性。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">(二) 形成时期 (1927.7-1935.1)</p>
+                            <p class="ml-4">1. 独创性地探索了适合中国特点的农村包围城市、武装夺取政权的新道路,标志着毛泽东思想的基本形成。</p>
+                            <p class="ml-4">2. 代表作:</p>
+                            <ul class="list-disc list-inside ml-8">
+                                <li>1928.10 《中国的红色政权为什么能够存在》: 提出红色政权存在发展的原因和主客观条件,提出“工农武装割据”。</li>
+                                <li>1930.1 《星星之火,可以燎原》: 提出了走“农村包围城市,武装夺取政权”的道路。</li>
+                                <li>1930.5 《反对本本主义》: 党内第一篇反对教条主义、提出思想路线的文献；没有调查就没有发言权；中国革命的胜利要靠中国同志了解中国情况；基本形成了包含毛泽东思想活的灵魂的三个方面。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">(三) 成熟时期 (1935.1-1945.8)</p>
+                            <p class="ml-4">1. 代表作:</p>
+                            <ul class="list-disc list-inside ml-8">
+                                <li>1937.7 《实践论》、《矛盾论》: 奠定了实事求是的思想路线。</li>
+                                <li>1938.6 《论持久战》: 揭示了抗日战争发展的基本规律；论述了只有实行人民战争,才能赢得胜利的思想；抗日战争的主要形式是运动战,其次是游击战。</li>
+                                <li>1939.10 《〈共产党人〉发刊词》: 提出三大法宝 (统一战线、武装斗争、党的建设)。党的建设是中国革命胜利的重要保证。第一次明确提出“马克思主义的理论和中国革命实践相结合”这个根本思想原则。</li>
+                                <li>1939.12 《中国革命和中国共产党》: 分析了中国的社会性质问题；阐明了中国革命的历史进程必须分为新民主主义革命和社会主义革命两部分。首次提出“新民主主义革命”的科学概念和总路线。</li>
+                                <li>1940.1 《新民主主义论》: 提出新民主主义革命理论,标志着新民主主义理论体系的完整形成。政治纲领: 建立无产阶级领导的,以工农联盟为基础的,几个革命阶级联合专政的民主共和国。</li>
+                                <li>1941.5 《改造我们的学习》: 反对主观主义是延安整风的最主要任务。对“实事求是”作出科学解释。</li>
+                                <li>1942.2 《反对党八股》: 延安整风主要内容: 反对主观主义整顿学风,反对宗派主义整顿党风,反对党八股以整顿文风。</li>
+                                <li>1943.6 《关于领导方法的若干问题》: 最早的完整的提出群众路线。</li>
+                                <li>1945.4 《论联合政府》: 概括了三大作风 (理论和实践相结合、密切联系群众、批评与自我批评)。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">(四) 继续发展 (1945.9-1976)</p>
+                             <ul class="list-disc list-inside ml-8">
+                                <li>1947.12 《目前形势和我们的任务》: 第一次提出新民主主义的三大经济纲领。</li>
+                                <li>1948.4 《在晋绥干部会议上的讲话》: 完整提出了新民主主义革命的总路线和土改总路线。</li>
+                                <li>1949.6 《论人民民主专政》: 首次提出了“中华人民共和国”的概念。人民民主专政的本质特征是对人民实行民主,对敌人实行专政；组织形式是人民代表大会制度。</li>
+                                <li>1956.4 《论十大关系》: 总结了我国社会主义建设的经验,提出了调动一切积极因素为社会主义建设事业服务的基本方针,对适合中国情况的社会主义建设道路进行了初步的探索。</li>
+                                <li>1957.6 《关于正确处理人民内部矛盾的问题》: 第一次就民主党派问题提出“长期共存,互相监督”。把正确区分和处理人民内部矛盾,作为社会主义国家政治生活的主要内容。</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section2_new_democratic_revolution" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第二节 新民主主义革命理论</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、近代中国国情与资产阶级民主主义革命 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 近代中国国情:</p>
+                            <p class="ml-4">1. 社会性质: 半殖民地半封建社会。</p>
+                            <p class="ml-4">2. 主要矛盾: 帝国主义与中华民族的矛盾、封建主义和人民大众的矛盾。</p>
+                            <p class="ml-4">3. 革命根本任务: 推翻帝国主义、封建主义和官僚资本主义统治。革命性质: 资产阶级民主革命。</p>
+                            <p class="ml-4">4. 两大历史任务: 求得民族独立和人民解放；实现国家繁荣富强和人民共同富裕。</p>
+                            <p class="font-semibold mt-2">(二) 资产阶级的民主革命:</p>
+                            <p class="ml-4">旧民主主义革命 (1840-1919) 与 新民主主义革命 (1919-1949)。</p>
+                            <p class="ml-4"><strong>异同点:</strong></p>
+                            <ul class="list-disc list-inside ml-8">
+                                <li><strong>相同点:</strong> 社会性质、革命任务、革命性质 (都属资产阶级民主革命)。</li>
+                                <li><strong>不同点 (根本区别在领导力量):</strong> 旧 (资产阶级领导,资产阶级思想,建资产阶级共和国,未完成任务) vs 新 (无产阶级领导,马克思主义指导,前途是社会主义,取得胜利)。</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、新民主主义革命的总路线 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1948年4月,毛泽东《在晋绥干部会议上的讲话》中完整提出: 无产阶级领导的,人民大众的,反对帝国主义、封建主义和官僚资本主义的革命。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、新民主主义的基本纲领 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 政治纲领 (《新民主主义论》):</p>
+                            <p class="ml-4">推翻帝国主义和封建主义的压迫,建立无产阶级领导的各个革命阶级联合专政的民主共和国。</p>
+                            <p class="font-semibold mt-2">(二) 经济纲领 (《目前形势和我们的任务》):</p>
+                            <ol class="list-decimal list-inside ml-4">
+                                <li>没收封建地主阶级的土地归农民所有 (中心内容)。</li>
+                                <li>没收官僚资本归新民主主义国家所有。</li>
+                                <li>保护民族工商业。</li>
+                            </ol>
+                            <p class="font-semibold mt-2">(三) 文化纲领:</p>
+                            <p class="ml-4">无产阶级领导反帝反封建的文化,是以共产主义思想为指导的民族的、科学的、大众的文化。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、新民主主义革命的道路 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>毛泽东在《中国的红色政权为什么能够存在》一文中提出了“工农武装割据”的思想: 在中国共产党的领导下,以土地革命为中心内容,以武装斗争为主要形式,以革命根据地为战略阵地,建设红色政权。</p>
+                            <p>即“农村包围城市,武装夺取政权”。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">五、新民主主义革命的基本经验(三大法宝) <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1939年10月,毛泽东在《〈共产党人〉发刊词》中提出: 统一战线,武装斗争,党的建设。</p>
+                            <p class="font-semibold">(一) 武装斗争:</p>
+                            <p class="ml-4">1. 中国革命必须以长期的武装斗争为主要形式。</p>
+                            <p class="ml-4">2. 中国武装斗争实质是无产阶级领导的以农民为主体的革命战争。</p>
+                            <p class="font-semibold mt-2">(二) 统一战线:</p>
+                            <p class="ml-4">1. 包含两个联盟: 工人阶级与其他劳动人民的联盟；工人阶级同可以合作的非劳动人民的联盟。</p>
+                            <p class="ml-4">2. 无产阶级在统一战线中的独立自主原则: 保持党在思想上、政治上、组织上的独立性。</p>
+                            <p class="font-semibold mt-2">(三) 党的建设 (一项“伟大的工程”):</p>
+                            <p class="ml-4">1. <strong>思想建设:</strong> 思想上建党是重要内容和显著特点。</p>
+                            <p class="ml-4">2. <strong>组织建设:</strong> 民主集中制是根本组织原则。</p>
+                            <p class="ml-4">3. <strong>作风建设:</strong> (1)延安整风运动; (2)三大优良作风; (3)七届二中全会提出“两个务必”。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section3_socialist_transformation" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第三节 社会主义改造理论</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="image-placeholder"><p>[新民主主义到社会主义转变时间轴图占位符]</p></div>
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、从新民主主义到社会主义的转变 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 主要矛盾:</strong> 资产阶级同工人阶级的矛盾逐渐成为新民主主义社会的主要矛盾。</p>
+                            <p><strong>2. 经济成分:</strong> 五种经济成分: 国营经济、合作社经济、个体经济、私人资本主义经济、国家资本主义经济。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、社会主义改造理论 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 党在过渡时期的总路线:</p>
+                            <p class="ml-4">在一个相当长的时期内,逐步实现国家的社会主义工业化,并逐步实现国家对农业、手工业和资本主义工商业的社会主义改造。</p>
+                            <p class="font-semibold mt-2">(二) 社会主义改造的经验总结 (“三大改造”):</p>
+                            <p class="ml-4">1. <strong>农业:</strong> 逐步过渡 (互助组 -> 初级社 -> 高级社), 遵循自愿互利、典型示范和国家帮助原则。</p>
+                            <p class="ml-4">2. <strong>手工业:</strong> 供销合作小组 -> 供销合作社 -> 生产合作社。</p>
+                            <p class="ml-4">3. <strong>资本主义工商业:</strong> 和平赎买。对官僚资本无偿没收；对民族资本实行利用、限制、改造方针,采赎买政策 (从低级国家资本主义到高级国家资本主义即全行业公私合营)。经济制度改造与人的改造结合。</p>
+                            <p class="font-semibold mt-2">(三) 社会主义改造的胜利完成:</p>
+                            <p class="ml-4">到1956年,基本完成对生产资料私有制的社会主义改造,标志着社会主义制度在中国的基本确立,中国进入社会主义初级阶段。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section4_socialist_construction_theory" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第四节 社会主义建设理论</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                     <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、对社会主义建设道路的探索 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1. 1956年4月,毛泽东发表《论十大关系》,正式提出探索中国社会主义建设道路的任务。</p>
+                            <p>2. 《论十大关系》中明确提出建设社会主义的基本方针:“要把国内外一切积极因素调动起来,为社会主义事业服务。”</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、社会主义矛盾学说 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1957年2月,毛泽东发表《关于正确处理人民内部矛盾的问题》,提出社会主义社会的基本矛盾和社会主义社会两类不同性质的社会矛盾学说。</p>
+                            <p class="font-semibold">(一) 社会主义社会的基本矛盾:</p>
+                            <p class="ml-4">仍然是生产关系和生产力、上层建筑和经济基础之间的矛盾。非对抗性矛盾。</p>
+                            <p class="font-semibold mt-2">(二) 社会主义社会两类不同性质的社会矛盾:</p>
+                            <p class="ml-4">1. 敌我矛盾 (对抗性) 和人民内部矛盾 (非对抗性)。</p>
+                            <p class="ml-4">2. 正确处理方法: 敌我矛盾用专政方法；人民内部矛盾用民主方法。把正确处理人民内部矛盾成为国家政治生活的主题。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、社会主义建设理论 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 社会主义的两个阶段:</p>
+                            <p class="ml-4">毛泽东认为社会主义可分为不发达的社会主义和比较发达的社会主义两个阶段。</p>
+                            <p class="font-semibold mt-2">(二) 社会主义建设的方针政策:</p>
+                            <p class="ml-4">1. <strong>经济建设:</strong> 中共八大确立“既反保守,又反冒进,在综合平衡重稳步前进”方针。陈云提出“三个主体、三个补充”。企业管理“两参一改三结合”。</p>
+                            <p class="ml-4">2. <strong>政治建设:</strong> 人民代表大会制度 (根本政治制度)；中共领导的多党合作和政治协商制度 (“长期共存、互相监督”)；民族区域自治制度。</p>
+                            <p class="ml-4">3. <strong>文化建设:</strong> 坚持马克思主义指导地位；“百花齐放,百家争鸣”、“古为今用”、“洋为中用”。</p>
+                            <p class="ml-4">4. <strong>祖国统一和对外关系:</strong> 外交方针 (打扫干净屋子再请客、另起炉灶、一边倒)；和平共处五项原则 (1953年周恩来提出)。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section5_living_soul_mao_thought" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第五节 毛泽东思想的活的灵魂</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、实事求是 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>是辩证唯物主义和历史唯物主义的思想路线,是毛泽东思想的出发点、根本点,是活的灵魂三个方面中最具特色、最根本的原则,是毛泽东思想的精髓。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、群众路线 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(1) 基本内涵和基本要求:</p>
+                            <p class="ml-4">一切为了群众,一切依靠群众,从群众中来,到群众中去。从群众中来,到群众中去,是马克思主义认识论在领导工作中的创造性运用。</p>
+                            <p class="font-semibold mt-2">(2) 群众路线是党的根本工作路线:</p>
+                            <p class="ml-4">立党为公,执政为民,是我们党同一切剥削阶级政党的根本区别。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、独立自主 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>(1) 独立自主,自力更生,是从中国实际出发,依靠群众进行革命和建设的必然结论。</p>
+                            <p>(2) 独立自主、自力更生是中国革命和建设的基本立足点。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="exercises_ch3" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">相关习题 (毛泽东思想)</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="example-box">
+                        <p class="font-medium">【习题】( )标志着中国共产党比较系统地探索中国自己建设社会主义道路的开始。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 毛泽东的《论十大关系》</li><li>B. 刘少奇的《关于新中国经济的建设方针》</li><li>C. 毛泽东的《必须坚持多快好省的建设方针》</li><li>D. 刘少奇的《国家工业化和人民生活水平的提高》</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】毛泽东明确界定实事求是的科学含义是在( )一文中提出的。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A.《改造我们的学习》</li><li>B.《实践论》</li><li>C.《矛盾论》</li><li>D.《反对本本主义》</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】标志毛泽东思想萌芽的代表著作是( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A.《反对本本主义》和《井冈山的斗争》</li><li>B.《中国社会各阶级的分析》和《湖南农民运动考察报告》</li><li>C.《中国的红色政权为什么能够存在?》和《星星之火,可以燎原》</li><li>D.《中国革命和中国共产党》和《新民主主义论》</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】下列对应关系错误的是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 毛泽东思想“活的灵魂”三个基本面:实事求是,群众路线,独立自主</li><li>B. 中国共产党的三大法宝:统一路线,武装斗争,党的建设</li><li>C. 上世纪50年代,在党政机关工作人员中开展“三反”运动:反贪污、反浪费、反盗骗国家财产</li><li>D. 1942年延安整风运动三项内容:反对主观主义以整顿学风,反对宗派主义以整顿党风,反对党八股以整顿文风</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong> (“三反”运动是反贪污、反浪费、反官僚主义)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】新民主主义革命路线的核心是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 无产阶级的领导</li><li>B. 人民大众的参与</li><li>C. 工农联盟的巩固</li><li>D. 人民军队的建设</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】国民革命的中心问题是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 军队问题</li><li>B. 农民问题</li><li>C. 统一战线问题</li><li>D. 党的建设问题</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】中国共产党人第一篇反对教条主义的重要文献是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 中国社会各阶级的分析</li><li>B. 星星之火可以燎原</li><li>C. 反对本本主义</li><li>D. 共产党人发刊词</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】对毛泽东和毛泽东思想的历史地位作了新的马克思主义的实事求是评价的是十一届六中全会通过的( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A.《党的若干历史问题的决议》</li><li>B.《论联合政府》</li><li>C.《关于建国以来党的若干历史问题的决议》</li><li>D.《新民主主义论》</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】毛泽东思想在20世纪20年代后期和30年代前期初步形成的主要标志是()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 农村包围城市道路的开辟和理论上的初步阐述</li><li>B.《中国社会各阶级的分析》</li><li>C. 着重从思想上建党理论的阐述</li><li>D. 新民主主义理论的形成</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】中国民主主义革命经历了旧民主主义革命和新民主主义革命两个阶段,“旧”阶段转化到“新”阶段的根本标志是( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 中国革命领导阶级的变化</li><li>B. 中国革命主要对象的变化</li><li>C. 中国革命基本性质的变化</li><li>D. 中国社会主要矛盾的变化</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】毛泽东总结中国革命经验,提出民主革命三大法宝的著作是( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A.《中国革命和中国共产党》</li><li>B.《新民主主义论》</li><li>C.《〈共产党人〉发刊词》</li><li>D.《论联合政府》</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】毛泽东在哪篇著作中将“和最广大的人民群众取得最密切的联系”作为中国共产党人区别于其他任何政党的三个显著标志之一( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A.《关于领导方法的若干问题》</li><li>B.《论联合政府》</li><li>C.《〈共产党人〉发刊词》</li><li>D.《反对本本主义》</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong> (《论联合政府》中提出三大作风)</p></div>
                     </div>
                 </div>
-            </div>
-            <div class="accordion-item bg-teal-50 p-4 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <h3 class="accordion-title text-xl font-semibold text-teal-700 flex justify-between items-center">
-                    <span>二、新民主主义革命的总路线</span>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </h3>
-                <div class="accordion-content mt-3 text-teal-600">
-                    <p>1948年毛泽东在《在晋绥干部会议上的讲话》中完整提出：<strong class="text-red-500">无产阶级领导的，人民大众的，反对帝国主义、封建主义和官僚资本主义的革命。</strong></p>
-                </div>
-            </div>
-            <div class="accordion-item bg-teal-50 p-4 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <h3 class="accordion-title text-xl font-semibold text-teal-700 flex justify-between items-center">
-                    <span>三、新民主主义的基本纲领</span>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </h3>
-                <div class="accordion-content mt-3 text-teal-600 space-y-2">
-                    <p><strong>(一) 政治纲领：</strong>推翻帝国主义和封建主义的压迫，建立无产阶级领导的、以工农联盟为基础的、各革命阶级联合专政的新民主主义共和国。</p>
-                    <p><strong>(二) 经济纲领 (三大经济纲领)：</strong></p>
-                    <ul class="list-decimal list-inside ml-4">
-                        <li>没收封建地主阶级的土地归农民所有 (中心内容)。</li>
-                        <li>没收官僚资本归新民主主义国家所有。</li>
-                        <li>保护民族工商业。</li>
-                    </ul>
-                    <p><strong>(三) 文化纲领：</strong>无产阶级领导的，反帝反封建的文化，即以共产主义思想为指导的民族的、科学的、大众的文化。</p>
-                </div>
-            </div>
-             <div class="accordion-item bg-teal-50 p-4 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <h3 class="accordion-title text-xl font-semibold text-teal-700 flex justify-between items-center">
-                    <span>四、新民主主义革命的道路</span>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </h3>
-                <div class="accordion-content mt-3 text-teal-600">
-                    <p>即<strong class="text-red-500">农村包围城市，武装夺取政权</strong>的道路。核心是“工农武装割据”思想：在中国共产党的领导下，以土地革命为中心内容，以武装斗争为主要形式，以革命根据地为战略阵地，建设红色政权。</p>
-                </div>
-            </div>
-             <div class="accordion-item bg-teal-50 p-4 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <h3 class="accordion-title text-xl font-semibold text-teal-700 flex justify-between items-center">
-                    <span>五、新民主主义革命的基本经验 (三大法宝)</span>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </h3>
-                <div class="accordion-content mt-3 text-teal-600 space-y-2">
-                    <p>毛泽东在《〈共产党人〉发刊词》中总结：<strong class="text-red-500">统一战线，武装斗争，党的建设。</strong></p>
-                    <p><strong>(一) 武装斗争：</strong>中国革命必须以长期的武装斗争为主要形式。实质是无产阶级领导的以农民为主体的革命战争。</p>
-                    <p><strong>(二) 统一战线：</strong>包含两个联盟：工人阶级与其他劳动人民的联盟；工人阶级同可以合作的非劳动人民的联盟。要坚持党在统一战线中的独立自主原则。</p>
-                    <p><strong>(三) 党的建设：</strong>一项“伟大的工程”。包括思想建设（首位）、组织建设（民主集中制）、作风建设（三大作风、两个务必）。</p>
-                </div>
-            </div>
-        </div>
-
-        <div id="tabSocialistTransformation" class="tab-content">
-            <h2 class="text-3xl font-semibold mb-6 text-teal-600 border-l-4 border-teal-500 pl-3">第三节 社会主义改造理论</h2>
-            <div class="placeholder-block">
-                <p class="font-medium text-lg">从新民主主义到社会主义的转变 (1949-1956)</p>
-                <p class="text-sm">（1949-1952 恢复时期；1953-1956 改造时期）</p>
-            </div>
-             <div class="accordion-item bg-teal-50 p-4 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <h3 class="accordion-title text-xl font-semibold text-teal-700 flex justify-between items-center">
-                    <span>一、从新民主主义到社会主义的转变</span>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </h3>
-                <div class="accordion-content mt-3 text-teal-600 space-y-2">
-                    <p><strong>1. 主要矛盾：</strong>新民主主义社会的主要矛盾是<strong class="text-sky-700">资产阶级同工人阶级</strong>的矛盾。</p>
-                    <p><strong>2. 经济成分（五种）：</strong></p>
-                    <ul class="list-disc list-inside ml-4">
-                        <li>社会主义的国营经济</li>
-                        <li>半社会主义性质的合作社经济</li>
-                        <li>农民和手工业者的个体经济</li>
-                        <li>私人资本主义经济</li>
-                        <li>国家资本主义经济</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="accordion-item bg-teal-50 p-4 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <h3 class="accordion-title text-xl font-semibold text-teal-700 flex justify-between items-center">
-                    <span>二、社会主义改造理论</span>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </h3>
-                <div class="accordion-content mt-3 text-teal-600 space-y-3">
-                    <p><strong>(一) 党在过渡时期的总路线（“一化三改”）：</strong>要在一个相当长的时期内，逐步实现国家的<strong class="text-sky-700">社会主义工业化</strong>，并逐步实现国家对<strong class="text-sky-700">农业、手工业和资本主义工商业的社会主义改造</strong>。</p>
-                    <p><strong>(二) 社会主义改造的经验总结（三大改造）：</strong></p>
-                    <ul class="list-disc list-inside ml-4">
-                        <li><strong>农业：</strong>逐步过渡（互助组 → 初级社 → 高级社），遵循自愿互利、典型示范和国家帮助原则。</li>
-                        <li><strong>手工业：</strong>逐步过渡（供销合作小组 → 供销合作社 → 生产合作社）。</li>
-                        <li><strong>资本主义工商业：</strong>和平赎买政策。对官僚资本无偿没收，对民族资本利用、限制、改造。形式：从低级国家资本主义（委托加工、计划订货等）到高级国家资本主义（公私合营）。</li>
-                    </ul>
-                    <p><strong>(三) 社会主义改造的胜利完成：</strong>到1956年底，基本完成对生产资料私有制的社会主义改造，标志着<strong class="text-red-500">社会主义制度在中国的基本确立</strong>，中国进入社会主义初级阶段。</p>
-                </div>
-            </div>
-        </div>
-        
-        <div id="tabSocialistConstruction" class="tab-content">
-            <h2 class="text-3xl font-semibold mb-6 text-teal-600 border-l-4 border-teal-500 pl-3">第四节 社会主义建设理论</h2>
-            <div class="accordion-item bg-teal-50 p-4 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <h3 class="accordion-title text-xl font-semibold text-teal-700 flex justify-between items-center">
-                    <span>一、对社会主义建设道路的探索</span>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </h3>
-                <div class="accordion-content mt-3 text-teal-600">
-                    <p>1956年毛泽东发表<strong class="text-sky-700">《论十大关系》</strong>，正式提出了探索中国社会主义建设道路的任务。基本方针：“要把国内外一切积极因素调动起来，为社会主义事业服务。”</p>
-                </div>
-            </div>
-            <div class="accordion-item bg-teal-50 p-4 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <h3 class="accordion-title text-xl font-semibold text-teal-700 flex justify-between items-center">
-                    <span>二、社会主义矛盾学说</span>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </h3>
-                <div class="accordion-content mt-3 text-teal-600 space-y-2">
-                    <p>1957年毛泽东发表<strong class="text-sky-700">《关于正确处理人民内部矛盾的问题》</strong>，提出了社会主义社会基本矛盾和两类不同性质社会矛盾学说。</p>
-                    <p><strong>(一) 社会主义社会的基本矛盾：</strong>仍然是生产关系和生产力、上层建筑和经济基础之间的矛盾。是非对抗性的。</p>
-                    <p><strong>(二) 社会主义社会两类不同性质的社会矛盾：</strong></p>
-                    <ul class="list-disc list-inside ml-4">
-                        <li><strong>敌我矛盾：</strong>对抗性的。采用专政方法解决。</li>
-                        <li><strong>人民内部矛盾：</strong>非对抗性的。采用民主方法解决。要把正确处理人民内部矛盾作为国家政治生活的主题。</li>
-                    </ul>
-                </div>
-            </div>
-             <div class="accordion-item bg-teal-50 p-4 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <h3 class="accordion-title text-xl font-semibold text-teal-700 flex justify-between items-center">
-                    <span>三、社会主义建设理论要点</span>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </h3>
-                <div class="accordion-content mt-3 text-teal-600 space-y-3">
-                    <p><strong>(一) 社会主义的两个阶段：</strong>不发达的社会主义；比较发达的社会主义。</p>
-                    <p><strong>(二) 社会主义建设的方针政策：</strong></p>
-                    <ul class="list-disc list-inside ml-4">
-                        <li><strong>经济建设：</strong>中共八大确立“既反保守，又反冒进，在综合平衡中稳步前进”方针。陈云“三个主体、三个补充”思想。企业管理“两参一改三结合”。</li>
-                        <li><strong>政治建设：</strong>人民代表大会制度（根本政治制度）；中共领导的多党合作和政治协商制度（基本政治制度，“长期共存、互相监督”）；民族区域自治制度。</li>
-                        <li><strong>文化建设：</strong>坚持马克思主义指导地位；“百花齐放，百家争鸣”、“古为今用”、“洋为中用”。</li>
-                        <li><strong>祖国统一和对外关系：</strong>建国初期三大外交方针（打扫干净屋子再请客、另起炉灶、一边倒）；和平共处五项原则。</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div id="tabLivingSoul" class="tab-content">
-            <h2 class="text-3xl font-semibold mb-6 text-teal-600 border-l-4 border-teal-500 pl-3">第五节 毛泽东思想的活的灵魂</h2>
-            <div class="placeholder-block">
-                <p class="font-medium text-lg">毛泽东思想活的灵魂三大基本方面</p>
-                <p class="text-sm">（此处可用图示概括三大方面及其关系）</p>
-            </div>
-            <div class="accordion-item bg-teal-50 p-4 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <h3 class="accordion-title text-xl font-semibold text-teal-700 flex justify-between items-center">
-                    <span>一、实事求是</span>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </h3>
-                <div class="accordion-content mt-3 text-teal-600">
-                    <p>是辩证唯物主义和历史唯物主义的思想路线，是毛泽东思想的<strong class="text-red-500">出发点、根本点</strong>，是毛泽东思想活的灵魂三个方面的有机统一中<strong class="text-red-500">最具特色、最根本的原则</strong>，是毛泽东思想的<strong class="text-red-500">精髓</strong>。</p>
-                </div>
-            </div>
-            <div class="accordion-item bg-teal-50 p-4 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <h3 class="accordion-title text-xl font-semibold text-teal-700 flex justify-between items-center">
-                    <span>二、群众路线</span>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </h3>
-                <div class="accordion-content mt-3 text-teal-600 space-y-2">
-                    <p><strong>(1) 基本内涵和基本要求：</strong>一切为了群众，一切依靠群众，从群众中来，到群众中去。</p>
-                    <p><strong>(2) 党的根本工作路线：</strong>立党为公，执政为民，是我们党同一切剥削阶级政党的根本区别。</p>
-                </div>
-            </div>
-            <div class="accordion-item bg-teal-50 p-4 rounded-lg mb-4 shadow-md hover:shadow-lg transition-shadow">
-                <h3 class="accordion-title text-xl font-semibold text-teal-700 flex justify-between items-center">
-                    <span>三、独立自主</span>
-                    <svg class="w-6 h-6 transform transition-transform duration-300 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </h3>
-                <div class="accordion-content mt-3 text-teal-600 space-y-2">
-                     <p><strong>(1) 内涵：</strong>独立自主，自力更生，是从中国实际出发，依靠群众进行革命和建设的必然结论。</p>
-                     <p><strong>(2) 地位：</strong>是中国革命和建设的<strong class="text-red-500">基本立足点</strong>。</p>
-                </div>
-            </div>
-        </div>
-        
-        <footer class="mt-12 text-center text-sm text-gray-400">
-            <p>毛泽东思想学习资料</p>
-        </footer>
+            </section>
+        </main>
     </div>
 
     <script>
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const tabContents = document.querySelectorAll('.tab-content');
-        const accordionItems = document.querySelectorAll('.accordion-item');
+        function toggleExplanation(button) {
+            const explanationDiv = button.nextElementSibling;
+            if (explanationDiv.style.display === 'none' || explanationDiv.style.display === '') {
+                explanationDiv.style.display = 'block';
+                button.textContent = '隐藏答案与解析';
+            } else {
+                explanationDiv.style.display = 'none';
+                button.textContent = '显示答案与解析';
+            }
+        }
 
-        // Tab functionality
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const targetId = button.dataset.target;
-                
-                tabButtons.forEach(btn => {
-                    btn.classList.remove('active', 'text-teal-600', 'border-teal-500', 'bg-teal-50');
-                    btn.classList.add('border-transparent', 'hover:text-teal-600', 'hover:border-teal-400');
-                });
-                button.classList.add('active', 'text-teal-600', 'border-teal-500', 'bg-teal-50');
-                button.classList.remove('border-transparent');
+        const mainContentSections = document.querySelectorAll('main > section.content-section');
+        const allSidebarLinks = document.querySelectorAll('aside nav a.sidebar-link');
+        const bodyEl = document.body;
+        const menuButton = document.getElementById('menu-button');
+        
+        function showSection(sectionIdToShow) {
+            mainContentSections.forEach(section => {
+                section.classList.toggle('active', section.id === sectionIdToShow);
+            });
+        }
 
-                tabContents.forEach(content => {
-                    if (content.id === targetId) {
-                        content.classList.add('active');
-                    } else {
-                        content.classList.remove('active');
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.innerWidth >= 768) { 
+                bodyEl.classList.add('sidebar-visible');
+                bodyEl.classList.remove('sidebar-globally-hidden');
+            } else {
+                bodyEl.classList.remove('sidebar-visible');
+                bodyEl.classList.add('sidebar-globally-hidden'); 
+            }
+
+            const hash = window.location.hash.substring(1);
+            let sectionToActivate = 'introduction_ch3'; 
+            let specificElementToScrollTo = null;
+
+            if (hash) {
+                const targetElementByHash = document.getElementById(hash);
+                if (targetElementByHash && targetElementByHash.classList.contains('content-section')) {
+                    sectionToActivate = hash; 
+                    specificElementToScrollTo = targetElementByHash;
+                } else if (targetElementByHash) { 
+                    const parentSection = targetElementByHash.closest('section.content-section');
+                    if (parentSection) {
+                        sectionToActivate = parentSection.id;
+                        specificElementToScrollTo = targetElementByHash;
                     }
-                });
+                }
+            }
+            
+            showSection(sectionToActivate);
+
+            allSidebarLinks.forEach(link => {
+                const linkHrefId = link.getAttribute('href').substring(1);
+                const isActive = linkHrefId === sectionToActivate || linkHrefId === hash;
+                link.classList.toggle('active', isActive);
+            });
+            
+            if (specificElementToScrollTo) {
+                 if (specificElementToScrollTo.tagName === 'SUMMARY') {
+                    specificElementToScrollTo.parentElement.open = true;
+                } else if (specificElementToScrollTo.tagName === 'DETAILS' && !specificElementToScrollTo.open) {
+                    // specificElementToScrollTo.open = true; 
+                }
+                setTimeout(() => { 
+                    specificElementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            } else if (document.getElementById(sectionToActivate)) { 
+                 setTimeout(() => {
+                    document.getElementById(sectionToActivate).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        });
+
+        allSidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                
+                let targetId = this.getAttribute('href').substring(1);
+                let sectionToDisplayId = targetId; 
+                const targetElement = document.getElementById(targetId);
+                
+                allSidebarLinks.forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+
+                showSection(sectionToDisplayId);
+                window.location.hash = targetId; 
+
+                if (targetElement) {
+                     setTimeout(() => { 
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 50); 
+                }
+                
+                if (window.innerWidth < 768 && bodyEl.classList.contains('sidebar-visible')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                     bodyEl.classList.add('sidebar-globally-hidden');
+                }
             });
         });
         
-        // Accordion functionality
-        accordionItems.forEach(item => {
-            const title = item.querySelector('.accordion-title');
-            const content = item.querySelector('.accordion-content');
-            const icon = title.querySelector('svg');
-
-            title.addEventListener('click', () => {
-                const parentTab = title.closest('.tab-content');
-                if (parentTab) {
-                    parentTab.querySelectorAll('.accordion-item.active').forEach(openItem => {
-                        if (openItem !== item) {
-                            openItem.classList.remove('active');
-                             const openIcon = openItem.querySelector('.accordion-title svg');
-                            if (openIcon) openIcon.style.transform = 'rotate(0deg)';
-                        }
-                    });
+        menuButton.addEventListener('click', () => {
+            bodyEl.classList.toggle('sidebar-globally-hidden');
+            bodyEl.classList.toggle('sidebar-visible', !bodyEl.classList.contains('sidebar-globally-hidden'));
+        });
+        
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) { 
+                if (!bodyEl.classList.contains('sidebar-globally-hidden')) { 
+                    bodyEl.classList.add('sidebar-visible');
+                } else { 
+                    bodyEl.classList.remove('sidebar-visible');
                 }
-                
-                const isActive = item.classList.toggle('active');
-                if (isActive) {
-                    if (icon) icon.style.transform = 'rotate(180deg)';
-                } else {
-                    if (icon) icon.style.transform = 'rotate(0deg)';
+            } else { 
+                if (bodyEl.classList.contains('sidebar-globally-hidden')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                }
+            }
+        });
+
+        document.querySelectorAll('details > summary').forEach(summary => {
+            const marker = summary.querySelector('.details-marker');
+            const detailsElement = summary.parentElement;
+            
+            if (marker) { 
+                 marker.style.transform = detailsElement.open ? 'rotate(90deg)' : 'rotate(0deg)';
+            }
+
+            detailsElement.addEventListener('toggle', function() {
+                if (marker) {
+                    marker.style.transform = this.open ? 'rotate(90deg)' : 'rotate(0deg)';
                 }
             });
         });

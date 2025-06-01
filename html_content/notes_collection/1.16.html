@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>其他法律法规学习网页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: padding-left 0.3s ease-in-out;
+        }
+        .content-section {
+            scroll-margin-top: 70px; 
+            display: none; 
+        }
+        .content-section.active {
+            display: block;
+        }
+        details > summary { 
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            background-color: #065f46; 
+            color: white;
+            border-radius: 0.375rem; 
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            list-style: none; 
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        details > summary::-webkit-details-marker {
+            display: none; 
+        }
+        details > summary:hover {
+            background-color: #047857; 
+        }
+        details[open] > summary {
+            background-color: #047857; 
+            border-radius: 0.375rem 0.375rem 0 0;
+        }
+        details > div.p-4 { 
+             border: 1px solid #047857; 
+             border-top: none;
+             border-radius: 0 0 0.375rem 0.375rem;
+             background-color: #f0fdfa; 
+        }
+        .key-point {
+            background-color: #d1fae5; 
+            border-left: 4px solid #10b981; 
+            color: #047857; 
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0 0.375rem 0.375rem 0; 
+        }
+        .example-box { 
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.5rem; 
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); 
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .explanation {
+            display: none;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background-color: #ecfdf5; 
+            border: 1px solid #a7f3d0; 
+            border-radius: 0.375rem; 
+        }
+        .btn {
+            background-color: #10b981; 
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; 
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #059669; 
+        }
+        
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+            height: calc(100vh - 4rem); 
+            transform: translateX(-100%); 
+            width: 22rem; 
+        }
+        main {
+            transition: margin-left 0.3s ease-in-out;
+            width: 100%; 
+            margin-left: 0;
+        }
+
+        body.sidebar-visible #sidebar {
+            transform: translateX(0);
+        }
+        body.sidebar-visible main {
+           margin-left: 22rem; 
+        }
+         @media (min-width: 768px) { 
+            body:not(.sidebar-globally-hidden) #sidebar {
+                transform: translateX(0);
+            }
+            body:not(.sidebar-globally-hidden) main {
+                margin-left: 22rem; 
+            }
+            body.sidebar-globally-hidden #sidebar {
+                transform: translateX(-100%);
+            }
+            body.sidebar-globally-hidden main {
+                margin-left: 0;
+            }
+        }
+
+        .sidebar-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            color: #d1fae5; 
+            text-decoration: none;
+            border-radius: 0.375rem; 
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: 600; 
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #10b981; 
+            color: white;
+        }
+         .details-marker { 
+            font-size: 0.8em;
+            margin-left: 0.5rem;
+            transition: transform 0.2s ease-in-out;
+        }
+        details[open] > summary > .details-marker {
+            transform: rotate(90deg);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        th, td {
+            border: 1px solid #a1a1aa; 
+            padding: 0.5rem;
+            text-align: left;
+        }
+        th {
+            background-color: #e4e4e7; 
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-slate-100">
+    <header class="bg-emerald-700 text-white p-4 fixed w-full top-0 z-50 shadow-md flex justify-between items-center">
+        <button id="menu-button" class="p-2 rounded-md text-emerald-200 hover:text-white hover:bg-emerald-600">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </button>
+        <h1 class="text-xl font-bold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">其他法律法规学习网页</h1>
+    </header>
+
+    <div class="flex pt-16">
+        <aside id="sidebar" class="bg-emerald-800 text-white p-4 space-y-1 fixed top-16 left-0 z-40 overflow-y-auto">
+            <nav>
+                <a href="#introduction_ch6_other_laws" class="sidebar-link">法律法规概览</a>
+                <a href="#section1_labor_law" class="sidebar-link">第一节 劳动法</a>
+                <a href="#section2_labor_contract_law" class="sidebar-link">第二节 劳动合同法</a>
+                <a href="#section3_consumer_protection_law" class="sidebar-link">第三节 消费者权益保护法</a>
+                <a href="#section4_criminal_procedure_law" class="sidebar-link">第四节 刑事诉讼法</a>
+                <a href="#section5_civil_procedure_law" class="sidebar-link">第五节 民事诉讼法</a>
+                <a href="#exercises_ch6_other_laws" class="sidebar-link">相关习题</a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-6">
+            <section id="introduction_ch6_other_laws" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第六章 其他法律法规概览</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="mb-3 text-gray-700 leading-relaxed">
+                        本章主要介绍劳动法、劳动合同法、消费者权益保护法、刑事诉讼法和民事诉讼法等其他重要法律法规的核心内容。
+                    </p>
+                    <div class="key-point">
+                        <h4 class="font-semibold text-lg mb-2">核心内容：</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>劳动法的基本原则、劳动者的权利与义务、工作时间与休息休假、工资、劳动争议解决。</li>
+                            <li>劳动合同法的劳动合同订立、种类、试用期、竞业限制、非全日制用工、劳务派遣及劳动合同解除等。</li>
+                            <li>消费者权益保护法中消费者的权利、经营者的义务、争议解决途径及惩罚性赔偿。</li>
+                            <li>刑事诉讼法的原则、主体、管辖、回避、证据、强制措施及诉讼程序。</li>
+                            <li>民事诉讼法的基本制度、管辖、证据及审判程序。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section1_labor_law" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第一节 劳动法</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <table class="min-w-full divide-y divide-gray-200 my-2">
+                        <thead class="bg-gray-50"><tr><th class="px-6 py-3">项目</th><th class="px-6 py-3">具体内容</th></tr></thead>
+                        <tbody>
+                            <tr><td>促进就业</td><td>1.禁止招用未满16周岁未成年人。<br>2.文艺、体育和特种工艺单位招用未满16周岁未成年人,须履行审批手续,保障其接受义务教育权利。</td></tr>
+                            <tr><td>休息休假</td><td>1.每周至少休息一日;<br>2.法定假日:元旦、春节、清明节、国际劳动节、端午节、中秋节、国庆节。</td></tr>
+                            <tr><td>加班时间限制</td><td>每日不得超过1小时,特殊原因每日不超3小时,每月不超36小时。</td></tr>
+                            <tr><td>加班不受限制情形</td><td>发生自然灾害、事故等威胁生命财产安全需紧急处理的;生产设备、交通运输线路、公共设施故障影响生产和公众利益需及时抢修的。</td></tr>
+                            <tr><td>加班费</td><td>日常加班150%工资;休息日加班不能补休200%工资;法定休假日加班300%工资。</td></tr>
+                            <tr><td>年假</td><td>劳动者连续工作1年以上,享受带薪年休假。</td></tr>
+                            <tr><td>工资</td><td>1.国家实行最低工资保障制度。标准由省级政府规定报国务院备案。<br>2.用人单位支付工资不得低于当地最低工资标准。<br>3.工资应以货币形式按月支付给劳动者本人。</td></tr>
+                            <tr><td>劳动争议解决</td><td>调解 (单位劳动争议调解委员会) -> 仲裁 (劳动争议仲裁委员会,诉讼前必须仲裁) -> 诉讼 (对仲裁不服可向法院起诉)。</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="section2_labor_contract_law" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第二节 劳动合同法</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <table class="min-w-full divide-y divide-gray-200 my-2">
+                         <thead class="bg-gray-50"><tr><th class="px-6 py-3">项目</th><th class="px-6 py-3">具体规定</th></tr></thead>
+                         <tbody>
+                            <tr><td>劳动合同的订立</td><td>1.用人单位自用工之日起即与劳动者建立劳动关系。用工前订立合同的,劳动关系自用工之日起建立。<br>2.建立劳动关系,应订立书面劳动合同。<br>3.已建劳动关系未同时订立书面合同的,应自用工之日起一个月内订立。</td></tr>
+                            <tr><td>劳动合同的种类</td><td>1.固定期限合同<br>2.无固定期限合同 (约定无确定终止时间)。应订立情形:①协商一致;②续订、订立时,劳动者在该单位连续工作满10年且距退休不足10年;单位初次实行劳动合同制或国企改制重订时,劳动者在该单位连续工作满10年且距退休不足10年;连续订立2次固定期限合同后续订的;③用工满1年不订书面合同视为已订立无固定期限合同。<br>3.以完成一定工作任务为期限的合同。</td></tr>
+                            <tr><td>试用期的规定</td><td>1.合同期3个月以上不满1年,试用期不超1个月;<br>2.合同期1年以上不满3年,试用期不超2个月;<br>3.3年以上固定期限和无固定期限合同,试用期不超6个月。<br>4.以完成一定工作任务为期限或合同期不满3个月,不得约定试用期。<br>同一用人单位与同一劳动者只能约定一次试用期。试用期包含在合同期内。仅约定试用期,试用期不成立,该期限为合同期。试用期工资不低于本单位同岗最低档工资或合同约定工资的80%,且不低于当地最低工资。</td></tr>
+                            <tr><td>竞业禁止的规定</td><td>人员限于高级管理、高级技术和其他负有保密义务的人员。解除或终止合同后,竞业限制期不超2年。</td></tr>
+                            <tr><td>非全日制用工</td><td>1.定义:以小时计酬为主,同一单位日均工作不超4小时,周累计不超24小时。<br>2.合同:可口头协议;不得约定试用期;任何一方可随时通知终止,不付经济补偿。<br>3.报酬:支付周期最长不超15日。</td></tr>
+                            <tr><td>劳务派遣</td><td>1.补充形式,只能在临时性、辅助性或替代性岗位实施。<br>2.被派遣劳动者同工同酬。<br>3.派遣单位应与被派遣者订立2年以上固定期合同,按月付报酬;无工作期间按当地最低工资标准付报酬。<br>4.用工单位不得再派遣。</td></tr>
+                            <tr><td>劳动合同解除(一般)</td><td>双方协商一致。</td></tr>
+                            <tr><td>劳动者解除劳动合同</td><td>1.一般情况提前30日书面通知(试用期提前3日)。<br>2.随时解除情形:用人单位未履行合同义务(劳动保护/条件、足额报酬、社保);规章制度违法损权益;强迫劳动或违章指挥危及安全。</td></tr>
+                            <tr><td>用人单位解除劳动合同</td><td>(1)劳动者不符录用条件、严重违规等。<br>(2)下列情形提前30日书面通知或额外付一月工资并付经济补偿:①患病或非因公负伤医疗期满不能从事原工作也不能从事另行安排工作;②不能胜任工作经培训或调岗仍不能胜任;③合同依据客观情况重大变化致无法履行且无法就变更达成协议。</td></tr>
+                            <tr><td>用人单位不得解除的情形</td><td>(1)接触职业病危害作业未离岗体检,或疑似职业病在诊断/观察期;(2)本单位患职业病或因公负伤被确认丧失/部分丧失劳动能力;(3)患病或非因公负伤在规定医疗期内;(4)女职工在孕期、产期、哺乳期;(5)本单位连续工作满15年且距退休不足5年。</td></tr>
+                            <tr><td>解除劳动合同的其他规定</td><td>1.用人单位单方解除应事先通知工会。<br>2.一定情况解除需付经济补偿 (每满一年付一月工资标准,6个月以上不满1年按1年算,不满6个月付半月工资)。</td></tr>
+                         </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="section3_consumer_protection_law" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第三节 消费者权益保护法</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <table class="min-w-full divide-y divide-gray-200 my-2">
+                        <thead class="bg-gray-50"><tr><th class="px-6 py-3">消费者权利</th><th class="px-6 py-3">内容</th></tr></thead>
+                        <tbody>
+                            <tr><td>人身、财产安全权</td><td>要求经营者提供的商品和服务符合保障人身、财产安全的要求。</td></tr>
+                            <tr><td>知情权</td><td>知悉商品价格、产地、生产者、性能、成分、售后服务等情况。</td></tr>
+                            <tr><td>自主选择权</td><td>自主选择经营者、商品品种或服务方式、买或不买,进行比较、鉴别和挑选。</td></tr>
+                            <tr><td>公平交易权</td><td>有权获得质量保障、价格合理、计量正确等公平交易条件。</td></tr>
+                            <tr><td>求偿权</td><td>因购买使用商品、接受服务受到人身、财产损害的,有权依法获得赔偿。</td></tr>
+                            <tr><td>社团权</td><td>有权依法成立维护自身合法权益的社会团体。</td></tr>
+                            <tr><td>获得知识权</td><td>有获得有关消费和消费者权益保护方面的知识的权利。</td></tr>
+                            <tr><td>获得尊重权</td><td>人格尊严、民族风俗习惯得到尊重。</td></tr>
+                            <tr><td>监督权</td><td>对商品和服务以及保护消费者权益工作进行监督,有权检举、控告、批评、建议。</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="font-semibold mt-4">经营者的义务:</p>
+                    <ul class="list-disc list-inside ml-4 text-gray-700">
+                        <li>经营场所经营者应尽安全保障义务。</li>
+                        <li>商品召回时承担消费者因此支出的必要费用。</li>
+                        <li>消费者索要发票等凭证,必须出具。</li>
+                        <li>耐用商品或装饰装修服务,6个月内发现瑕疵,由经营者承担举证责任。</li>
+                        <li>使用格式条款应显著提示与消费者重大利害关系内容,并按要求说明。不得利用格式条款排除/限制消费者权利、减轻/免除经营者责任、加重消费者责任。</li>
+                        <li>网络、电视、电话、邮购等方式销售商品,消费者7日内可无理由退货 (定作、鲜活易腐、已拆封数字化商品、报纸期刊除外)。退货商品应完好,运费消费者承担 (另有约定除外)。</li>
+                        <li>未经消费者同意或请求,或明确拒绝,不得发送商业性信息。</li>
+                    </ul>
+                    <p class="font-semibold mt-4">争议的解决途径及求偿对象:</p>
+                     <ul class="list-disc list-inside ml-4 text-gray-700">
+                        <li>途径: (1)与经营者协商和解; (2)请求消协或其他调解组织调解; (3)向有关行政部门投诉; (4)仲裁; (5)诉讼。</li>
+                        <li>求偿对象: 可向销售者要求赔偿。销售者赔偿后可向生产者或其他销售者追偿。展销会、租赁柜台受损可向销售者/服务者或展销会举办者/柜台出租者要求赔偿。</li>
+                        <li>虚假广告推荐商品/服务造成损害,推荐者与经营者承担连带责任。</li>
+                    </ul>
+                    <p class="font-semibold mt-4">惩罚性赔偿:</p>
+                    <p class="ml-4 text-gray-700">经营者提供商品或服务有欺诈行为的,应按消费者要求增加赔偿损失,金额为购买价款或服务费用的三倍;增加赔偿金额不足五百元的,为五百元。</p>
+                </div>
+            </section>
+
+            <section id="section4_criminal_procedure_law" class="content-section mb-8">
+                 <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第四节 刑事诉讼法</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、刑事诉讼的原则 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <ol class="list-decimal list-inside ml-4">
+                                <li>侦查权、检察权、审判权由专门机关依法行使。</li>
+                                <li>未经人民法院依法判决,对任何人都不得确定有罪。</li>
+                                <li>具有法定情形不予追究刑事责任:
+                                    <ul class="list-disc list-inside ml-4">
+                                        <li>(一)情节显著轻微、危害不大,不认为是犯罪的;</li>
+                                        <li>(二)犯罪已过追诉时效期限的;</li>
+                                        <li>(三)经特赦令免除刑罚的;</li>
+                                        <li>(四)依照刑法告诉才处理的犯罪,没有告诉或者撤回告诉的;</li>
+                                        <li>(五)犯罪嫌疑人、被告人死亡的;</li>
+                                        <li>(六)其他法律规定免予追究刑事责任的。</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、刑事诉讼的主体 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>刑事诉讼主体是所有参与刑事诉讼活动,在刑事诉讼中享有一定权利、承担一定义务的国家专门机关和诉讼参与人。</p>
+                            <p>刑事诉讼参与人包括当事人和其他诉讼参与人。</p>
+                            <p><strong>1. 犯罪嫌疑人和被告人:</strong> 公诉案件中,提起公诉前称“犯罪嫌疑人”,提起公诉后称“被告人”。</p>
+                            <p><strong>2. 辩护人:</strong> 受委托或经法院指定履行辩护职责。可为律师；人民团体或单位推荐的人；监护人、亲友。被执行刑罚、被剥夺/限制人身自由、被开除公职、被吊销执业证书者不得担任辩护人 (监护人、近亲属除外)。犯罪嫌疑人自被第一次讯问或采取强制措施之日起有权委托辩护人 (侦查期间只能委托律师)。被告人有权随时委托辩护人。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、管辖 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 立案管辖:</p>
+                            <p class="ml-4"><strong>1. 人民法院直接受理的刑事案件 (自诉案件):</strong></p>
+                            <ul class="list-disc list-inside ml-8">
+                                <li>(1) 侮辱、诽谤案 (危害社会秩序和国家利益的除外);</li>
+                                <li>(2) 暴力干涉婚姻自由案 (致人死亡的除外);</li>
+                                <li>(3) 虐待案 (致人重伤或死亡的除外);</li>
+                                <li>(4) 侵占案。</li>
+                            </ul>
+                            <p class="ml-4"><strong>2. 人民检察院立案侦查的刑事案件:</strong> 司法工作人员利用职权实施的非法拘禁、刑讯逼供、非法搜查等侵犯公民权利、损害司法公正的犯罪。公安机关管辖的国家机关工作人员利用职权实施的重大犯罪案件,经省级以上检察院决定,可由检察院立案侦查。</p>
+                            <p class="ml-4"><strong>3. 公安机关侦查的刑事案件:</strong> 普通刑事案件。</p>
+                            <p class="font-semibold mt-2">(二) 审判管辖:</p>
+                            <p class="ml-4"><strong>1. 级别管辖:</strong></p>
+                            <ul class="list-disc list-inside ml-8">
+                                <li>基层人民法院: 管辖第一审刑事案件 (法律另有规定的除外)。</li>
+                                <li>中级人民法院: 管辖危害国家安全、恐怖活动案件；可能判处无期徒刑、死刑的案件。</li>
+                                <li>高级人民法院: 管辖全省(区、市)性的重大刑事案件。</li>
+                                <li>最高人民法院: 管辖全国性的重大刑事案件。</li>
+                            </ul>
+                            <p class="ml-4">上级法院可审判下级法院管辖的一审案件；下级法院可请求移送重大复杂案件给上级法院。</p>
+                            <p class="ml-4"><strong>2. 地域管辖:</strong> 由犯罪地人民法院管辖。若被告人居住地审判更适宜,可由被告人居住地法院管辖。多个同级法院有管辖权的,由最初受理的法院审判,必要时可移送主要犯罪地法院。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、回避 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 回避的对象:</strong> 审判人员、检察人员、侦查人员、书记员、鉴定人和翻译人员。</p>
+                            <p><strong>2. 回避的事由:</strong> (一)是本案当事人或其近亲属；(二)本人或近亲属与本案有利害关系；(三)担任过本案证人、鉴定人、辩护人、诉讼代理人；(四)与本案当事人有其他关系可能影响公正处理。不得接受请客送礼或违规会见。</p>
+                            <p><strong>3. 回避的决定主体:</strong> 审判人员由院长决定；检察人员由检察长决定；侦查人员由公安机关负责人决定。院长回避由审判委员会决定；检察长和公安机关负责人回避由同级检察院检察委员会决定。</p>
+                            <p><strong>4. 其他:</strong> 对侦查人员回避决定前,侦查不停止。对驳回申请回避的决定,可申请复议一次。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">五、证据 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 证据的概念:</p>
+                            <p class="ml-4">以法律规定形式表现出来能够证明案件真实情况的材料。</p>
+                            <p class="font-semibold mt-2">(二) 证据的法定种类:</p>
+                            <ol class="list-decimal list-inside ml-4">
+                                <li>物证</li><li>书证</li><li>证人证言</li><li>被害人陈述</li><li>犯罪嫌疑人、被告人供述和辩解</li><li>鉴定意见</li><li>勘验、检查、辨认、侦查实验笔录</li><li>视听资料、电子数据</li>
+                            </ol>
+                            <p class="font-semibold mt-2">(三) 证据的分类:</p>
+                            <p class="ml-4">1. 原始证据和传来证据</p>
+                            <p class="ml-4">2. 直接证据和间接证据</p>
+                            <p class="ml-4">3. 言词证据和实物证据</p>
+                            <p class="ml-4">4. 有罪证据和无罪证据</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">六、刑事强制措施 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>包括: 拘传、取保候审、监视居住、拘留、逮捕五种 (强制力度由轻到重)。</p>
+                            <p><strong>1. 拘传:</strong> 强制未被羁押的嫌疑人、被告人到案受讯问。一般12小时,重大复杂需拘留逮捕的不超24小时。两次间隔一般不超12小时。</p>
+                            <p><strong>2. 取保候审:</strong> 适用情形 (可能判管制、拘役或独立附加刑；可能判有期徒刑以上不致社会危险；患严重疾病、生活不能自理、怀孕或哺乳妇女不致社会危险；羁押期满未办结)。保证方式: 保证金、保证人。最长不超12个月。</p>
+                            <p><strong>3. 监视居住:</strong> 适用条件 (符合逮捕条件但患严重疾病、怀孕哺乳、唯一扶养人、特殊情况更适宜、羁押期满未办结)。符合取保条件但不能提供保证人/保证金也可。最长不超6个月。指定居所监视居住期限折抵刑期 (管制1:1, 拘役有期徒刑2:1)。</p>
+                            <p><strong>4. 拘留:</strong> 公安机关对现行犯或重大嫌疑分子可先行拘留的情形 (正在预备/实行/即时被发觉；被害人/目击者指认；身边/住处发现证据；犯罪后企图自杀/逃跑/在逃；可能毁灭/伪造证据/串供；不讲真实姓名住址身份不明；有流窜/多次/结伙作案重大嫌疑)。拘留时出示拘留证,24小时内送看守所,24小时内通知家属 (例外情形除外),24小时内讯问。</p>
+                            <p><strong>5. 逮捕:</strong> 有证据证明有犯罪事实,可能判徒刑以上,取保候审不足以防止社会危险性 (可能实施新犯罪；危害国家/公共/社会秩序；可能毁灭证据/串供/干扰证人；可能打击报复；企图自杀/逃跑)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">七、刑事诉讼程序 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>公诉案件一般经立案、侦查、提起公诉、审判、执行五个阶段。</p>
+                            <p class="font-semibold">(一) 立案</p>
+                            <p class="font-semibold mt-2">(二) 侦查</p>
+                            <p class="font-semibold mt-2">(三) 起诉:</p>
+                            <p class="ml-4">由检察院审查决定。犯罪情节轻微不需判刑或免刑的,可作不起诉决定。</p>
+                            <p class="font-semibold mt-2">(四) 审判:</p>
+                            <p class="ml-4"><strong>1. 审级制度:</strong> 四级两审终审制。</p>
+                            <p class="ml-4"><strong>2. 第一审程序:</strong></p>
+                            <p class="ml-8">(1) 普通程序审理期限: 公诉案受理后2个月内宣判,至迟不超3个月 (特殊情况可延长)。自诉案被告人羁押的同公诉案；未羁押的受理后6个月内宣判。</p>
+                            <p class="ml-8">(2) 简易程序: 基层法院适用。条件 (事实清楚证据充分；被告人认罪无异议；被告人对适用无异议)。不适用情形 (盲聋哑人或限制行为能力精神病人；未成年人；重大社会影响；共犯部分人不认罪或对适用有异议)。审判员一人独任。受理后20日内审结 (可判超3年有期徒刑可延长至一个半月)。</p>
+                            <p class="ml-4"><strong>3. 第二审程序:</strong> 上诉、抗诉期限 (判决10天, 裁定5天)。原则 (全面审查, 上诉不加刑)。</p>
+                            <p class="ml-4"><strong>4. 死刑复核程序</strong></p>
+                            <p class="ml-4"><strong>5. 审判监督程序:</strong> 对已生效判决裁定发现确有错误依法重审。启动主体 (各级法院院长、最高法、最高检、上级法院、上级检察院)。</p>
+                            <p class="font-semibold mt-2">【补充】</p>
+                            <p class="ml-4"><strong>1. 速裁程序:</strong> 基层法院管辖可能判3年以下刑罚,事实清楚证据充分,被告人认罪认罚同意适用。审判员一人独任。一般不进行法庭调查辩论。当庭宣判。受理后10日内审结 (可能判超1年可延长至15日)。</p>
+                            <p class="ml-4"><strong>2. 缺席审判程序:</strong> 适用贪污贿赂、严重危害国家安全、恐怖活动犯罪,嫌疑人/被告人在境外,检察院认为事实查清证据充分。由犯罪地、离境前居住地或最高法指定中院审理。被告人患严重疾病无法出庭超6个月,申请或同意恢复审理可缺席。被告人死亡但有证据无罪可缺席确认无罪。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section5_civil_procedure_law" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第五节 民事诉讼法</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、民事诉讼法的基本制度 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 回避制度:</p>
+                            <p class="ml-4">院长担任审判长时的回避,由审判委员会决定;审判人员的回避,由院长决定;其他人员的回避,由审判长决定。</p>
+                            <p class="font-semibold mt-2">(二) 公开审判制度:</p>
+                            <p class="ml-4">人民法院审理民事案件,除涉及国家秘密、个人隐私的案件不公开审理。离婚案件和涉及当事人商业秘密的案件,经当事人申请不公开审理的以外,应当公开审理。宣告判决一律公开。</p>
+                            </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、管辖 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 级别管辖:</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>基层人民法院: 管辖第一审民事案件。</li>
+                                <li>中级人民法院: 管辖重大涉外案件；本辖区有重大影响的案件；最高法确定由中院管辖的案件。</li>
+                                <li>高级人民法院: 管辖本辖区内有重大影响的第一审民事案件。</li>
+                                <li>最高人民法院: 管辖在全国有重大影响的案件；认为应由本院审理的案件。</li>
+                            </ul>
+                            <p><strong>2. 地域管辖:</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>“原告就被告”原则: 一般由被告住所地法院管辖；住所地与经常居住地不一致的,由经常居住地法院管辖。</li>
+                                <li>合同纠纷: 被告住所地或合同履行地法院管辖。</li>
+                                <li>侵权行为: 被告住所地或侵权行为地法院管辖。</li>
+                                <li>专属管辖: 不动产纠纷 (不动产所在地)；港口作业纠纷 (港口所在地)；继承遗产纠纷 (被继承人死亡时住所地或主要遗产所在地)。</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、证据 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>举证责任: “谁主张,谁举证”。当事人对自己提出的主张,有责任提供证据。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、民事诉讼审判程序 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 第一审普通程序</strong></p>
+                            <p><strong>2. 简易程序:</strong></p>
+                            <p class="ml-4">(1) 适用范围: 简单民事案件 (事实清楚、权利义务关系明确、争议不大)。当事人双方也可约定适用。</p>
+                            <p class="ml-4">(2) 起诉与审判: 原告可口头起诉。立案之日起3个月内审结 (特殊情况可延长1个月)。审判员一人独任审理。</p>
+                            <p class="ml-4">(3) 不适用简易程序情形: 起诉时被告下落不明；发回重审；共同诉讼一方或双方人多；应适用特别程序、审判监督程序、督促程序、公示催告程序。</p>
+                            <p class="ml-4"><strong>【小额诉讼程序】</strong></p>
+                            <p class="ml-8">(1) 适用情形: 基层法院及其派出法庭审理简单金钱给付案,标的额为省市区上年度就业人员年平均工资50%以下,一审终审。标的额超50%但在2倍以下,双方可约定适用。</p>
+                            <p class="ml-8">(2) 不适用情形: 人身关系、财产确权案；涉外案；需评估鉴定或对结果有异议；一方下落不明；当事人提反诉；其他不宜适用。</p>
+                            <p class="ml-8">(3) 审理方式: 可一次开庭审结并当庭宣判。</p>
+                            <p class="ml-8">(4) 审理期限: 立案之日起2个月内审结 (特殊情况可延长1个月)。</p>
+                            <p><strong>3. 第二审程序:</strong> 上诉期限 (不服裁定10日,不服判决15日)。</p>
+                            <p><strong>4. 审判监督程序:</strong> 对已生效判决裁定发现确有错误依法重审。可由法院依职权、检察院抗诉或当事人申请启动。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="exercises_ch6_other_laws" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">相关习题 (其他法律法规)</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="example-box">
+                        <p class="font-medium">1. 若消费者和经营者发生争议,解决途径不包括()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 与经营者协商和解或请求消费者协会协调</li><li>B. 向有关纪检部门申诉</li><li>C. 根据与经营者达成的仲裁协议提请仲裁机构仲裁</li><li>D. 向人民法院提起诉讼</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">2. 张某与某公司签订劳动合同,合同中关于试用期的约定,符合法律规定的是()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 试用期为1年</li><li>B. 试用期期间公司可以随时解除合同</li><li>C. 试用期期间企业支付的工资不低于约定工资的百分之七十</li><li>D. 试用期期间提前三天,张某可以通知公司,解除劳动合同</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">3. 根据《中华人民共和国消费者权益保护法》的规定,服务者向消费者提供质低价高的服务,是对消费者()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 公平交易权的侵犯</li><li>B. 人格尊严权的侵犯</li><li>C. 损害求偿权的侵犯</li><li>D. 选择服务自主权的侵犯</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">4.【多选】下列说法中,正确的是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 同一用人单位与同一劳动者只能约定一次试用期</li><li>B. 试用期的工资不能低于用人单位所在地的最低工资标准</li><li>C. 建立劳动关系,应当订立书面劳动合同</li><li>D. 用人单位在法定休假日安排劳动者工作的,须支付不低于工资的200%的工资报酬</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A, B, C</strong> (D错误，法定休假日应为300%)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">5.【多选】劳动者有下列情形之一的,用人单位不能解除劳动合同( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 女职工在孕期、产期、哺乳期的</li><li>B. 患病或非因工负伤,在规定的医疗期内的</li><li>C. 在本单位连续工作满十五年,且距法定退休年龄不足五年的</li><li>D. 在本单位患职业病或者因工负伤并被确认丧失或者部分丧失劳动能力的</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A, B, C, D</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">6.【多选】按照新修改的《消费者权益保护法》规定,七日之内无理由退货,但是也列举了一些不适用七天无理由退货的情况,其中包括( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 消费者定作的</li><li>B. 鲜活易腐的</li><li>C.在线下载或者消费者拆封的音像制品、计算机软件等数字化商品</li><li>D. 交付的报纸、期刊</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A, B, C, D</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">7.【多选】下列关于《劳动合同法》的规定说法正确的是( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 用人单位自用工之日起即与劳动者建立劳动关系</li><li>B. 试用期最长不得超过六个月</li><li>C. 同一用人单位与同一劳动者只能约定一次试用期</li><li>D. 劳动者在试用期的工资不得低于本单位相同岗位最低档工资或者劳动合同约定工资的百分之八十,并不得低于用人单位所在地的最低工资标准</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A, B, C, D</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">8.【多选】关于经营者的义务下列说法正确的是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 宾馆、商场、餐馆、银行、机场、车站、港口、影剧院等经营场所的经营者,应当对消费者尽到安全保障义务</li><li>B. 采取召回措施的,经营者应当承担消费者因商品被召回支出的必要费用</li><li>C. 消费者索要发票等购货凭证或者服务单据的,经营者必须出具</li><li>D. 经营者未经消费者同意或者请求,或者消费者明确表示拒绝的,不得向其发送商业性信息</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A, B, C, D</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">9.【多选】郑女士在某美容院进行皮肤护理后,脸部出现红肿、发痒的症状。经查,是因为美容时所用的护肤产品为不合格产品。郑女士找到美容院的老板谢某要求赔偿,谢某称他并不是这家美容院的法人代表,他使用的是朋友蔡某登记的营业执照,因此他对郑女士并无赔偿义务。请问,根据《消费者权益保护法》的相关规定,郑女士可以要求谁来赔偿?</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 护肤品生产厂家</li><li>B. 美容院老板谢某</li><li>C. 营业执照持有人蔡某</li><li>D. 消费者协会</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A, B, C</strong> (D消费者协会是调解组织，不是赔偿主体)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">10. 在我国刑事诉讼中,拘传的适用对象是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 证人</li><li>C. 未被羁押的犯罪嫌疑人</li><li>B. 已被羁押的被告人</li><li>D. 被害人</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">11.下列选项中,既是原始证据,又是直接证据的是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 被害人有关被告人衣着情况的陈述</li><li>B. 被告人有关犯罪事实的供述</li><li>C. 犯罪现场提供的被害人的脚印</li><li>D. 被告人遗留在犯罪现场的作案工具</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">12. 根据《中华人民共和国消费者权益保护法》的规定,服务者向消费者提供质低价高的服务,是对消费者()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 公平交易权的侵犯</li><li>B. 人格尊严权的侵犯</li><li>C. 损害求偿权的侵犯</li><li>D. 选择服务自主权的侵犯</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">13. A地的甲与B地的乙,两人因C地的一处房产归属问题发生纠纷。甲提起不动产诉讼,根据民事诉讼依法规定该诉讼的管辖地是( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. A地法院</li><li>B. B地法院</li><li>C. C地法院</li><li>D. 甲乙两人协商决定</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong> (不动产纠纷由不动产所在地法院专属管辖)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">14. 我国《刑事诉讼法》规定,犯罪嫌疑人在被侦查机关( ) 后或者采取强制措施之日起,有权委托辩护人。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 立案侦查</li><li>C. 传唤</li><li>B. 第一次讯问</li><li>D. 调查</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">15.下列案件中,不适用民事诉讼法审理的是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 丁不服税务机关征税的决定,向法院起诉</li><li>B. 甲失踪3年杳无音信,其妻到法院要求宣告甲失踪</li><li>C. 乙欠丙3000元钱迟迟不还,丙无奈之下请求法院向乙发出支付令</li><li>D. 戊与一公司签订劳动合同,该公司未足额支付工资,戊向法院起诉</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong> (此为行政诉讼)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">16. 某市中级法院审理一起故意杀人案件中,发现该案件事实不清,证据不足。关于本案,该法院正确的做法是( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 自行补充侦查</li><li>B. 裁定撤销案件</li><li>C. 退回人民检察院补充侦查</li><li>D. 作出无罪判决</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong> (或D，如果补充侦查后仍证据不足)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">17.取保候审的执行机关是( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 人民法院</li><li>B. 人民检察院</li><li>C. 公安机关</li><li>D. 基层组织</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">18. 因被告人患有严重疾病无法出庭,中止审理超过(),被告人仍无法出庭,被告人及其法定代理人、近亲属申请或者同意恢复审理的,人民法院可以在被告人不出庭的情况下缺席审理,依法作出判决。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 三个月</li><li>C.一年</li><li>B. 六个月</li><li>D. 两年</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">19. 甲和乙因合同纠纷诉至法院,诉讼过程中发现下列情形,不应回避的是( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 证人刘某,是乙的妻子</li><li>B. 审判员王某,是甲的哥哥</li><li>C. 合议庭审判员于某与该案的审理结果有利害关系</li><li>D. 合议庭组成人员中的陪审员周某,是甲的弟弟</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong> (证人与当事人有亲属关系本身不构成证人回避的法定事由，但可能影响其证言的可信度。审判人员等有亲属关系或利害关系则应回避。)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">20.【多选】根据新修改的刑事诉讼法,下列哪些情形不适用于速裁程序()</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 被告人是盲、聋、哑人,或者是尚未完全丧失辨认或者控制自己行为能力的精神病人</li><li>B. 被告人是未成年人的</li><li>C. 案件有重大社会影响的</li><li>D. 共同犯罪案件中部分被告人对指控的犯罪事实、罪名、量刑建议或者适用速裁程序有异议的</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A, B, C, D</strong></p></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function toggleExplanation(button) {
+            const explanationDiv = button.nextElementSibling;
+            if (explanationDiv.style.display === 'none' || explanationDiv.style.display === '') {
+                explanationDiv.style.display = 'block';
+                button.textContent = '隐藏答案与解析';
+            } else {
+                explanationDiv.style.display = 'none';
+                button.textContent = '显示答案与解析';
+            }
+        }
+
+        const mainContentSections = document.querySelectorAll('main > section.content-section');
+        const allSidebarLinks = document.querySelectorAll('aside nav a.sidebar-link');
+        const bodyEl = document.body;
+        const menuButton = document.getElementById('menu-button');
+        
+        function showSection(sectionIdToShow) {
+            mainContentSections.forEach(section => {
+                section.classList.toggle('active', section.id === sectionIdToShow);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.innerWidth >= 768) { 
+                bodyEl.classList.add('sidebar-visible');
+                bodyEl.classList.remove('sidebar-globally-hidden');
+            } else {
+                bodyEl.classList.remove('sidebar-visible');
+                bodyEl.classList.add('sidebar-globally-hidden'); 
+            }
+
+            const hash = window.location.hash.substring(1);
+            let sectionToActivate = 'introduction_ch6_other_laws'; 
+            let specificElementToScrollTo = null;
+
+            if (hash) {
+                const targetElementByHash = document.getElementById(hash);
+                if (targetElementByHash && targetElementByHash.classList.contains('content-section')) {
+                    sectionToActivate = hash; 
+                    specificElementToScrollTo = targetElementByHash;
+                } else if (targetElementByHash) { 
+                    const parentSection = targetElementByHash.closest('section.content-section');
+                    if (parentSection) {
+                        sectionToActivate = parentSection.id;
+                        specificElementToScrollTo = targetElementByHash;
+                    }
+                }
+            }
+            
+            showSection(sectionToActivate);
+
+            allSidebarLinks.forEach(link => {
+                const linkHrefId = link.getAttribute('href').substring(1);
+                const isActive = linkHrefId === sectionToActivate || linkHrefId === hash;
+                link.classList.toggle('active', isActive);
+            });
+            
+            if (specificElementToScrollTo) {
+                 if (specificElementToScrollTo.tagName === 'SUMMARY') {
+                    specificElementToScrollTo.parentElement.open = true;
+                } else if (specificElementToScrollTo.tagName === 'DETAILS' && !specificElementToScrollTo.open) {
+                    // specificElementToScrollTo.open = true; 
+                }
+                setTimeout(() => { 
+                    specificElementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            } else if (document.getElementById(sectionToActivate)) { 
+                 setTimeout(() => {
+                    document.getElementById(sectionToActivate).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        });
+
+        allSidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                
+                let targetId = this.getAttribute('href').substring(1);
+                let sectionToDisplayId = targetId; 
+                const targetElement = document.getElementById(targetId);
+                
+                allSidebarLinks.forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+
+                showSection(sectionToDisplayId);
+                window.location.hash = targetId; 
+
+                if (targetElement) {
+                     setTimeout(() => { 
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 50); 
+                }
+                
+                if (window.innerWidth < 768 && bodyEl.classList.contains('sidebar-visible')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                     bodyEl.classList.add('sidebar-globally-hidden');
+                }
+            });
+        });
+        
+        menuButton.addEventListener('click', () => {
+            bodyEl.classList.toggle('sidebar-globally-hidden');
+            bodyEl.classList.toggle('sidebar-visible', !bodyEl.classList.contains('sidebar-globally-hidden'));
+        });
+        
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) { 
+                if (!bodyEl.classList.contains('sidebar-globally-hidden')) { 
+                    bodyEl.classList.add('sidebar-visible');
+                } else { 
+                    bodyEl.classList.remove('sidebar-visible');
+                }
+            } else { 
+                if (bodyEl.classList.contains('sidebar-globally-hidden')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                }
+            }
+        });
+
+        document.querySelectorAll('details > summary').forEach(summary => {
+            const marker = summary.querySelector('.details-marker');
+            const detailsElement = summary.parentElement;
+            
+            if (marker) { 
+                 marker.style.transform = detailsElement.open ? 'rotate(90deg)' : 'rotate(0deg)';
+            }
+
+            detailsElement.addEventListener('toggle', function() {
+                if (marker) {
+                    marker.style.transform = this.open ? 'rotate(90deg)' : 'rotate(0deg)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

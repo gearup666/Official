@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>法理学知识学习网页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: padding-left 0.3s ease-in-out;
+        }
+        .content-section {
+            scroll-margin-top: 70px; 
+            display: none; 
+        }
+        .content-section.active {
+            display: block;
+        }
+        details > summary { 
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            background-color: #065f46; 
+            color: white;
+            border-radius: 0.375rem; 
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            list-style: none; 
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        details > summary::-webkit-details-marker {
+            display: none; 
+        }
+        details > summary:hover {
+            background-color: #047857; 
+        }
+        details[open] > summary {
+            background-color: #047857; 
+            border-radius: 0.375rem 0.375rem 0 0;
+        }
+        details > div.p-4 { 
+             border: 1px solid #047857; 
+             border-top: none;
+             border-radius: 0 0 0.375rem 0.375rem;
+             background-color: #f0fdfa; 
+        }
+        .key-point {
+            background-color: #d1fae5; 
+            border-left: 4px solid #10b981; 
+            color: #047857; 
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0 0.375rem 0.375rem 0; 
+        }
+        .example-box { 
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.5rem; 
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); 
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .explanation {
+            display: none;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background-color: #ecfdf5; 
+            border: 1px solid #a7f3d0; 
+            border-radius: 0.375rem; 
+        }
+        .btn {
+            background-color: #10b981; 
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; 
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #059669; 
+        }
+        
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+            height: calc(100vh - 4rem); 
+            transform: translateX(-100%); 
+            width: 22rem; 
+        }
+        main {
+            transition: margin-left 0.3s ease-in-out;
+            width: 100%; 
+            margin-left: 0;
+        }
+
+        body.sidebar-visible #sidebar {
+            transform: translateX(0);
+        }
+        body.sidebar-visible main {
+           margin-left: 22rem; 
+        }
+         @media (min-width: 768px) { 
+            body:not(.sidebar-globally-hidden) #sidebar {
+                transform: translateX(0);
+            }
+            body:not(.sidebar-globally-hidden) main {
+                margin-left: 22rem; 
+            }
+            body.sidebar-globally-hidden #sidebar {
+                transform: translateX(-100%);
+            }
+            body.sidebar-globally-hidden main {
+                margin-left: 0;
+            }
+        }
+
+        .sidebar-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            color: #d1fae5; 
+            text-decoration: none;
+            border-radius: 0.375rem; 
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: 600; 
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #10b981; 
+            color: white;
+        }
+         .details-marker { 
+            font-size: 0.8em;
+            margin-left: 0.5rem;
+            transition: transform 0.2s ease-in-out;
+        }
+        details[open] > summary > .details-marker {
+            transform: rotate(90deg);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        th, td {
+            border: 1px solid #a1a1aa; 
+            padding: 0.5rem;
+            text-align: left;
+        }
+        th {
+            background-color: #e4e4e7; 
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-slate-100">
+    <header class="bg-emerald-700 text-white p-4 fixed w-full top-0 z-50 shadow-md flex justify-between items-center">
+        <button id="menu-button" class="p-2 rounded-md text-emerald-200 hover:text-white hover:bg-emerald-600">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </button>
+        <h1 class="text-xl font-bold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">法理学知识学习网页</h1>
+    </header>
+
+    <div class="flex pt-16">
+        <aside id="sidebar" class="bg-emerald-800 text-white p-4 space-y-1 fixed top-16 left-0 z-40 overflow-y-auto">
+            <nav>
+                <a href="#introduction_jurisprudence" class="sidebar-link">法理学概览</a>
+                <a href="#section1_concept_of_law" class="sidebar-link">第一节 法的概念</a>
+                <a href="#section2_legal_relationship" class="sidebar-link">第二节 法律关系</a>
+                <a href="#section3_legal_rules" class="sidebar-link">第三节 法律规则</a>
+                <a href="#section4_legal_responsibility" class="sidebar-link">第四节 法律责任</a>
+                <a href="#section5_sources_of_law" class="sidebar-link">第五节 法的渊源</a>
+                <a href="#section6_effect_of_law" class="sidebar-link">第六节 法的效力</a>
+                <a href="#section7_implementation_of_law" class="sidebar-link">第七节 法的实施</a>
+                <a href="#exercises_jurisprudence" class="sidebar-link">相关习题</a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-6">
+            <section id="introduction_jurisprudence" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第一章 法理学概览</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="mb-3 text-gray-700 leading-relaxed">
+                        本章主要介绍法理学的基本概念，包括法的含义与特征、法与社会的关系、法的作用、法律体系和法的分类、法律关系、法律规则、法律责任、法的渊源、法的效力以及法的实施。
+                    </p>
+                    <div class="key-point">
+                        <h4 class="font-semibold text-lg mb-2">核心内容：</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>理解法的国家意志性、权利义务性、国家强制性等基本特征。</li>
+                            <li>探讨法与政策、法与道德的相互关系。</li>
+                            <li>掌握法的规范作用（指引、评价、预测、教育、强制）和社会作用。</li>
+                            <li>了解中国特色社会主义法律体系的构成及法的不同分类方法。</li>
+                            <li>熟悉法律关系的构成要素（主体、客体、内容）。</li>
+                            <li>区分不同类型的法律规则及其适用。</li>
+                            <li>理解法律责任的概念、分类及免责情形。</li>
+                            <li>掌握我国法的渊源及其位阶关系，以及法律冲突的解决规则。</li>
+                            <li>了解法对人、事、空间、时间的效力范围。</li>
+                            <li>熟悉执法、司法、守法的基本概念和原则。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section1_concept_of_law" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第一节 法的概念</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、法的含义与特征 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 法的含义:</p>
+                            <p class="ml-4">法是由国家制定、认可并依靠国家强制力保证实施的,以权利和义务为调整内容,以人的行为及行为关系为调整对象,反映由特定物质生活条件所决定的统治阶级或人民意志的行为规范体系。</p>
+                            <p class="font-semibold mt-2">(二) 法的特征:</p>
+                            <ol class="list-decimal list-inside ml-4">
+                                <li>国家意志性</li>
+                                <li>权利义务性 (设定“权利模式”和“义务模式”)</li>
+                                <li>国家强制性</li>
+                                <li>普遍性 (针对不特定的人,可反复适用)</li>
+                                <li>规范性</li>
+                                <li>程序性</li>
+                                <li>可诉性</li>
+                            </ol>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、法与社会 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 法与政策:</p>
+                            <p class="ml-4">党的政策对社会主义法的作用:</p>
+                            <ul class="list-disc list-inside ml-8">
+                                <li>党的政策指导法制建设的各个环节,社会主义法是实现党的政策的重要手段和形式。</li>
+                                <li>法一般在总结党的政策实践经验基础上制定,使政策完善并在实践中产生更显著效果。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">(二) 法与道德:</p>
+                            <table class="min-w-full divide-y divide-gray-200 my-2">
+                                <thead class="bg-gray-50"><tr><th>方面</th><th>法律</th><th>道德</th></tr></thead>
+                                <tbody>
+                                    <tr><td>生成方式</td><td>国家依程序主动制定认可</td><td>社会生产生活中自然演进</td></tr>
+                                    <tr><td>行为标准</td><td>具体明确,可操作性强</td><td>笼统原则,标准模糊</td></tr>
+                                    <tr><td>强制方式</td><td>外在强制 (国家强制力)</td><td>内在约束 (良知认同,社会舆论)</td></tr>
+                                    <tr><td>调整方式</td><td>重外在行为</td><td>重内在动机</td></tr>
+                                    <tr><td>解决方式</td><td>可诉性</td><td>不可诉性 (舆论压力,良心谴责)</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、法的作用 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>法的作用,是指法对社会生活所发生的影响。分为规范作用和社会作用。</p>
+                            <p class="font-semibold">(一) 规范作用:</p>
+                            <ol class="list-decimal list-inside ml-4">
+                                <li><strong>指引作用:</strong> 对本人行为的导向、引路作用 (确定指引 vs 不确定指引)。</li>
+                                <li><strong>评价作用:</strong> 判断、衡量他人行为合法与否的评判作用。</li>
+                                <li><strong>预测作用:</strong> 预估行为及后果,合理安排自己行为。</li>
+                                <li><strong>教育作用:</strong> 通过法律实施,对一般人行为产生影响。</li>
+                                <li><strong>强制作用:</strong> 通过制裁、约束违法犯罪行为来强制人们遵守法律。</li>
+                            </ol>
+                            <p class="font-semibold mt-2">(二) 社会作用:</p>
+                            <ol class="list-decimal list-inside ml-4">
+                                <li>政治职能 (阶级统治的职能)。</li>
+                                <li>社会职能 (执行社会公共事务的职能)。</li>
+                            </ol>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、法律体系和法的分类 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 法律体系:</p>
+                            <p class="ml-4"><strong>1. 含义和特征:</strong> 一国全部现行有效的法律规范,按标准原则划分为不同法律部门而形成的和谐有机整体。特征: ①只包括国内法; ②只包括现行有效法; ③构成基础是法律部门。</p>
+                            <p class="ml-4">法律部门 (部门法): 调整同一类社会关系的法律规范总称。划分标准: 主要为调整对象,其次为调整方法。</p>
+                            <p class="ml-4"><strong>2. 中国特色社会主义法律体系:</strong> 以宪法为统帅,法律为主干,行政法规、地方性法规为重要组成部分。由宪法相关法、民法商法、行政法、经济法、社会法、刑法、诉讼与非诉讼程序法等部门组成。</p>
+                            <p class="font-semibold mt-2">(二) 法的分类:</p>
+                            <ol class="list-decimal list-inside ml-4">
+                                <li><strong>国内法与国际法:</strong> 按创制主体、适用范围、渊源分。</li>
+                                <li><strong>成文法与不成文法:</strong> 按创制方式、表现形式分。</li>
+                                <li><strong>根本法 (宪法) 与普通法:</strong> 按地位、效力、内容、制定程序分。</li>
+                                <li><strong>一般法与特别法:</strong> 按效力范围分。</li>
+                                <li><strong>实体法与程序法:</strong> 按规定内容不同分。</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section2_legal_relationship" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第二节 法律关系</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、法律关系概述 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 含义:</p>
+                            <p class="ml-4">法律在调整人们行为的过程中形成的权利义务关系。具有合法性。</p>
+                            <p class="font-semibold mt-2">(二) 法律事实 (法律关系的产生、变更和消灭):</p>
+                            <p class="ml-4"><strong>1. 概念:</strong> 法律规范规定,能引起法律关系产生、变更、消灭的客观情况。</p>
+                            <p class="ml-4"><strong>2. 分类 (按是否以人意志为转移):</strong> ①法律事件 (不以当事人意志为转移的客观事实); ②法律行为 (当事人意志为转移的人的行为)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、法律关系的构成要素 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>由法律关系主体、法律关系内容和法律关系客体三要素构成。</p>
+                            <p class="font-semibold">(一) 主体:</p>
+                            <p class="ml-4">法律关系的参加者,权利享有者和义务承担者。范围: 公民(自然人)、法人、国家等。需具权利能力和行为能力。</p>
+                            <p class="ml-4">① <strong>权利能力:</strong> 参与法律关系,享权利担义务的法律资格。</p>
+                            <p class="ml-4">② <strong>行为能力:</strong> 通过自己行为取得权利履行义务的能力。</p>
+                            <p class="ml-4">关系: 权利能力是行为能力前提；二者可分离。</p>
+                            <p class="font-semibold mt-2">(二) 客体:</p>
+                            <p class="ml-4"><strong>1. 含义:</strong> 权利和义务指向的对象。</p>
+                            <p class="ml-4"><strong>2. 种类:</strong> 物、人身利益、行为、智力成果、权利本身。</p>
+                            <p class="font-semibold mt-2">(三) 内容:</p>
+                            <p class="ml-4"><strong>1. 含义:</strong> 法律权利和法律义务,核心要素。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section3_legal_rules" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第三节 法律规则</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、法律规则的含义 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>规定法律上的权利、义务、责任的准则、标准,或是赋予某一事实状态以法律意义的指示、规定。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、法律规则的分类 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 权利规则、义务规则与复合规则 (按内容分):</strong></p>
+                            <p class="ml-4">① <strong>权利规则 (授权性规则):</strong> 规定可为/不为及要求他人为/不为的行为。分权利性规则、职权性规则。</p>
+                            <p class="ml-4">② <strong>义务规则:</strong> 直接要求作为或不作为 (命令性、禁止性规则)。</p>
+                            <p class="ml-4">③ <strong>复合规则:</strong> 兼具授予权利、设定义务性质。</p>
+                            <p class="font-semibold mt-2">2. 确定性规则、准用性规则与委任性规则 (按内容是否直接明确规定分):</p>
+                            <p class="ml-4"><strong>确定性规则:</strong> 明确规定行为规则内容 (最常见)。</p>
+                            <p class="ml-4"><strong>委任性规则 (委托性规则):</strong> 未明确规定内容,授权某机构具体规定。</p>
+                            <p class="ml-4"><strong>准用性规则:</strong> 未明确规定内容,但指明可援引其他规则明确。</p>
+                            <p class="font-semibold mt-2">3. 强行性规则与任意性规则 (按强制程度分):</p>
+                            <p class="ml-4"><strong>强行性规则:</strong> 必须作为或不作为,违背则制裁,不允许随意改变。</p>
+                            <p class="ml-4"><strong>任意性规则:</strong> 规定权利义务具相对肯定形式,允许当事人协议或单方变更。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section4_legal_responsibility" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第四节 法律责任</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、法律责任的概念 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>行为人由于违法行为、违约行为或者由于法律规定而应承受的某种不利的法律后果。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、法律责任的分类 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>根据违法行为所违反法律性质分: 民事责任、行政责任、刑事责任、违宪责任。</p>
+                            <p class="ml-4">(1) <strong>民事责任:</strong> 违反民法、违约或民法规定所应承担。包括停止侵害、赔偿损失、支付违约金等。</p>
+                            <p class="ml-4">(2) <strong>刑事责任:</strong> 因犯罪行为所必须承受,由司法机关确定。主刑 (管制、拘役、有期徒刑、无期徒刑、死刑), 附加刑 (罚金、剥夺政治权利、没收财产、驱逐出境)。</p>
+                            <p class="ml-4">(3) <strong>行政责任:</strong> 违反行政法规定或行政法规定所应承担。包括行政处分 (警告、记过、撤职、开除等) 和行政处罚 (警告、罚款、行政拘留等)。</p>
+                            <p class="ml-4">(4) <strong>违宪责任:</strong> 有关国家机关制定法律法规规章或有关主体从事活动与宪法抵触而产生。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、责任免除的情形 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>行为人违法应担责,但因法律特别规定可部分或全部免除。方式: 1.时效免责; 2.不诉免责; 3.自首、立功免责; 4.有效补救免责; 5.协议/意定免责; 6.自助免责; 7.人道主义免责。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、法律制裁 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 概念:</strong> 特定机关对违法者依其法律责任而实施的强制性惩罚措施。</p>
+                            <p><strong>2. 种类:</strong> 刑事制裁、民事制裁、行政制裁、违宪制裁。</p>
+                            <p><strong>3. 与法律责任关系:</strong> 制裁是承担责任重要方式。责任是前提,制裁是结果/体现。有责任不等于一定有制裁。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section5_sources_of_law" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第五节 法的渊源</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、法的渊源的含义 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>简称“法源”,又称法律形式,指那些来源不同,因而具有法的不同效力意义和作用的法的外在表现形式。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、我国不同法的渊源的制定主体 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 国家立法权:</strong> 基本法律 (刑事、民事、国家机构等) 由全国人大制定；其他法律由全国人大常委会制定。</p>
+                            <p><strong>2. 行政立法权:</strong> 行政法规由国务院制定；部门规章由部委行署、直属机构制定；地方政府规章由省级政府、设区的市/自治州政府制定 (后者限城乡建设管理、环保、历史文化保护)。</p>
+                            <p><strong>3. 地方立法权:</strong> 地方性法规由省级和设区的市/自治州人大及其常委会制定 (后者需省级常委会批准)；民族自治法规 (自治条例、单行条例) 由自治区、州、县人大制定 (需上级批准/备案)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、法的渊源的位阶 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>宪法效力最高。法律效力高于行政法规、地方性法规、规章。行政法规效力高于地方性法规、规章。地方性法规效力高于本级和下级地方政府规章。省级政府规章效力高于本行政区内设区的市、自治州政府规章。部门规章之间、部门规章与地方政府规章同等效力,在各自权限范围施行。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、法的冲突及解决 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 一般规则:</strong> (1)上位法优于下位法; (2)特别法优于一般法; (3)新法优于旧法; (4)法不溯及既往 (有利溯及除外)。</p>
+                            <p><strong>2. 具体解决规则:</strong> (1)同一机关新一般规定与旧特别规定不一致,由制定机关裁决; (2)地方性法规与部门规章不一致,由国务院提意见或报全国人大常委会裁决; (3)部门规章之间、部门规章与地方政府规章不一致,由国务院裁决。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section6_effect_of_law" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第六节 法的效力</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p>法律效力可分为: 法对人的效力、法对事的效力、法的空间效力、法的时间效力。</p>
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、法对人的效力 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>指法律对谁有效力。原则: 1.属人主义 (只适用本国公民); 2.属地主义 (适用该国管辖区内所有人); 3.保护主义 (维护本国利益); 4.以属地主义为主,与属人、保护主义结合 (我国采用)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、法对事的效力 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>指法律调整的范围。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、法的空间效力 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>指法律发生效力的地域范围。一般在一国主权所及全部领域有效。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、法的时间效力 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>指法律何时生效、何时终止效力及有无溯及力。</p>
+                            <p><strong>1. 生效时间:</strong> ①公布之日起生效; ②条文自定具体生效时间; ③公布后符合一定条件时生效。</p>
+                            <p><strong>2. 终止生效时间 (废止):</strong> ①明示废止 (规定有效期届满自动失效；新法规定旧法失效)；②默示废止 (与已生效新法抵触则旧法自动失效)。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section7_implementation_of_law" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第七节 法的实施</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p>法在实际生活中被人们所遵守和施行。将应然行为模式转为实际行为。</p>
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、执法 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>专指国家行政机关及其公职人员依法行使管理职权、履行管理职责、实施法律的活动。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、司法 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 司法 (法的适用):</strong> 特定国家机关及其公职人员,依职权和程序,将法运用于具体案件的专门活动。</p>
+                            <p><strong>2. 司法基本原则:</strong> (1)司法公正; (2)公民在法律面前一律平等; (3)以事实为根据,以法律为准绳; (4)司法机关依法独立行使职权 (专属性、独立性、合法性)。</p>
+                        </div>
+                    </details>
+                     <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、守法 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>全体社会成员以法律规定行为模式为准则,行使权利、履行义务。构成: (1)主体:所有社会成员。(2)范围:宪法法律、法规规章、其他法源、判决书等。(3)内容:行使权利和履行义务。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="exercises_jurisprudence" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">相关习题</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="example-box">
+                        <p class="font-medium">1. 当代中国的法律渊源主要是以宪法为核心的各种制定法,但下列哪一个选项不包括在内()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 江苏省的地方性法规</li><li>B. 深圳经济特区的法规</li><li>C. 天津市高级人民法院的判例</li><li>D. 国务院的行政法规</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong> (我国不实行判例法)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">2. 甲的父亲在一次车祸中丧生,甲依法律承了其父的遗产。引起遗产继承这一法律关系发生的法律事实是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 车祸</li><li>B. 甲的父亲死亡</li><li>C. 甲与其你之间存在合法的父子关系</li><li>D. 甲未声明放弃继承权</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong> (死亡是引起继承开始的法律事件)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">3. 《深圳经济特区禁止食用野生动物若干规定》规定,“餐饮业经营者不得以禁止食用的野生动物及其制品的名称、别称、图案制作招牌、菜谱招揽、诱导顾客”,这属于( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A.授权性规范</li><li>B. 禁止性规范</li><li>C. 任意性规范</li><li>D. 构成性规范</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">4. 对于违法犯罪行为的制裁和惩罚,体现了法律的( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A.评价作用</li><li>C. 强制作用</li><li>B.教育作用</li><li>D. 指引作用</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">5. 法律是一种特殊的行为规则,其最主要的特征是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 由国家制定或认可</li><li>B. 对全体社会成员具有普遍约束力</li><li>C. 靠国家强制力保证实施</li><li>D. 以规定权利和义务为内容</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">6. 法律和道德的关系,下列表述中错误的是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 法律强调调整人的行为,道德强调调整人的内心</li><li>B. 法律是道德的最高要求,道德是法律的最低要求</li><li>C. 法律和道德在调整人类社会关系,都起到规范作用</li><li>D. 法律通过国家强制力保障实施,道德通过社会舆论保障实施</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong> (法律是道德的最低要求)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">7. 法律在内容的设定上以( )为核心。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 法律事实</li><li>B. 法律责任</li><li>C. 权利和义务</li><li>D. 刑罚处罚</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">8.【多选】根据我国《立法法》的规定,关于不同的法律渊源之间出现冲突时的法律适用,下列哪些选项是错误的( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 自治条例、单行条例与地方性法规不一致的,适用地方性法规</li><li>B. 地方性法规和部门规章之间的效力没有高下之分,发生冲突时由国务院决定如何适用</li><li>C. 公安部的部门规章与民政部的部门规章不一致时,按照新法优于旧法的原则处理,直接选择后颁布的部门规章加以适用</li><li>D. 某市经授权制定的劳动法规与我国《劳动法》的规定不一致,不能确定如何适用时,由全国人大常委会裁决</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A, B, C</strong> (A错误，民族自治地方的自治条例和单行条例在本地方有优先效力或特殊效力；B错误，冲突时由国务院提出意见，认为应适用地方性法规的决定适用，认为应适用部门规章的提请全国人大常委会裁决；C错误，部门规章冲突由国务院裁决。)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">9. 法律规定的不以当事人的主观意志为转移的能引起法律关系的产生、变更和消灭的属于( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 法律解释</li><li>B. 法律事件</li><li>C. 法律行为</li><li>D. 法律部门</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">10. 法的规范作用包括( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A.指引、评价、惩罚、强制、教育作用</li><li>B.指引、评价、教育、预测、惩罚作用</li><li>C.指引、教育、强制、鼓励、预测作用</li><li>D.指引、评价、预测、教育、强制作用</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p></div>
+                    </div>
+                     <div class="example-box">
+                        <p class="font-medium">11. 法治思维和人治思维的分水岭是在( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 有没有法律</li><li>C. 法律的好坏</li><li>B. 法律的多寡</li><li>D.最高的权威是法律还是个人</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">12. 根据法律效力的强弱程度,可将法律规范分为()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 确定性规范和准用性规范</li><li>C. 强行性规范和任意性规范</li><li>B. 委任性规范和准用性规范</li><li>D. 授权性规范和义务性规范</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function toggleExplanation(button) {
+            const explanationDiv = button.nextElementSibling;
+            if (explanationDiv.style.display === 'none' || explanationDiv.style.display === '') {
+                explanationDiv.style.display = 'block';
+                button.textContent = '隐藏答案与解析';
+            } else {
+                explanationDiv.style.display = 'none';
+                button.textContent = '显示答案与解析';
+            }
+        }
+
+        const mainContentSections = document.querySelectorAll('main > section.content-section');
+        const allSidebarLinks = document.querySelectorAll('aside nav a.sidebar-link');
+        const bodyEl = document.body;
+        const menuButton = document.getElementById('menu-button');
+        
+        function showSection(sectionIdToShow) {
+            mainContentSections.forEach(section => {
+                section.classList.toggle('active', section.id === sectionIdToShow);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.innerWidth >= 768) { 
+                bodyEl.classList.add('sidebar-visible');
+                bodyEl.classList.remove('sidebar-globally-hidden');
+            } else {
+                bodyEl.classList.remove('sidebar-visible');
+                bodyEl.classList.add('sidebar-globally-hidden'); 
+            }
+
+            const hash = window.location.hash.substring(1);
+            let sectionToActivate = 'introduction_jurisprudence'; 
+            let specificElementToScrollTo = null;
+
+            if (hash) {
+                const targetElementByHash = document.getElementById(hash);
+                if (targetElementByHash && targetElementByHash.classList.contains('content-section')) {
+                    sectionToActivate = hash; 
+                    specificElementToScrollTo = targetElementByHash;
+                } else if (targetElementByHash) { 
+                    const parentSection = targetElementByHash.closest('section.content-section');
+                    if (parentSection) {
+                        sectionToActivate = parentSection.id;
+                        specificElementToScrollTo = targetElementByHash;
+                    }
+                }
+            }
+            
+            showSection(sectionToActivate);
+
+            allSidebarLinks.forEach(link => {
+                const linkHrefId = link.getAttribute('href').substring(1);
+                const isActive = linkHrefId === sectionToActivate || linkHrefId === hash;
+                link.classList.toggle('active', isActive);
+            });
+            
+            if (specificElementToScrollTo) {
+                 if (specificElementToScrollTo.tagName === 'SUMMARY') {
+                    specificElementToScrollTo.parentElement.open = true;
+                } else if (specificElementToScrollTo.tagName === 'DETAILS' && !specificElementToScrollTo.open) {
+                    // specificElementToScrollTo.open = true; 
+                }
+                setTimeout(() => { 
+                    specificElementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            } else if (document.getElementById(sectionToActivate)) { 
+                 setTimeout(() => {
+                    document.getElementById(sectionToActivate).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        });
+
+        allSidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                
+                let targetId = this.getAttribute('href').substring(1);
+                let sectionToDisplayId = targetId; 
+                const targetElement = document.getElementById(targetId);
+                
+                allSidebarLinks.forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+
+                showSection(sectionToDisplayId);
+                window.location.hash = targetId; 
+
+                if (targetElement) {
+                     setTimeout(() => { 
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 50); 
+                }
+                
+                if (window.innerWidth < 768 && bodyEl.classList.contains('sidebar-visible')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                     bodyEl.classList.add('sidebar-globally-hidden');
+                }
+            });
+        });
+        
+        menuButton.addEventListener('click', () => {
+            bodyEl.classList.toggle('sidebar-globally-hidden');
+            bodyEl.classList.toggle('sidebar-visible', !bodyEl.classList.contains('sidebar-globally-hidden'));
+        });
+        
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) { 
+                if (!bodyEl.classList.contains('sidebar-globally-hidden')) { 
+                    bodyEl.classList.add('sidebar-visible');
+                } else { 
+                    bodyEl.classList.remove('sidebar-visible');
+                }
+            } else { 
+                if (bodyEl.classList.contains('sidebar-globally-hidden')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                }
+            }
+        });
+
+        document.querySelectorAll('details > summary').forEach(summary => {
+            const marker = summary.querySelector('.details-marker');
+            const detailsElement = summary.parentElement;
+            
+            if (marker) { 
+                 marker.style.transform = detailsElement.open ? 'rotate(90deg)' : 'rotate(0deg)';
+            }
+
+            detailsElement.addEventListener('toggle', function() {
+                if (marker) {
+                    marker.style.transform = this.open ? 'rotate(90deg)' : 'rotate(0deg)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

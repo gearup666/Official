@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的项目导航</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* 全局样式 */
+    <title>我的项目导航</title> <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"> <style>
+        /* Original styles from the uploaded index.html are preserved here */
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
@@ -24,7 +21,7 @@
 
         /* 容器样式 */
         .container {
-            max-width: 1400px; /* 稍微加宽以容纳更多卡片 */
+            max-width: 1400px; 
             margin: 30px auto;
             padding: 20px;
             flex-grow: 1;
@@ -36,13 +33,13 @@
             margin-bottom: 40px;
             padding-bottom: 20px;
             border-bottom: 2px solid #e0e0e0;
-            position: relative; /* 用于背景动画 */
-            overflow: hidden; /* 隐藏溢出内容 */
+            position: relative; 
+            overflow: hidden; 
             padding-top: 50px;
             padding-bottom: 50px;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); /* 渐变背景 */
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); 
             color: white;
-            border-radius: 15px; /* 圆角 */
+            border-radius: 15px; 
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
@@ -66,13 +63,13 @@
         }
 
         .header h1 {
-            color: #ffffff; /* 白色标题 */
-            font-size: 3.5em; /* 更大标题 */
+            color: #ffffff; 
+            font-size: 3.5em; 
             margin-bottom: 10px;
-            font-weight: 800; /* 更粗标题 */
+            font-weight: 800; 
             letter-spacing: 1px;
             text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
-            position: relative; /* 确保在伪元素之上 */
+            position: relative; 
             z-index: 1;
         }
 
@@ -86,36 +83,35 @@
         /* 卡片网格布局 */
         .cards-grid {
             display: grid;
-            /* 卡片列数：小屏幕1列，中等屏幕2列，大屏幕3列，更大屏幕4列 */
             grid-template-columns: repeat(1, 1fr); 
-            gap: 25px; /* 卡片间距 */
-            margin-top: 40px;
+            gap: 25px; 
+            margin-top: 20px; /* Adjusted margin-top to be slightly less than header's margin-bottom */
         }
 
         /* 单个卡片样式 */
         .card {
             background-color: #ffffff;
-            border-radius: 16px; /* 更圆润的圆角 */
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* 更精致的阴影 */
-            padding: 25px; /* 调整内边距 */
+            border-radius: 16px; 
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); 
+            padding: 25px; 
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-            display: flex; /* 使用flex布局来对齐图标和标题 */
-            align-items: center; /* 垂直居中对齐 */
+            display: flex; 
+            align-items: center; 
             text-decoration: none;
             color: inherit;
-            min-height: 100px; /* 卡片最小高度 */
+            min-height: 100px; 
             position: relative;
             overflow: hidden;
             border: 1px solid #e0e0e0;
         }
 
         .card:hover {
-            transform: translateY(-8px) scale(1.03); /* 悬浮时轻微上移并放大 */
+            transform: translateY(-8px) scale(1.03); 
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-            background-color: #f8faff; /* 悬浮时轻微变色 */
+            background-color: #f8faff; 
         }
 
-        .card::before {
+        .card::before { /* Hover background effect from original */
             content: '';
             position: absolute;
             top: 0;
@@ -128,30 +124,38 @@
             z-index: 0;
         }
 
-        .card:hover::before {
+        .card:hover::before { /* Hover background effect from original */
             opacity: 1;
         }
 
-        .card-icon {
-            font-size: 2.5em; /* 图标大小 */
-            color: #6a11cb; /* 统一的图标颜色 */
-            margin-right: 20px; /* 图标和标题之间的间距 */
-            flex-shrink: 0; /* 防止图标被压缩 */
+        .card-icon { /* Icon container from original */
+            font-size: 2.5em; 
+            color: #6a11cb; 
+            margin-right: 20px; 
+            flex-shrink: 0; 
             transition: transform 0.3s ease, color 0.3s ease;
             position: relative;
             z-index: 1;
         }
         
-        .card:hover .card-icon {
-            transform: scale(1.1); /* 悬浮时图标放大 */
-            color: #2575fc; /* 悬浮时图标颜色变化 */
+        .card:hover .card-icon { /* Icon hover from original */
+            transform: scale(1.1); 
+            color: #2575fc; 
+        }
+        
+        .card-icon.deprecated { /* Specific style for deprecated icons */
+             color: #ef4444; /* Red color for deprecated icons */
+        }
+        .card:hover .card-icon.deprecated {
+            color: #f87171; /* Lighter red on hover for deprecated */
         }
 
-        .card-title {
-            font-size: 1.2em; /* 调整标题字体大小 */
-            color: #343a40; /* 深色标题 */
-            margin: 0; /* 移除默认的margin */
-            font-weight: 700; /* 标题加粗 */
+
+        .card-title { /* Title style from original */
+            font-size: 1.2em; 
+            color: #343a40; 
+            margin: 0; 
+            font-weight: 700; 
             word-break: break-word;
             overflow-wrap: break-word;
             position: relative;
@@ -161,12 +165,12 @@
         /* 页脚样式 */
         .footer {
             text-align: center;
-            margin-top: auto; /* 将页脚推到底部 */
+            margin-top: auto; 
             padding: 30px 0;
             border-top: 1px solid #e0e0e0;
             font-size: 0.9em;
             color: #777;
-            background-color: #ffffff; /* 页脚背景色 */
+            background-color: #ffffff; 
             width: 100%;
             box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
         }
@@ -184,7 +188,7 @@
         }
         @media (min-width: 1024px) { /* lg */
             .cards-grid {
-                grid-template-columns: repeat(4, 1fr); /* 大屏幕上最多4列 */
+                grid-template-columns: repeat(4, 1fr); 
             }
         }
         @media (max-width: 639px) {
@@ -195,7 +199,7 @@
                 font-size: 1em;
             }
             .card {
-                flex-direction: row; /* 小屏幕确保图标和文字在一行 */
+                flex-direction: row; 
                 padding: 20px;
             }
             .card-icon {
@@ -206,96 +210,139 @@
                 font-size: 1.1em;
             }
         }
+
+        /* Custom section title style, similar to header h1 but smaller */
+        .section-title-custom {
+            font-size: 2.5em; /* Slightly smaller than main header */
+            font-weight: 700;
+            color: #333; /* Or a color that fits the theme */
+            text-align: center;
+            margin-top: 40px; /* Space above section title */
+            margin-bottom: 30px; /* Space below section title */
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <h1>公考知识点互动式网页导航</h1>
-            <p>这里汇集了公考所有知识点的网页互动版</p>
-        </header>
+            <h1>公考知识点互动式网页导航</h1> <p>这里汇集了公考所有知识点的网页互动版</p> </header>
 
         <main>
-            <div class="cards-grid" id="navigation-cards-container">
-                <!-- 
-                    卡片结构说明：
-                    - `href`: 链接到您的HTML文件路径。
-                    - `class="card group"`: 基本卡片样式和用于悬停效果的 Tailwind group 类。
-                    - `card-icon`: 图标容器。
-                    - `<i>` 标签: Font Awesome 图标。
-                        - `class`: 图标的 CSS 类。例如: `fas fa-book` (实心书本), `fas fa-lightbulb` (实心灯泡), `fas fa-code` (实心代码), `fas fa-chart-bar` (实心柱状图), `fas fa-pencil-alt` (实心铅笔), `fas fa-brain` (实心大脑), `fas fa-flask` (实心烧瓶), `fas fa-home` (实心家), `fas fa-laptop-code` (实心笔记本电脑和代码)。
-                        - 如何查找图标名称：访问 Font Awesome 官网 (https://fontawesome.com/v5/icons)，搜索关键词（英文），选择免费版图标，复制其类名。
-                    - `card-title`: 页面标题。
-                -->
-
-                <a href="html_content/notes_collection/1.1.html" class="card group">
-                    <div class="card-icon">
-                        <i class="fas fa-lightbulb"></i> 
-                    </div>
-                    <h2 class="card-title">一、二 - 马克思主义哲学学习</h2>
-                </a>
-
-                <a href="html_content/notes_collection/1.3.html" class="card group">
-                    <div class="card-icon">
-                        <i class="fas fa-fist-raised"></i> 
-                    </div>
-                    <h2 class="card-title">一、三 - 毛泽东思想学习</h2>
-                </a>
-
-
-                <a href="html_content/notes_collection/1.5.html" class="card group">
-                    <div class="card-icon">
-                        <i class="fas fa-chart-line"></i> 
-                    </div>
-                    <h2 class="card-title">一、五 - 经济知识学习</h2>
-                </a>
-
-                <a href="html_content/notes_collection/2.1.html" class="card group">
-                    <div class="card-icon">
-                        <i class="fas fa-comments"></i> 
-                    </div>
-                    <h2 class="card-title">二、一 - 言语理解与表达</h2>
-                </a>
-
-
-                <a href="html_content/notes_collection/3.html" class="card group">
-                    <div class="card-icon">
-                        <i class="fas fa-calculator"></i> 
-                    </div>
-                    <h2 class="card-title">三 - 数量关系系统课</h2>
-                </a>
-
-
-                <a href="html_content/notes_collection/4.html" class="card group">
-                    <div class="card-icon">
-                        <i class="fas fa-puzzle-piece"></i> 
-                    </div>
-                    <h2 class="card-title">四 - 判断推理系统课</h2>
-                </a>
-
-
-                <a href="html_content/notes_collection/5.html" class="card group">
-                    <div class="card-icon">
-                        <i class="fas fa-chart-bar"></i> 
-                    </div>
-                    <h2 class="card-title">五 - 资料分析系统课</h2>
-                </a>
-
-
-                <a href="html_content/notes_collection/2.2.html" class="card group">
-                    <div class="card-icon">
-                        <i class="fas fa-comments"></i> 
-                    </div>
-                    <h2 class="card-title">二、二 - 言语理解与表达</h2>
-                </a>
-                
+            <section id="active-notes" class="mb-12">
+                <h2 class="section-title-custom">笔记链接</h2>
+                <div class="cards-grid" id="active-navigation-cards-container">
+                    <a href="html_content/notes_collection/1.1.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-brain"></i></div>
+                        <h2 class="card-title">1.1 马克思主义哲学</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.2.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-landmark"></i></div>
+                        <h2 class="card-title">1.2 中共党史</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.3.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-book-reader"></i></div>
+                        <h2 class="card-title">1.3 毛泽东思想</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.4.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-flag"></i></div>
+                        <h2 class="card-title">1.4 中国特色社会主义理论体系</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.4.5.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-star"></i></div>
+                        <h2 class="card-title">1.5 习近平新时代中国特色社会主义思想</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.5.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                        <h2 class="card-title">1.6 经济知识</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.6.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-users-cog"></i></div>
+                        <h2 class="card-title">1.7 管理知识</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.7.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-file-signature"></i></div>
+                        <h2 class="card-title">1.8 公文知识</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.8.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-landmark"></i></div> <h2 class="card-title">1.9 历史人文知识</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.9.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-flask"></i></div>
+                        <h2 class="card-title">1.10 自然科技知识</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.10.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-building"></i></div>
+                        <h2 class="card-title">1.11 事业单位管理制度</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.11.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-balance-scale"></i></div>
+                        <h2 class="card-title">1.12 法理学知识</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.12.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-gavel"></i></div>
+                        <h2 class="card-title">1.13 宪法知识</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.13.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-skull-crossbones"></i></div>
+                        <h2 class="card-title">1.14 刑法知识</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.14.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-lightbulb"></i></div>
+                        <h2 class="card-title">1.15 民法知识</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.15.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-landmark"></i></div> <h2 class="card-title">1.16 行政法知识</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.16.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-scroll"></i></div>
+                        <h2 class="card-title">1.17 其他法律法规</h2>
+                    </a>
+                    <a href="html_content/notes_collection/2.1.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-comments"></i></div>
+                        <h2 class="card-title">2 言语理解与表达</h2>
+                    </a>
+                    <a href="html_content/notes_collection/3.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-calculator"></i></div>
+                        <h2 class="card-title">3 数量关系</h2>
+                    </a>
+                    <a href="html_content/notes_collection/4.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-puzzle-piece"></i></div>
+                        <h2 class="card-title">4 判断推理用</h2>
+                    </a>
+                    <a href="html_content/notes_collection/5.html" class="card group">
+                        <div class="card-icon"><i class="fas fa-chart-pie"></i></div> <h2 class="card-title">5 资料分析</h2>
+                    </a>
                 </div>
+            </section>
+
+            <section id="deprecated-notes" class="mb-12">
+                <h2 class="section-title-custom">已废除</h2>
+                <div class="cards-grid" id="deprecated-navigation-cards-container">
+                    <a href="html_content/notes_collection/1.1.1.html" class="card group">
+                        <div class="card-icon deprecated"><i class="fas fa-trash-alt"></i></div>
+                        <h2 class="card-title">马克思主义哲学学习</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.3.1.html" class="card group">
+                        <div class="card-icon deprecated"><i class="fas fa-history"></i></div>
+                        <h2 class="card-title">毛泽东思想学习 - 第三章</h2>
+                    </a>
+                    <a href="html_content/notes_collection/1.5.1.html" class="card group">
+                        <div class="card-icon deprecated"><i class="fas fa-ban"></i></div>
+                        <h2 class="card-title">经济知识学习 - 第五章</h2>
+                    </a>
+                    <a href="html_content/notes_collection/2.2.html" class="card group">
+                        <div class="card-icon deprecated"><i class="fas fa-folder-minus"></i></div>
+                        <h2 class="card-title">言语理解与表达 知识点互动导航</h2>
+                    </a>
+                </div>
+            </section>
         </main>
     </div>
 
     <footer class="footer">
-        <p>&copy; <span id="currentYear"></span> 我的项目. All rights reserved.</p>
-    </footer>
+        <p>&copy; <span id="currentYear"></span> 我的项目. All rights reserved.</p> </footer>
 
     <script>
         // 简单脚本，用于在页脚显示当前年份

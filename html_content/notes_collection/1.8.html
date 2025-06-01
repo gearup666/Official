@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>历史人文知识学习网页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: padding-left 0.3s ease-in-out;
+        }
+        .content-section {
+            scroll-margin-top: 70px; 
+            display: none; 
+        }
+        .content-section.active {
+            display: block;
+        }
+        details > summary { 
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            background-color: #065f46; 
+            color: white;
+            border-radius: 0.375rem; 
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            list-style: none; 
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        details > summary::-webkit-details-marker {
+            display: none; 
+        }
+        details > summary:hover {
+            background-color: #047857; 
+        }
+        details[open] > summary {
+            background-color: #047857; 
+            border-radius: 0.375rem 0.375rem 0 0;
+        }
+        details > div.p-4 { 
+             border: 1px solid #047857; 
+             border-top: none;
+             border-radius: 0 0 0.375rem 0.375rem;
+             background-color: #f0fdfa; 
+        }
+        .key-point {
+            background-color: #d1fae5; 
+            border-left: 4px solid #10b981; 
+            color: #047857; 
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0 0.375rem 0.375rem 0; 
+        }
+        .example-box { 
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.5rem; 
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); 
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .explanation {
+            display: none;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background-color: #ecfdf5; 
+            border: 1px solid #a7f3d0; 
+            border-radius: 0.375rem; 
+        }
+        .highlight { 
+            background-color: #fef3c7; 
+            padding: 0.125rem 0.25rem; 
+            border-radius: 0.125rem; 
+        }
+        .btn {
+            background-color: #10b981; 
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; 
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #059669; 
+        }
+        
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+            height: calc(100vh - 4rem); 
+            transform: translateX(-100%); 
+            width: 22rem; 
+        }
+        main {
+            transition: margin-left 0.3s ease-in-out;
+            width: 100%; 
+            margin-left: 0;
+        }
+
+        body.sidebar-visible #sidebar {
+            transform: translateX(0);
+        }
+        body.sidebar-visible main {
+           margin-left: 22rem; 
+        }
+         @media (min-width: 768px) { 
+            body:not(.sidebar-globally-hidden) #sidebar {
+                transform: translateX(0);
+            }
+            body:not(.sidebar-globally-hidden) main {
+                margin-left: 22rem; 
+            }
+            body.sidebar-globally-hidden #sidebar {
+                transform: translateX(-100%);
+            }
+            body.sidebar-globally-hidden main {
+                margin-left: 0;
+            }
+        }
+
+        .sidebar-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            color: #d1fae5; 
+            text-decoration: none;
+            border-radius: 0.375rem; 
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: 600; 
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #10b981; 
+            color: white;
+        }
+         .details-marker { 
+            font-size: 0.8em;
+            margin-left: 0.5rem;
+            transition: transform 0.2s ease-in-out;
+        }
+        details[open] > summary > .details-marker {
+            transform: rotate(90deg);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        th, td {
+            border: 1px solid #a1a1aa; 
+            padding: 0.5rem;
+            text-align: left;
+        }
+        th {
+            background-color: #e4e4e7; 
+            font-weight: 600;
+        }
+        .image-placeholder {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 500px; 
+            min-height: 150px; 
+            margin: 1rem auto;
+            padding: 1rem;
+            background-color: #f4f4f5; 
+            border: 1px dashed #a1a1aa; 
+            border-radius: 0.375rem;
+            text-align: center;
+            color: #71717a; 
+        }
+    </style>
+</head>
+<body class="bg-slate-100">
+    <header class="bg-emerald-700 text-white p-4 fixed w-full top-0 z-50 shadow-md flex justify-between items-center">
+        <button id="menu-button" class="p-2 rounded-md text-emerald-200 hover:text-white hover:bg-emerald-600">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </button>
+        <h1 class="text-xl font-bold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">历史人文知识学习网页</h1>
+    </header>
+
+    <div class="flex pt-16">
+        <aside id="sidebar" class="bg-emerald-800 text-white p-4 space-y-1 fixed top-16 left-0 z-40 overflow-y-auto">
+            <nav>
+                <a href="#introduction_ch8" class="sidebar-link">历史人文概览</a>
+                <a href="#section1_ancient_chinese_history" class="sidebar-link">第一节 中国古代史</a>
+                <a href="#section2_modern_chinese_history" class="sidebar-link">第二节 中国近代史</a>
+                <a href="#section3_chinese_culture" class="sidebar-link">第三节 中国文化</a>
+                <a href="#exercises_ch8" class="sidebar-link">相关习题</a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-6">
+            <section id="introduction_ch8" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第八章 历史人文概览</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="mb-3 text-gray-700 leading-relaxed">
+                        本章主要梳理中国古代史、中国近代史以及中国文化的相关知识点。
+                    </p>
+                    <div class="key-point">
+                        <h4 class="font-semibold text-lg mb-2">核心内容：</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>中国古代史：从原始社会到明清时期的重要朝代、事件、制度和文化成就。</li>
+                            <li>中国近代史：从鸦片战争到五四运动的主要历史事件、条约和重要运动。</li>
+                            <li>中国文化：包括中央集权制度的演变、土地制度变迁、古代思想、文学、书画艺术、戏曲艺术、农学工艺、医学及古人年龄代称等。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section1_ancient_chinese_history" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第一节 中国古代史</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">专题一 原始社会 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">一、祖国境内的远古居民 (原始人群时期)</p>
+                            <table class="min-w-full divide-y divide-gray-200 my-2">
+                                <thead class="bg-gray-50"><tr><th>名称</th><th>距今年代</th><th>意义</th><th>社会组织</th></tr></thead>
+                                <tbody>
+                                    <tr><td>云南元谋人</td><td>170万年</td><td>境内目前已确定的最早人类</td><td rowspan="3">原始人群</td></tr>
+                                    <tr><td>陕西蓝田人</td><td>80万年</td><td>最早直立行走</td></tr>
+                                    <tr><td>北京周口店人</td><td>70万年</td><td>使用天然火,并保存火种</td></tr>
+                                    <tr><td>北京山顶洞人</td><td>约3万年</td><td>磨光和钻孔技术,制造出骨针,人工取火</td><td>氏族公社</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="font-semibold mt-2">二、原始的农耕生活 (氏族社会)</p>
+                             <table class="min-w-full divide-y divide-gray-200 my-2">
+                                <thead class="bg-gray-50"><tr><th>氏族遗址</th><th>距今年代</th><th>生活地域</th><th>生产状况</th><th>生活状况</th></tr></thead>
+                                <tbody>
+                                    <tr><td>河姆渡遗址</td><td>约七千年</td><td>长江流域</td><td>耒耜(lěi sì)、水稻(最早种植水稻)</td><td>干栏式房屋、黑陶</td></tr>
+                                    <tr><td>半坡遗址</td><td>约五六千年</td><td>黄河流域</td><td>磨制工具、粟</td><td>半地穴式房屋、彩陶</td></tr>
+                                    <tr><td>大汶口遗址</td><td>约四五千年</td><td>黄河流域</td><td>多为地面建筑</td><td>私有制</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="mt-2">【五谷】古代有多种说法,最主要的有两种:一种指稻、黍、稷、麦、菽；另一种指麻、黍、稷、麦、菽。</p>
+                            <p class="font-semibold mt-2">三、三皇五帝的传说</p>
+                            <p class="ml-4"><strong>(一) 三皇:</strong> 伏羲氏、女娲、神农 (最流行说法)。</p>
+                            <p class="ml-4"><strong>(二) 五帝:</strong> 黄帝、颛顼、帝喾、尧、舜 (司马迁《史记》记载)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">专题二 夏商周时期 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">一、夏朝 (约公元前2070年-约前1600年)</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>禹传子启,家天下,世袭制代替禅让制,定都阳城,最早的奴隶制国家。</li>
+                                <li>二里头文化: 河南洛阳偃师二里头村,发现最早宫殿建筑基址,“中国龙” (大型绿松石龙形器)。</li>
+                                <li>夏历: 《夏小正》,按月亮运行周期制定,又叫阴历、农历。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">二、商朝 (约公元前1600年-约前1046年)</p>
+                             <ul class="list-disc list-inside ml-4">
+                                <li>商汤鸣条之战败夏桀,建商,都亳。盘庚迁都殷,称殷商。</li>
+                                <li>青铜器: 后母戊鼎 (最大青铜器)。</li>
+                                <li>甲骨文: 刻于龟甲兽骨,汉字源头。甲骨文之父王懿荣。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">三、西周 (公元前1046年-前771年)</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>武王伐纣,牧野之战胜商,建周,都镐京。</li>
+                                <li>实行分封制、宗法制 (嫡长子继承制)、井田制 (贵族土地所有制)。</li>
+                                <li>国人暴动: 周厉王残暴,平民奴隶反抗,厉王出逃,周公、召公“共和行政”。共和元年 (公元前841年) 为我国有确切纪年开始。</li>
+                                <li>灭亡: 周幽王“烽火戏诸侯”。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">四、东周 (公元前770年-公元前221年)</p>
+                            <p class="ml-4">周平王东迁洛邑。分春秋和战国。春秋 (奴隶社会结束), 战国 (封建社会开始)。</p>
+                            <p class="ml-4"><strong>(一) 春秋 (公元前770-前476年)</strong></p>
+                            <p class="ml-8">1. 春秋五霸: 说法一 (齐桓公、晋文公、楚庄王、秦穆公、宋襄公); 说法二 (齐桓公、晋文公、楚庄王、吴王阖闾、越王勾践)。</p>
+                            <p class="ml-8">2. 典故: 齐桓公 (管鲍之交,长勺之战,尊王攘夷,老马识途); 晋文公 (退避三舍,秦晋之好,寒食节); 楚庄王 (一鸣惊人,问鼎中原); 勾践 (卧薪尝胆,鸟尽弓藏)。</p>
+                            <p class="ml-4"><strong>(二) 战国 (公元前475-前221年)</strong></p>
+                            <p class="ml-8">1. 战国七雄: 齐、楚、燕、韩、赵、魏、秦。灭亡顺序: 韩赵魏楚燕齐。</p>
+                            <div class="image-placeholder"><p>[战国七雄地图占位符]</p></div>
+                            <p class="ml-8">2. 主要战争: 桂陵之战 (围魏救赵); 马陵之战 (减灶诱敌); 长平之战 (纸上谈兵)。</p>
+                            <p class="ml-8">3. 变法运动: 商鞅变法 (秦孝公时期)。经济 (废井田、土地私有,重农抑商,统一度量衡); 政治 (户籍连坐,推行县制); 军事 (奖励军功)。</p>
+                            <p class="ml-8">4. 战国四公子: 信陵君魏无忌 (窃符救赵); 孟尝君田文 (鸡鸣狗盗); 平原君赵胜 (毛遂自荐); 春申君黄歇 (移花接木)。</p>
+                            <p class="ml-8">5. 其他: 都江堰 (李冰父子); 司南 (最早指南工具); 《甘石星经》 (最早恒星记录); 《黄帝内经》 (最早人体解剖知识)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">专题三 秦汉时期 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p class="font-semibold">一、秦 (公元前221年—公元前206年)</p>
+                             <ul class="list-disc list-inside ml-4">
+                                <li>建立: 秦王嬴政灭六国,建统一中央集权封建国家,都咸阳。</li>
+                                <li>巩固统一措施: 政治 (中央集权,三公九卿,郡县制); 经济 (统一货币度量衡); 文化 (统一文字小篆,焚书坑儒); 军事 (北击匈奴,修长城灵渠,统一东南岭南)。</li>
+                                <li>灭亡: 陈胜吴广起义 (大泽乡起义,揭竿而起); 项羽巨鹿之战,刘邦攻入咸阳。</li>
+                             </ul>
+                             <p class="font-semibold mt-2">二、西汉 (公元前202年—公元9年)</p>
+                             <ul class="list-disc list-inside ml-4">
+                                <li>建立: 刘邦称帝,都长安。</li>
+                                <li>文景之治: 轻徭薄赋,与民休息。</li>
+                                <li>全盛 (汉武帝): 加强中央集权 (中朝制,刺史,推恩令); 经济 (盐铁专卖,统一五铢钱); 思想 (“罢黜百家,独尊儒术”,设太学)。</li>
+                                <li>张骞出使西域,开辟丝绸之路。</li>
+                                <li>公元前60年设西域都护府。</li>
+                                <li>卫青、霍去病破匈奴。</li>
+                                <li>昭君出塞 (公元前33年)。</li>
+                                <li>王莽改制: 公元9年王莽建新朝,托古改制。</li>
+                             </ul>
+                             <p class="font-semibold mt-2">三、东汉 (公元25年—公元220年)</p>
+                             <ul class="list-disc list-inside ml-4">
+                                <li>光武中兴: 刘秀建东汉,都洛阳。</li>
+                                <li>班超经营西域,任西域都护。</li>
+                                <li>黄巾起义: 瓦解东汉统治。</li>
+                             </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">专题四 三国两晋南北朝 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <div class="image-placeholder"><p>[三国两晋南北朝时期政权演变图占位符]</p></div>
+                            <p class="font-semibold">一、三国到两晋</p>
+                            <p class="ml-4"><strong>(一) 三分天下:</strong> 200年官渡之战 (曹操胜袁绍); 208年赤壁之战 (孙刘联军胜曹操)。魏 (220年,曹丕)、蜀 (221年,刘备)、吴 (222年,孙权)。</p>
+                            <p class="ml-4"><strong>(二) 短暂的统一:</strong> 265年司马炎建西晋,都洛阳。317年司马睿建东晋,都建康。淝水之战 (东晋胜前秦)。</p>
+                            <p class="font-semibold mt-2">二、南北并立——南北朝</p>
+                            <p class="ml-4">北魏孝文帝改革: 迁都洛阳,推行汉化政策。</p>
+                            <div class="image-placeholder"><p>[北魏孝文帝迁都示意图占位符]</p></div>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">专题五 隋唐时期 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">一、隋朝 (公元581年—公元618年)</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>隋文帝杨坚建隋,都长安,开创“开皇之治”。</li>
+                                <li>隋炀帝杨广修大运河。</li>
+                            </ul>
+                             <p class="font-semibold mt-2">二、唐朝 (公元618年—公元907年)</p>
+                             <ul class="list-disc list-inside ml-4">
+                                <li>玄武门之变 (626年,李世民)。</li>
+                                <li>贞观之治 (唐太宗)。</li>
+                                <li>开元盛世 (唐玄宗前期)。</li>
+                                <li>安史之乱 (唐朝由盛转衰的转折点)。</li>
+                                <li>黄巢起义 (加速唐朝灭亡)。</li>
+                             </ul>
+                             <p class="font-semibold mt-2">三、相关制度</p>
+                             <ul class="list-disc list-inside ml-4">
+                                <li>科举制度: 隋炀帝时正式形成。唐宋鼎盛,明清衰败。</li>
+                                <li>三省六部制: 隋朝确立,唐朝完善。</li>
+                             </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">专题六 宋元时期 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">一、宋</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>陈桥驿兵变,赵匡胤建北宋,都汴京。</li>
+                                <li>杯酒释兵权。</li>
+                                <li>澶渊之盟 (北宋与辽)。</li>
+                                <li>靖康之变 (1127年,北宋亡)。</li>
+                                <li>赵构建南宋,都临安。</li>
+                                <li>岳飞抗金。绍兴和议。文天祥抗元。</li>
+                                <li>政权并立: 辽 (契丹)、北宋 (汉)、西夏 (党项)、金 (女真)、南宋 (汉)。</li>
+                                <div class="image-placeholder"><p>[宋代及周边政权地图占位符]</p></div>
+                                <li>宋代改革: 庆历新政 (范仲淹); 王安石变法 (熙宁变法)。</li>
+                                <li>宋代经济: 景德镇 (瓷都); 交子 (最早纸币); 经济重心南移; 市舶司 (管理外贸)。</li>
+                                <li>四大发明: 指南针、印刷术、火药、造纸术。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">二、蒙古的兴起和元朝</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>1206年铁木真称成吉思汗。忽必烈1271年建元朝,都大都。</li>
+                                <li>行省制度 (开省级制度先河)。</li>
+                                <li>设宣政院管理西藏。</li>
+                                <li>马可波罗来华,黄道婆改进棉纺织技术。</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">专题七 明清时期 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">一、明朝 (公元1368年—公元1644年)</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>朱元璋建明,初都南京,明成祖朱棣迁都北京。</li>
+                                <li>政治制度: 中央废丞相,权分六部; 地方三司分权; 厂卫特务机构; 八股取士。</li>
+                                <li>经济与对外交流: 张居正“一条鞭法”; 郑和下西洋; 美洲作物传入; 徐光启《泰西水法》; 戚继光抗倭,郑成功收复台湾。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">二、清朝 (公元1616年—公元1911年)</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>努尔哈赤建后金,皇太极改国号为清。1644年清军入关,定都北京。</li>
+                                <li>巩固发展: 康熙 (平三藩,收台湾,《尼布楚条约》); 雍正 (密折制度,设军机处,改土归流,摊丁入亩); 乾隆 (平定大小和卓叛乱,设伊犁将军)。</li>
+                                <li>重农抑商和海禁政策。</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section2_modern_chinese_history" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第二节 中国近代史</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">专题一 鸦片战争 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">一、第一次鸦片战争 (1840年-1842年)</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>导火索: 1839年6月林则徐虎门销烟。</li>
+                                <li>《南京条约》 (中英): 割香港岛；开放五口通商；赔款；协定关税；领事裁判权。</li>
+                                <li>救亡图存: 林则徐 (开眼看世界第一人); 魏源《海国图志》 (“师夷长技以制夷”); 徐继畲《瀛寰志略》。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">二、第二次鸦片战争 (1856年-1860年)</p>
+                            <p class="ml-4">英法联军侵华 (俄美支持)。</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>《天津条约》: 外国公使进驻北京；内地传教；长江各口岸通航。</li>
+                                <li>英法联军火烧圆明园。</li>
+                                <li>《北京条约》: 开天津为商埠；准许招募华工；割九龙司给英国。</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">专题二 太平天国 (1851-1864年) <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">一、兴衰</p>
+                            <p class="ml-4">兴: 1843年创立“拜上帝教”; 1851年金田起义,洪秀全称天王,建“太平天国”; 1853年攻占南京,改名“天京”定都。</p>
+                            <p class="ml-4">衰: 1856年天京变乱,由盛转衰。</p>
+                            <p class="font-semibold mt-2">二、纲领</p>
+                            <p class="ml-4">1. 《天朝田亩制度》: 废除封建地主土地所有制,按人口年龄平均分配土地。革命纲领,反映农民愿望,但为空想。</p>
+                            <p class="ml-4">2. 《资政新篇》: 向西方学习,进行经济、政治、文化改革。中国人最早提出的在中国发展资本主义的方案。未反映农民土地问题,未能推行。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">专题三 洋务运动 (19世纪60年代-90年代) <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1. 目的: “师夷长技以自强”,维护清政府封建统治。</p>
+                            <p>2. 推行机构: 总理衙门。</p>
+                            <p>3. 代表人物: 中央奕訢；地方曾国藩、李鸿章、左宗棠、张之洞。</p>
+                            <p>4. 指导思想: 中体西用。</p>
+                            <p>5. 口号: 前期“自强”,后期“求富”。</p>
+                            <p>6. 内容: 军事工业 (安庆内军械所,江南制造总局等); 民用工业 (上海轮船招商局,开平煤矿等); 海军 (北洋、南洋、福建三支); 新式教育 (同文馆,派留学生)。</p>
+                            <p>7. 失败标志: 甲午中日战争惨败。根本原因: 未从根本上变革落后的封建制度。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">专题四 民族危机的加深 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">一、甲午中日战争 (1894年-1895年)</p>
+                            <p class="ml-4">1. 《马关条约》: 割辽东半岛、台湾及附属岛屿、澎湖列岛给日本；赔款二亿两；开放沙市、重庆、苏州、杭州通商；允许在通商口岸设厂；日军暂占威海卫。</p>
+                            <p class="ml-4">2. 影响: 中国主权完整进一步破坏,刺激列强瓜分中国野心,民族危机加深,中国半殖民地化程度大大加深。</p>
+                            <p class="font-semibold mt-2">二、义和团运动与八国联军侵华</p>
+                            <p class="ml-4">1. 义和团: “扶清灭洋”。</p>
+                            <p class="ml-4">2. 1900年八国联军侵华,占领北京。</p>
+                            <p class="ml-4">3. 《辛丑条约》: 赔款4.5亿两；划北京使馆区；列强驻兵京津铁路沿线；清政府镇压反帝斗争；改总理衙门为外务部。</p>
+                            <p class="ml-4">4. 影响: 清政府完全成为帝国主义统治中国的工具,中国完全沦为半殖民地半封建社会。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">专题五 戊戌变法 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1. 公车上书 (1895年,康有为领导),维新思想发展为爱国救亡政治运动。</p>
+                            <p>2. 严复《天演论》 (“物竞天择、适者生存”),提供思想基础。</p>
+                            <p>3. 发展: 1898年康有为呈《应诏统筹全局折》,组织保国会。</p>
+                            <p>4. 百日维新: 光绪帝颁《定国是诏》开始,百日后失败。</p>
+                            <p>5. 核心内容: 学习西方政治制度,建立君主立宪制。</p>
+                            <p>6. 性质: 资产阶级改良运动。</p>
+                            <p>7. 戊戌六君子: 谭嗣同、林旭、杨深秀、刘光第、杨锐、康广仁。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">专题六 辛亥革命 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">一、同盟会</p>
+                            <p class="ml-4">1. 建立: 1905年,东京,第一个全国性资产阶级革命政党。</p>
+                            <p class="ml-4">2. 政治纲领: 驱除鞑虏,恢复中华、创立民国、平均地权。</p>
+                            <p class="ml-4">3. 纲领阐发为三民主义: 民族、民权、民生。</p>
+                            <p class="font-semibold mt-2">二、武昌起义</p>
+                            <p class="ml-4">1. 爆发: 1911年10月10日。</p>
+                            <p class="ml-4">2. 成果: 1912年1月1日中华民国成立 (总统制共和政体)；南京临时政府 (资产阶级民主政府)；《中华民国临时约法》 (第一部资产阶级宪法)。革命果实被袁世凯窃取。</p>
+                            <p class="ml-4">3. 失败原因: 资产阶级软弱性和妥协性 (根本)；中外反动势力联合绞杀。</p>
+                            <p class="ml-4">4. 评价: 推翻封建王朝统治,民主共和观念深入人心；打击帝国主义侵略势力；为民族资本主义发展创造有利条件；推动亚洲被压迫民族解放运动。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">专题七 新文化运动和五四运动 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">一、新文化运动</p>
+                            <p class="ml-4">1. 1915年陈独秀在上海创办《青年杂志》(后改名《新青年》),标志运动开始。</p>
+                            <p class="ml-4">前期: 宣传“民主”与“科学”,批判旧文化。胡适《文学改良刍议》,鲁迅《狂人日记》。</p>
+                            <p class="ml-4">后期: 传播马克思主义思想。</p>
+                            <p class="font-semibold mt-2">二、五四运动</p>
+                            <p class="ml-4">1. 导火索: 巴黎和会上中国外交失败。</p>
+                            <p class="ml-4">2. 经过: 第一阶段 (北京,学生)；第二阶段 (上海,工人)。</p>
+                            <p class="ml-4">3. 意义: 工人阶级登上历史舞台,促进马克思主义传播,彻底的反帝反封建革命运动,新民主主义革命开端。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section3_chinese_culture" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第三节 中国文化</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、中央集权封建制度的形成与发展 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 西周:</strong> 分封制 + 宗法制。以血缘关系为纽带。</p>
+                            <p><strong>2. 秦:</strong> 郡县制。郡县长官由皇帝任免,不得世袭。官僚政治代替世袭贵族政治。</p>
+                            <p><strong>3. 汉:</strong> 郡国并行制；推恩令 (削弱王侯)；刺史制度 (监察地方)。</p>
+                            <p><strong>4. 宋:</strong> 收精兵、削实权、制钱谷；派文官任地方官；设通判监督知州,转运使节制地方财政。</p>
+                            <p><strong>5. 元:</strong> 行省制。河北、山东、山西由中书省直辖,西藏、四川、青海由宣政院管辖。</p>
+                            <p><strong>6. 明清:</strong> 明 (内阁制,厂卫制度)；清 (雍正设军机处,君主专制达顶峰)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、中国古代土地制度的变迁 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 西周:</strong> 井田制,土地国有,不得转让买卖。</p>
+                            <p><strong>2. 春秋:</strong> 齐国“相地而衰征”；鲁国“初税亩”。促使土地由国有向私有转化。</p>
+                            <p><strong>3. 战国:</strong> 秦国商鞅变法,废井田,法律确立土地私有。</p>
+                            <p><strong>4. 秦汉:</strong> 西汉编户制度,按资产多少承担赋役兵役。</p>
+                            <p><strong>5. 隋唐:</strong> 均田制 (按人口分配国家掌握土地),府兵制和租庸调制基础。</p>
+                            <p><strong>6. 宋元:</strong> 宋代“不抑兼并”。王安石变法 (青苗法、募役法、方田均税法等)。</p>
+                            <p><strong>7. 明清:</strong> 明神宗“一条鞭法” (赋役合一折银)。雍正“摊丁入亩” (地丁银,废人头税)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、古代中国的思想 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 春秋战国时期 (诸子百家)</p>
+                            <table class="min-w-full divide-y divide-gray-200 my-2">
+                                <thead class="bg-gray-50"><tr><th>学派</th><th>代表人</th><th>时代</th><th>著作</th><th>观点</th></tr></thead>
+                                <tbody>
+                                    <tr><td rowspan="3">儒家</td><td>孔子</td><td>春秋</td><td>编《春秋》,修“五经”,弟子作《论语》</td><td>有教无类,德治,仁</td></tr>
+                                    <tr><td>孟子</td><td>战国</td><td>《孟子》</td><td>性善论,仁政,民贵君轻</td></tr>
+                                    <tr><td>荀子</td><td>战国</td><td>《荀子》</td><td>性恶论,朴素唯物主义</td></tr>
+                                    <tr><td rowspan="2">道家</td><td>老子</td><td>春秋</td><td>《道德经》</td><td>无为而治,上善若水,祸福相依,道生万物</td></tr>
+                                    <tr><td>庄子</td><td>战国</td><td>《庄子》(《南华经》)</td><td>天人合一,清静无为,《齐物论》,《逍遥游》</td></tr>
+                                    <tr><td>法家</td><td>商鞅、韩非</td><td>战国</td><td>《商君书》,《韩非子》</td><td>以法治国,重农抑商,奖励耕战,君主专制</td></tr>
+                                    <tr><td>墨家</td><td>墨子</td><td>战国</td><td>《墨子》</td><td>兼爱、非攻、尚贤、节用</td></tr>
+                                    <tr><td>杂家</td><td>吕不韦</td><td>战国</td><td>《吕氏春秋》</td><td>兼儒墨、合名法</td></tr>
+                                    <tr><td>兵家</td><td>孙武,孙膑</td><td>春秋,战国</td><td>《孙子兵法》,《孙膑兵法》</td><td>《孙子兵法》最早兵书</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="font-semibold mt-2">(二) 两汉—明清</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>董仲舒 (西汉):</strong> “天人感应”、“君权神授”,儒学成正统。</li>
+                                <li><strong>王充 (东汉):</strong> 《论衡》。</li>
+                                <li><strong>范缜 (南朝):</strong> 《神灭论》。</li>
+                                <li><strong>程朱理学 (南宋):</strong> 朱熹集大成,“存天理、灭人欲”。</li>
+                                <li><strong>心学 (明朝):</strong> 王阳明创立,“内心反省”以“致良知”。</li>
+                                <li><strong>黄宗羲 (明末清初):</strong> 《明夷待访录》,“天下为主,君为客”,主张工商皆本。</li>
+                                <li><strong>顾炎武 (明末清初):</strong> 《日知录》,经世致用,“天下兴亡,匹夫有责”。</li>
+                                <li><strong>王夫之 (明末清初):</strong> 《读通鉴论》,唯物主义,发展观点看历史,“趋时更新”。</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、文学 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 春秋时期</p>
+                            <p class="ml-4">史书:《春秋》(最早编年体),《左传》(第一部叙事详细编年体),《国语》(第一部国别体)。</p>
+                            <p class="ml-4">儒家经典: 四书(《大学》《中庸》《论语》《孟子》), 五经(《诗经》《尚书》《礼记》《周易》《春秋》)。</p>
+                            <p class="ml-4">楚辞: 屈原创,《楚辞》(第一部浪漫主义诗歌总集),代表作《离骚》《天问》。</p>
+                            <p class="font-semibold mt-2">(二) 秦汉时期</p>
+                            <p class="ml-4">史书:《史记》(司马迁,第一部纪传体通史),《汉书》(班固,第一部纪传体断代史),《战国策》(刘向编订)。</p>
+                            <p class="ml-4">文学: 汉赋 (司马相如、杨雄、班固、张衡);《淮南子》(刘安);乐府诗 (《陌上桑》《孔雀东南飞》《木兰辞》); 建安文学 (曹操、曹丕、曹植,建安七子)。</p>
+                            <p class="font-semibold mt-2">(三) 魏晋南北朝</p>
+                            <p class="ml-4">史书:《三国志》(陈寿)。小说:《搜神记》(干宝),《世说新语》。文学理论:《文心雕龙》(刘勰)。文人: 陶渊明 (田园诗人,《归园田居》), 诸葛亮 (《出师表》)。</p>
+                            <p class="font-semibold mt-2">(四) 盛世兴文—唐宋元时期</p>
+                            <p class="ml-4">初唐四杰 (王勃等)。盛唐诗派: 山水田园 (王维“诗佛”,孟浩然), 边塞 (岑参,王昌龄,高适)。李杜: 李白 (“诗仙”), 杜甫 (“诗圣”,“诗史”)。中晚唐: 白居易 (“诗魔”), 李贺 (“诗鬼”), 刘禹锡, 李商隐, 杜牧。</p>
+                            <p class="ml-4">唐宋八大家: 韩愈, 柳宗元, 欧阳修, 苏洵, 苏轼, 苏辙, 王安石, 曾巩。</p>
+                            <p class="ml-4">宋词: 豪放派 (范仲淹,辛弃疾,岳飞,陆游); 婉约派 (李煜“千古词帝”,柳永,秦观,李清照“千古第一才女”)。</p>
+                            <p class="ml-4">史书:《资治通鉴》(司马光主编,编年体通史)。</p>
+                            <p class="ml-4">元曲四大家: 关汉卿 (《窦娥冤》), 马致远 (《汉宫秋》), 郑光祖 (《倩女离魂》), 白朴 (《墙头马上》)。其他: 王实甫 (《西厢记》), 张养浩 (《山坡羊·潼关怀古》), 纪君祥 (《赵氏孤儿》)。</p>
+                            <p class="font-semibold mt-2">(五) 明清时期</p>
+                            <p class="ml-4">三言二拍: 冯梦龙 (三言), 凌濛初 (二拍)。</p>
+                            <p class="ml-4">汤显祖: “玉茗堂四梦” (《牡丹亭》等), 与莎士比亚齐名。</p>
+                            <p class="ml-4">明代四大奇书: 《三国演义》,《水浒传》,《西游记》,《金瓶梅》。</p>
+                            <p class="ml-4">清代小说: 《红楼梦》 (曹雪芹、高鹗); 《聊斋志异》 (蒲松龄); 晚清四大谴责小说 (《官场现形记》等)。</p>
+                            <p class="ml-4">清代戏曲: 洪昇《长生殿》, 孔尚任《桃花扇》。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">五、选官制度 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p>秦朝: 按军功授爵。汉代: 察举制、征辟制。魏晋南北朝: 九品中正制。隋唐—清朝: 科举制。</p>
+                             <p class="font-semibold">科举制度发展:</p>
+                             <ul class="list-disc list-inside ml-4">
+                                <li>创立: 隋文帝始,隋炀帝设进士科。</li>
+                                <li>完善: 唐太宗增科目,武则天创武举殿试,唐玄宗诗赋为进士科内容。</li>
+                                <li>演变: 明清八股取士。</li>
+                                <li>废除: 1905年。</li>
+                             </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">六、现当代文学 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>鲁迅, 茅盾, 老舍, 闻一多, 冰心, 巴金, 赵树理, 曹禺, 朱自清, 徐志摩, 戴望舒等及其代表作 (详见PDF)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">七、书画艺术 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 汉字发展:</p>
+                            <p class="ml-4">甲骨文 (殷商) -> 金文 (商周) -> 大篆 (春秋战国秦) -> 小篆 (秦统一) -> 隶书 (秦产生,汉通行) -> 草书 (汉初) -> 楷书 (汉末,魏晋通行) -> 行书 (两晋)。</p>
+                            <p class="font-semibold mt-2">(二) 汉字载体:</p>
+                            <p class="ml-4">文房四宝: 湖笔、徽墨、宣纸、端砚。</p>
+                            <p class="ml-4">造纸术: 西汉发明,东汉蔡伦改进。后传入世界。</p>
+                            <p class="ml-4">印刷术: 隋唐雕版印刷 (《金刚经》), 北宋毕昇活字印刷。</p>
+                            <p class="font-semibold mt-2">(三) 书法名家名品 (详见PDF列表)。</p>
+                            <p class="font-semibold mt-2">(四) 绘画艺术 (详见PDF列表)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">八、戏曲艺术 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>中国五大戏曲剧种: 京剧、豫剧、评剧、越剧、黄梅戏。</p>
+                            <p class="font-semibold">1. 京剧:</p>
+                            <p class="ml-4">清代形成于北京。唱腔: 二黄、西皮。基本功: 唱、念、做、打。行当: 生、旦、净、丑。脸谱颜色象征性格。</p>
+                            <p class="font-semibold mt-2">2. 现代地方戏 (评剧、粤剧、越剧、豫剧、黄梅戏、吕剧、昆曲、花鼓戏等及其代表作, 详见PDF)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">九、农学和工艺 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>《氾胜之书》(西汉,现存最早农书),《四民月令》(东汉),《齐民要术》(贾思勰,北朝,现存最早最完整农书),《农桑辑要》(元),王祯《农书》(元),徐光启《农政全书》(明),宋应星《天工开物》(明,“中国17世纪的工艺百科全书”)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">十、医学 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p class="font-semibold">(一) 医学名人名著:</p>
+                             <ul class="list-disc list-inside ml-4">
+                                <li>扁鹊 (战国): 四诊法,《难经》,“脉学之宗”。</li>
+                                <li>《黄帝内经》 (战国问世,西汉编定): 中医学理论基础。</li>
+                                <li>《神农本草经》 (东汉): 第一部完整药物学著作。</li>
+                                <li>张仲景 (东汉): 《伤寒杂病论》,中医治疗学基础,“医圣”。</li>
+                                <li>华佗 (东汉): 外科鼻祖,“麻沸散”,“神医”。</li>
+                                <li>元丹贡布 (唐): 《四部医典》。</li>
+                                <li>《唐本草》 (唐): 世界最早国家编定药典。</li>
+                                <li>孙思邈 (唐): 《千金方》,“药王”。</li>
+                                <li>李时珍 (明): 《本草纲目》,“东方药物巨典”。</li>
+                             </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">十一、古人的年龄代称 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>孩提 (2-3岁), 汤饼之期 (婴儿出生3日), 总角 (8-14岁少年), 幼学 (10岁), 豆蔻 (女子13-14岁), 及笄 (女子15岁), 加冠 (男子20岁), 而立 (30岁), 不惑 (40岁), 知命 (50岁), 耳顺 (60岁), 从心 (70岁), 喜寿 (77岁), 耄耋 (80岁), 米寿 (88岁), 期颐 (100岁)。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="exercises_ch8" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">相关习题</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="example-box">
+                        <p class="font-medium">【习题】“胶州亡矣,山东亡矣,国将不国矣!”该宣言针对的历史事件是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 1915年袁世凯与日本签署“二十一条”</li><li>B. 1919年中国外交在巴黎和会的失败</li><li>C. 1931年日本发动“九一八事变”</li><li>D. 1937年“七七事变”的爆发</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】习近平总书记在《告台湾同胞书》发表40周年纪念会上的讲话中指出台湾问题的产生和演变同近代以来中华民族命运休戚相关。下列关于台湾问题表述,说法错误的是()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 1885年清政府将台湾从福建省析出升格设立台湾省,省会设于台北</li><li>B. 1895年清政府在《马关条约》中把台湾和澎湖列岛割让给日本</li><li>C. 1945年抗日战争胜利后,中国政府重新恢复了台湾省的行政管理机构</li><li>D. 1947年2月28日,台北市民为反抗国民党当局的暴政,举行大规模示威游行</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：(需核对原文答案，题目未提供)</strong> </p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】古人所说的“绿蚁”“欢伯”“般若汤”,指的是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 茶</li><li>B. 酒</li><li>C. 豆浆</li><li>D. 蜂蜜</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】下列关于马克思的主要著作《共产党宣言》的表述,不正确的是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 1848年2月在德国第一次以单行本问世</li><li>B.《共产党宣言》是马克思主义诞生的重要标志</li><li>C. 我国最早的《共产党宣言》中文全译本是1920年8月出版的,翻译者是陈望道</li><li>D.《共产党宣言》是国际共产主义运动的第一个纲领性文献</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong> (应为在伦敦第一次以单行本问世)</p></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function toggleExplanation(button) {
+            const explanationDiv = button.nextElementSibling;
+            if (explanationDiv.style.display === 'none' || explanationDiv.style.display === '') {
+                explanationDiv.style.display = 'block';
+                button.textContent = '隐藏答案与解析';
+            } else {
+                explanationDiv.style.display = 'none';
+                button.textContent = '显示答案与解析';
+            }
+        }
+
+        const mainContentSections = document.querySelectorAll('main > section.content-section');
+        const allSidebarLinks = document.querySelectorAll('aside nav a.sidebar-link');
+        const bodyEl = document.body;
+        const menuButton = document.getElementById('menu-button');
+        
+        function showSection(sectionIdToShow) {
+            mainContentSections.forEach(section => {
+                section.classList.toggle('active', section.id === sectionIdToShow);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.innerWidth >= 768) { 
+                bodyEl.classList.add('sidebar-visible');
+                bodyEl.classList.remove('sidebar-globally-hidden');
+            } else {
+                bodyEl.classList.remove('sidebar-visible');
+                bodyEl.classList.add('sidebar-globally-hidden'); 
+            }
+
+            const hash = window.location.hash.substring(1);
+            let sectionToActivate = 'introduction_ch8'; 
+            let specificElementToScrollTo = null;
+
+            if (hash) {
+                const targetElementByHash = document.getElementById(hash);
+                if (targetElementByHash && targetElementByHash.classList.contains('content-section')) {
+                    sectionToActivate = hash; 
+                    specificElementToScrollTo = targetElementByHash;
+                } else if (targetElementByHash) { 
+                    const parentSection = targetElementByHash.closest('section.content-section');
+                    if (parentSection) {
+                        sectionToActivate = parentSection.id;
+                        specificElementToScrollTo = targetElementByHash;
+                    }
+                }
+            }
+            
+            showSection(sectionToActivate);
+
+            allSidebarLinks.forEach(link => {
+                const linkHrefId = link.getAttribute('href').substring(1);
+                const isActive = linkHrefId === sectionToActivate || linkHrefId === hash;
+                link.classList.toggle('active', isActive);
+            });
+            
+            if (specificElementToScrollTo) {
+                 if (specificElementToScrollTo.tagName === 'SUMMARY') {
+                    specificElementToScrollTo.parentElement.open = true;
+                } else if (specificElementToScrollTo.tagName === 'DETAILS' && !specificElementToScrollTo.open) {
+                    // specificElementToScrollTo.open = true; 
+                }
+                setTimeout(() => { 
+                    specificElementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            } else if (document.getElementById(sectionToActivate)) { 
+                 setTimeout(() => {
+                    document.getElementById(sectionToActivate).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        });
+
+        allSidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                
+                let targetId = this.getAttribute('href').substring(1);
+                let sectionToDisplayId = targetId; 
+                const targetElement = document.getElementById(targetId);
+                
+                allSidebarLinks.forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+
+                showSection(sectionToDisplayId);
+                window.location.hash = targetId; 
+
+                if (targetElement) {
+                     setTimeout(() => { 
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 50); 
+                }
+                
+                if (window.innerWidth < 768 && bodyEl.classList.contains('sidebar-visible')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                     bodyEl.classList.add('sidebar-globally-hidden');
+                }
+            });
+        });
+        
+        menuButton.addEventListener('click', () => {
+            bodyEl.classList.toggle('sidebar-globally-hidden');
+            bodyEl.classList.toggle('sidebar-visible', !bodyEl.classList.contains('sidebar-globally-hidden'));
+        });
+        
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) { 
+                if (!bodyEl.classList.contains('sidebar-globally-hidden')) { 
+                    bodyEl.classList.add('sidebar-visible');
+                } else { 
+                    bodyEl.classList.remove('sidebar-visible');
+                }
+            } else { 
+                if (bodyEl.classList.contains('sidebar-globally-hidden')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                }
+            }
+        });
+
+        document.querySelectorAll('details > summary').forEach(summary => {
+            const marker = summary.querySelector('.details-marker');
+            const detailsElement = summary.parentElement;
+            
+            if (marker) { 
+                 marker.style.transform = detailsElement.open ? 'rotate(90deg)' : 'rotate(0deg)';
+            }
+
+            detailsElement.addEventListener('toggle', function() {
+                if (marker) {
+                    marker.style.transform = this.open ? 'rotate(90deg)' : 'rotate(0deg)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

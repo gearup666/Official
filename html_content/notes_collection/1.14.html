@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>民法知识学习网页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: padding-left 0.3s ease-in-out;
+        }
+        .content-section {
+            scroll-margin-top: 70px; 
+            display: none; 
+        }
+        .content-section.active {
+            display: block;
+        }
+        details > summary { 
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            background-color: #065f46; 
+            color: white;
+            border-radius: 0.375rem; 
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            list-style: none; 
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        details > summary::-webkit-details-marker {
+            display: none; 
+        }
+        details > summary:hover {
+            background-color: #047857; 
+        }
+        details[open] > summary {
+            background-color: #047857; 
+            border-radius: 0.375rem 0.375rem 0 0;
+        }
+        details > div.p-4 { 
+             border: 1px solid #047857; 
+             border-top: none;
+             border-radius: 0 0 0.375rem 0.375rem;
+             background-color: #f0fdfa; 
+        }
+        .key-point {
+            background-color: #d1fae5; 
+            border-left: 4px solid #10b981; 
+            color: #047857; 
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0 0.375rem 0.375rem 0; 
+        }
+        .example-box { 
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.5rem; 
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); 
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .explanation {
+            display: none;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background-color: #ecfdf5; 
+            border: 1px solid #a7f3d0; 
+            border-radius: 0.375rem; 
+        }
+        .btn {
+            background-color: #10b981; 
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; 
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #059669; 
+        }
+        
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+            height: calc(100vh - 4rem); 
+            transform: translateX(-100%); 
+            width: 22rem; 
+        }
+        main {
+            transition: margin-left 0.3s ease-in-out;
+            width: 100%; 
+            margin-left: 0;
+        }
+
+        body.sidebar-visible #sidebar {
+            transform: translateX(0);
+        }
+        body.sidebar-visible main {
+           margin-left: 22rem; 
+        }
+         @media (min-width: 768px) { 
+            body:not(.sidebar-globally-hidden) #sidebar {
+                transform: translateX(0);
+            }
+            body:not(.sidebar-globally-hidden) main {
+                margin-left: 22rem; 
+            }
+            body.sidebar-globally-hidden #sidebar {
+                transform: translateX(-100%);
+            }
+            body.sidebar-globally-hidden main {
+                margin-left: 0;
+            }
+        }
+
+        .sidebar-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            color: #d1fae5; 
+            text-decoration: none;
+            border-radius: 0.375rem; 
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: 600; 
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #10b981; 
+            color: white;
+        }
+         .details-marker { 
+            font-size: 0.8em;
+            margin-left: 0.5rem;
+            transition: transform 0.2s ease-in-out;
+        }
+        details[open] > summary > .details-marker {
+            transform: rotate(90deg);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        th, td {
+            border: 1px solid #a1a1aa; 
+            padding: 0.5rem;
+            text-align: left;
+        }
+        th {
+            background-color: #e4e4e7; 
+            font-weight: 600;
+        }
+        .image-placeholder { /* For 法人分类图 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin: 1rem auto;
+            padding: 1rem;
+            background-color: #f4f4f5;
+            border: 1px dashed #a1a1aa;
+            border-radius: 0.375rem;
+            text-align: center;
+            color: #71717a;
+        }
+    </style>
+</head>
+<body class="bg-slate-100">
+    <header class="bg-emerald-700 text-white p-4 fixed w-full top-0 z-50 shadow-md flex justify-between items-center">
+        <button id="menu-button" class="p-2 rounded-md text-emerald-200 hover:text-white hover:bg-emerald-600">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </button>
+        <h1 class="text-xl font-bold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">民法知识学习网页</h1>
+    </header>
+
+    <div class="flex pt-16">
+        <aside id="sidebar" class="bg-emerald-800 text-white p-4 space-y-1 fixed top-16 left-0 z-40 overflow-y-auto">
+            <nav>
+                <a href="#introduction_ch4_civil_law" class="sidebar-link">民法概览</a>
+                <a href="#section1_civil_law_overview" class="sidebar-link">第一节 民法概述</a>
+                <a href="#section2_civil_subjects" class="sidebar-link">第二节 民事主体</a>
+                <a href="#section3_civil_legal_acts" class="sidebar-link">第三节 民事法律行为</a>
+                <a href="#section4_civil_rights" class="sidebar-link">第四节 民事权利</a>
+                <a href="#section5_civil_liability" class="sidebar-link">第五节 民事责任</a>
+                <a href="#section6_marriage_family" class="sidebar-link">第六节 婚姻家庭关系</a>
+                <a href="#section7_statute_of_limitations" class="sidebar-link">第七节 诉讼时效</a>
+                <a href="#exercises_ch4_civil_law" class="sidebar-link">相关习题</a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-6">
+            <section id="introduction_ch4_civil_law" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第四章 民法概览</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="mb-3 text-gray-700 leading-relaxed">
+                        本章主要介绍民法的基本概念、原则、调整对象，民事主体（自然人、法人、非法人组织），民事法律行为，民事权利（物权、债权、知识产权、人身权、继承权），民事责任，婚姻家庭关系以及诉讼时效等核心内容。
+                    </p>
+                    <div class="key-point">
+                        <h4 class="font-semibold text-lg mb-2">核心内容：</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>民法的调整对象及基本原则。</li>
+                            <li>自然人的民事权利能力与行为能力，监护，宣告失踪与死亡。</li>
+                            <li>法人的概念、成立条件、分类及民事责任。</li>
+                            <li>非法人组织的特征。</li>
+                            <li>民事法律行为的含义、分类、生效要件，无效及可撤销情形，效力待定行为。</li>
+                            <li>代理制度的基本内容。</li>
+                            <li>物权概述，所有权，用益物权，担保物权。</li>
+                            <li>债权概述，债的产生原因，合同编（要约承诺、买卖、赠与、借款、保证、租赁等）。</li>
+                            <li>知识产权（著作权、专利权、商标权）。</li>
+                            <li>财产继承权（继承方式、遗产、法定继承、遗嘱继承、遗赠、遗赠抚养协议）。</li>
+                            <li>人身权（生命权、身体权、健康权、姓名权、名称权、肖像权、名誉权、荣誉权、隐私权）。</li>
+                            <li>民事责任概述及特殊侵权责任。</li>
+                            <li>婚姻家庭关系（结婚、家庭关系、离婚、收养）。</li>
+                            <li>诉讼时效的概念、种类、起算、中止与中断。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section1_civil_law_overview" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第一节 民法概述</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、民法的概念和调整对象 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1. 民法调整平等主体的自然人、法人和非法人组织之间的人身关系和财产关系。</p>
+                            <p>2. 民法的调整对象: 平等主体之间的财产关系和人身关系。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、民法基本原则 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>(一) 平等原则:</strong> 民事主体在民事活动中的法律地位一律平等。</p>
+                            <p><strong>(二) 自愿原则:</strong> 民事主体从事民事活动,应当遵循自愿原则,按照自己的意思设立、变更、终止民事法律关系。</p>
+                            <p><strong>(三) 公平原则:</strong> 民事主体从事民事活动,应当遵循公平原则,合理确定各方的权利和义务。</p>
+                            <p><strong>(四) 诚实信用原则:</strong> 民事主体从事民事活动,应当遵循诚信原则,秉持诚实,恪守承诺。</p>
+                            <p><strong>(五) 守法和公序良俗原则:</strong> 民事主体从事民事活动,不得违反法律,不得违背公序良俗。</p>
+                            <p><strong>(六) 节约资源保护生态环境原则 (绿色原则):</strong> 民事主体从事民事活动,应当有利于节约资源、保护生态环境。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、民事法律的适用规则 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>第十条 处理民事纠纷,应当依照法律;法律没有规定的,可以适用习惯,但是不得违背公序良俗。</p>
+                            <p>第十一条 其他法律对民事关系有特别规定的,依照其规定。</p>
+                            <p>第十二条 中华人民共和国领域内的民事活动,适用中华人民共和国法律。法律另有规定的,依照其规定。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section2_civil_subjects" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第二节 民事主体</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、自然人 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 自然人的民事权利能力:</p>
+                            <p class="ml-4">1. <strong>概念:</strong> 自然人依法享有民事权利和承担民事义务的资格。一律平等。</p>
+                            <p class="ml-4">2. <strong>起止时间:</strong> 始于出生、终于死亡。以出生/死亡证明为准,无则以户籍等有效登记为准。</p>
+                            <p class="ml-4">3. <strong>胎儿的民事权利能力:</strong> 涉及遗产继承、接受赠与等胎儿利益保护的,胎儿视为具有民事权利能力。但胎儿娩出时为死体的,其民事权利能力自始不存在。</p>
+                            <p class="font-semibold mt-2">(二) 自然人的民事行为能力:</p>
+                            <p class="ml-4">1. <strong>概念:</strong> 能够以自己的行为依法行使权利和承担义务的资格。</p>
+                            <p class="ml-4">2. <strong>分类:</strong></p>
+                            <table class="min-w-full divide-y divide-gray-200 my-2">
+                                <thead class="bg-gray-50"><tr><th>类型</th><th>范围</th><th>效果</th></tr></thead>
+                                <tbody>
+                                    <tr><td>完全民事行为能力人</td><td>①年满18周岁且精神正常的成年人<br>②16周岁以上的未成年人,以自己的劳动收入为主要生活来源的</td><td>可以独立实施民事法律行为,且符合法律生效要件的行为有效。</td></tr>
+                                    <tr><td>限制民事行为能力人</td><td>①8周岁以上的未成年人<br>②不能完全辨认自己行为的成年人</td><td>①可以独立实施纯获利益的民事法律行为或者与其年龄、智力相适应的民事法律行为。<br>②其他不能独立实施的民事法律行为,由其法定代理人代理,或者经其法定代理人同意、追认。</td></tr>
+                                    <tr><td>无民事行为能力人</td><td>①不满8周岁的未成年人<br>②不能辨认自己行为的成年人</td><td>由其法定代理人代理实施民事法律行为。未经法定代理人代理,无民事行为能力人独立实施的民事法律行为,无效。</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="font-semibold mt-2">(三) 自然人的住所:</p>
+                            <p class="ml-4">以户籍登记或其他有效身份登记记载的居所为住所;经常居所与住所不一致的,经常居所视为住所。</p>
+                            <p class="font-semibold mt-2">(四) 监护:</p>
+                            <p class="ml-4">1. <strong>概念:</strong> 监护人对被监护人的人身、财产等合法权益依法实行监督和保护的制度。</p>
+                            <p class="ml-4">2. <strong>类型:</strong></p>
+                                <ul class="list-disc list-inside ml-8">
+                                    <li><strong>法定监护(未成年人):</strong> 父母是首要监护人。父母死亡或无能力,按顺序为:①祖父母、外祖父母; ②兄、姐; ③其他愿意担任的个人或组织(需同意)。无合格者由民政部门或村/居委会担任。</li>
+                                    <li><strong>法定监护(成年精神病人):</strong> 按顺序为:①配偶; ②父母、子女; ③其他近亲属; ④其他愿意担任的个人或组织(需同意)。无合格者由民政部门或村/居委会担任。</li>
+                                    <li><strong>指定监护:</strong> 对监护人确定有争议,由被监护人住所地村/居委会或民政部门指定,不服可向法院申请指定；也可直接向法院申请。</li>
+                                    <li><strong>遗嘱监护:</strong> 被监护人父母可通过遗嘱指定监护人。</li>
+                                    <li><strong>意定监护(成年协议监护):</strong> 完全民事行为能力成年人可书面确定自己丧失/部分丧失民事行为能力时的监护人。</li>
+                                </ul>
+                            <p class="font-semibold mt-2">(五) 宣告失踪与宣告死亡:</p>
+                            <p class="ml-4">1. <strong>宣告失踪:</strong> 自然人下落不明满二年,利害关系人可申请法院宣告。设立财产代管人。重新出现可申请撤销。</p>
+                            <p class="ml-4">2. <strong>宣告死亡:</strong> 下落不明一般满4年；因意外事件下落不明满2年 (或经证明不可能生存的不受2年限制)。利害关系人申请法院宣告。死亡日期以判决宣告日为准 (意外事件以发生日为准)。婚姻关系消灭,财产按继承办理。重新出现可申请撤销,婚姻关系一般自行恢复 (对方再婚或书面不愿恢复除外),子女被收养关系不因撤销而主张无效。被撤销死亡宣告的人有权请求返还财产。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、法人 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 概念:</strong> 具有民事权利能力和民事行为能力,依法独立享有民事权利和承担民事义务的组织。法定代表人代表法人从事民事活动。民事权利能力和行为能力从成立到终止。</p>
+                            <p><strong>2. 成立条件:</strong> (1)依法成立。(2)有自己的名称、组织机构、住所、财产或者经费。(3)法律、行政法规规定须经批准的,依照其规定。</p>
+                            <p><strong>3. 民事责任承担:</strong> (1)法人以其全部财产独立承担民事责任。(2)法定代表人以法人名义从事的民事活动,其法律后果由法人承受。(3)法人章程或权力机构对法定代表人代表权的限制,不得对抗善意相对人。</p>
+                            <p><strong>4. 法人的分类:</strong></p>
+                            <div class="image-placeholder"><p>[法人分类图占位符]</p></div>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>营利法人:</strong> 有限责任公司、股份有限公司、其他企业法人。</li>
+                                <li><strong>非营利法人:</strong> 事业单位、社会团体、捐助法人 (基金会、社会服务机构、宗教活动场所)。</li>
+                                <li><strong>特别法人:</strong> 机关法人、农村集体经济组织法人、城镇农村的合作经济组织法人、基层群众性自治组织法人 (村委会、居委会)。</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、非法人组织 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>非法人组织是不具有法人资格,但是能够依法以自己的名义从事民事活动的组织。包括个人独资企业、合伙企业等。非法人组织的财产不足以清偿债务的,其出资人或者设立人承担无限责任。法律另有规定的,依照其规定。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section3_civil_legal_acts" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第三节 民事法律行为</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、民事法律行为的含义 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p>民事法律行为是民事主体通过意思表示设立、变更、终止民事法律关系的行为。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、民事法律行为的分类 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1. 根据成立需要一方还是双方/多方意思表示: 单方法律行为、双方法律行为、多方法律行为。</p>
+                            <p>2. 根据当事人双方是否均取得利益: 有偿法律行为、无偿法律行为。</p>
+                            <p>3. 根据成立是否以交付实物为条件: 诺成性法律行为、实践性法律行为。</p>
+                            <p>4. 根据两个相互关联法律行为的地位: 主法律行为、从法律行为。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、民事法律行为的生效要件 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1. 行为人具有相应的民事法律行为能力;</p>
+                            <p>2. 意思表示真实;</p>
+                            <p>3. 不违反法律、行政法规的强制性规定,不违背公序良俗。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、无效民事法律行为 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1. 无民事行为能力人实施的民事法律行为无效;</p>
+                            <p>2. 行为人与相对人恶意串通,损害他人合法权益的民事法律行为无效;</p>
+                            <p>3. 违反法律、行政法规的强制性规定的民事法律行为无效;</p>
+                            <p>4. 违背公序良俗的民事法律行为无效;</p>
+                            <p>5. 行为人与相对人以虚假的意思表示实施的民事法律行为无效。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">五、可撤销的民事法律行为 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 可撤销情形:</p>
+                            <p>1. <strong>重大误解:</strong> 基于重大误解实施的,行为人有权请求法院或仲裁机构撤销。因认识错误实施,主观过失。对行为性质、标的物品种等错误认识,使后果与意思相悖。</p>
+                            <p>2. <strong>显失公平:</strong> 一方利用对方处于危困状态、缺乏判断能力等情形,致使成立时显失公平的,受损害方有权请求撤销。须有偿行为；内容显失公平；受害人出于急迫、轻率或无经验。</p>
+                            <p>3. <strong>欺诈:</strong> 一方以欺诈手段,使对方在违背真实意思情况下实施的,受欺诈方有权请求撤销。故意告知虚假情况或隐瞒真实情况,诱使对方作错误意思表示。</p>
+                            <p>4. <strong>胁迫:</strong> 一方以胁迫手段,使对方在违背真实意思情况下实施的,受胁迫方有权请求撤销。</p>
+                            <p class="font-semibold mt-2">(二) 撤销权的消灭:</p>
+                            <p>1. 当事人自知道或应知道撤销事由起1年内、重大误解当事人自知道或应知道撤销事由起90日内未行使;</p>
+                            <p>2. 当事人受胁迫,自胁迫行为终止起1年内未行使;</p>
+                            <p>3. 当事人知道撤销事由后明确表示或以行为表明放弃。</p>
+                            <p>当事人自民事法律行为发生起5年内未行使撤销权的,撤销权消灭。无效或被撤销的民事法律行为自始无效。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">六、效力待定的民事法律行为 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 限制民事行为能力人超越能力行为:</strong> 纯获利益或与其年龄智力精神状况相适应的行为有效；其他行为经法定代理人同意或追认后有效。相对人可催告法定代理人30日内追认,未作表示视为拒绝。被追认前,善意相对人有撤销权。</p>
+                            <p><strong>2. 无权代理行为:</strong> 未经被代理人追认,对被代理人不发生效力。相对人可催告被代理人30日内追认,未作表示视为拒绝。被追认前,善意相对人有撤销权。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">【增补】代理制度 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 代理基本制度:</strong> 代理人在代理权限内,以被代理人名义实施的民事法律行为,对被代理人发生效力。应由本人亲自实施的不得代理。包括委托代理和法定代理。法定代理人是无/限制民事行为能力人的监护人。转代理需被代理人同意或追认。</p>
+                            <p><strong>2. 无权代理:</strong></p>
+                            <p class="ml-4"><strong>【狭义的无权代理】</strong>行为人没有代理权、超越代理权或者代理权终止后,仍然实施代理行为,未经被代理人追认的,对被代理人不发生效力。</p>
+                            <p class="ml-4"><strong>【表见代理】</strong>行为人没有代理权、超越代理权或者代理权终止后,仍然实施代理行为,相对人有理由相信行为人有代理权的,代理行为有效。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">七、附条件和附期限的民事法律行为 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>【附条件】</strong>可附条件 (性质上不得附条件的除外)。附生效条件的,自条件成就时生效。附解除条件的,自条件成就时失效。</p>
+                            <p><strong>【附期限】</strong>可附期限。附生效期限的,自期限届至时生效。附终止期限的,自期限届满时失效。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section4_civil_rights" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第四节 民事权利</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">第一部分 物权 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p class="font-semibold">一、物的概述:</p>
+                             <p class="ml-4">1. <strong>概念:</strong> 能够满足人的需要并为人能够支配的物体或者自然力。</p>
+                             <p class="ml-4">2. <strong>特征:</strong> (1)客观存在；(2)能被人支配与控制；(3)具有效用。</p>
+                             <p class="ml-4">3. <strong>物的分类 (按能否移动及移动后是否损害价值):</strong> ①动产；②不动产。</p>
+                             <p class="font-semibold mt-2">二、物权的概念:</p>
+                             <p class="ml-4">权利人依法对特定的物享有直接支配和排他的权利,包括所有权、用益物权和担保物权。</p>
+                             <p class="font-semibold mt-2">三、物权的基本原则:</p>
+                             <p class="ml-4">1. <strong>物权法定原则:</strong> 物权的种类和内容,由法律规定。</p>
+                             <p class="ml-4">2. <strong>公示公信原则:</strong> (1)公示 (不动产—登记；动产—交付)；(2)公信 (第三人善意信赖公示则能取得物权)。</p>
+                             <p class="font-semibold mt-2">【增补】善意取得制度:</p>
+                             <p class="ml-4">1. <strong>概念:</strong> 原物由占有人转让给善意第三人时,善意第三人可取得所有权,所有权人不得请求返还。</p>
+                             <p class="ml-4">2. <strong>条件:</strong> 受让人受让时善意；以合理价格转让；该登记的已登记,不需登记的已交付；占有人有权占有；出让人无权处分。</p>
+                             <p class="ml-4">3. <strong>物权的优先效力原则:</strong> 物权优先于债权；先设立的物权优于后设立的物权 (法律另有规定除外)。</p>
+                             <p class="font-semibold mt-2">四、所有权:</p>
+                             <p class="ml-4"><strong>(一) 概念:</strong> 所有权人对自己的不动产或者动产,依法享有占有、使用、收益和处分的权利。</p>
+                             <p class="ml-4"><strong>(二) 种类:</strong> 1. 国家所有权 (国务院代表行使)；2. 集体所有权；3. 私人所有权。</p>
+                             <p class="ml-4"><strong>(三) 建筑物区分所有权:</strong> 业主对专有部分享有所有权,对共有部分享有共有和共同管理权。建筑区划内道路、绿地 (除城镇公共或明示个人外)、其他公共场所、公用设施、物业服务用房属业主共有。业主共同决定事项及表决规则 (详见PDF)。住宅改变为经营性用房需有利害关系业主一致同意。共有部分经营收入扣除成本后属业主共有。</p>
+                             <p class="ml-4"><strong>(四) 共有:</strong> 按份共有 (按份额享有所有权)；共同共有 (共同享有所有权)。无约定或约定不明,除家庭关系等外视为按份共有。按份共有内部处分共有物或重大修缮需占份额2/3以上共有人同意；转让份额其他共有人同等条件有优先购买权。共同共有处分共有物或重大修缮需全体同意 (另有约定除外)。</p>
+                             <p class="ml-4"><strong>(五) 遗失物:</strong> 所有权人有权追回。通过转让被他人占有,权利人可向无处分权人请求赔偿,或2年内向受让人请求返还 (受让人通过拍卖或向有资质经营者购得,返还时应支付费用)。领取遗失物应向拾得人或有关部门支付保管等必要费用。悬赏寻找的应按承诺履行。遗失物自招领公告1年内无人认领归国家。</p>
+                             <p class="font-semibold mt-2">五、用益物权:</p>
+                             <p class="ml-4"><strong>1. 含义:</strong> 对他人不动产或动产,依法享有占有、使用和收益的权利。</p>
+                             <p class="ml-4"><strong>2. 种类:</strong></p>
+                             <p class="ml-8">(1) <strong>土地承包经营权:</strong> 承包期 (耕地30年；草地30-50年；林地30-70年)。可依法流转土地经营权。土地经营权人有权在合同期内占有土地,自主生产经营并获益。流转期5年以上自合同生效时设立。</p>
+                             <p class="ml-8">(2) <strong>建设用地使用权:</strong> 对国家所有土地享有占有、使用、收益,建造建筑物等。自登记时设立。转让等附着物一并处分。住宅建设用地使用权期间届满自动续期。</p>
+                             <p class="ml-8">(3) <strong>宅基地使用权:</strong> 对集体所有土地享有占有使用,建住宅等。</p>
+                             <p class="ml-8">(4) <strong>地役权:</strong> 按合同约定利用他人不动产以提高自己不动产效益。自合同生效时设立。</p>
+                             <p class="ml-8">(5) <strong>【民法典新增】居住权:</strong> 按合同约定对他人的住宅享有占有、使用的用益物权。书面合同,登记设立。不得转让、继承。住宅不得出租 (另有约定除外)。期满或居住权人死亡消灭。可遗嘱设立。</p>
+                            <p class="font-semibold mt-2">六、担保物权:</p>
+                            <p class="ml-4"><strong>(一) 概念:</strong> 债务人不履行到期债务或发生约定情形,依法享有就担保财产优先受偿的权利。</p>
+                            <p class="ml-4"><strong>(二) 抵押权:</strong></p>
+                            <p class="ml-8">1. <strong>含义:</strong> 债务人或第三人不转移财产占有,将该财产抵押给债权人,债务人不履约或发生约定情形,债权人优先受偿。</p>
+                            <p class="ml-8">2. <strong>抵押物范围:</strong> 可抵押 (建筑物、建设用地使用权、海域使用权、生产设备原材料等、在建建筑物船舶航空器、交通运输工具等)。不可抵押 (土地所有权；宅基地自留地等集体土地使用权(法律规定可抵押除外)；公益目的非营利法人教育医疗等公益设施；所有权使用权不明或有争议财产；依法被查封扣押监管财产等)。</p>
+                            <p class="ml-8">3. <strong>抵押权设立:</strong> 书面合同。不动产抵押登记时生效；动产抵押不需登记,合同生效即取得抵押权。</p>
+                            <p class="ml-8">4. <strong>禁止流押:</strong> 抵押权人不得约定债务人不履约时抵押财产归债权人所有。</p>
+                            <p class="ml-8">5. <strong>抵押权顺位:</strong> 已登记按登记时间先后；已登记优于未登记；均未登记按债权比例。</p>
+                            <p class="ml-8">6. <strong>抵押物转让【民法典变动】:</strong> 抵押期间可转让 (另有约定除外),抵押权不受影响。转让应及时通知抵押权人。抵押权人能证明转让可能损害抵押权,可请求提前清偿或提存。</p>
+                            <p class="ml-4"><strong>(三) 质(押)权:</strong></p>
+                            <p class="ml-8">1. <strong>动产质权:</strong> 债务人或第三人将其动产出质给债权人占有,不履约或发生约定情形,债权人优先受偿。书面合同,自交付质押财产时设立。</p>
+                            <p class="ml-8">2. <strong>权利质权:</strong> 可出质权利 (汇票本票支票；债券存款单；仓单提单；可转让基金份额股权；可转让知识产权中财产权；应收账款等)。有权利凭证的自交付时设立；无凭证的自登记时设立。</p>
+                            <p class="ml-8">3. <strong>禁止流质。</strong></p>
+                            <p class="ml-4"><strong>(四) 留置权:</strong> 债务人不履约,债权人可留置已合法占有债务人动产并优先受偿。法定担保物权,适用保管、仓储、承揽、运输等合同。应约定或给予60日以上履行期 (鲜活易腐等除外)。逾期未履行的可协议折价或拍卖变卖优先受偿。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">第二部分 债权 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p class="font-semibold">一、债权的概念:</p>
+                             <p class="ml-4">因合同、侵权行为、无因管理、不当得利及法律其他规定,权利人请求特定义务人为或不为一定行为的权利。</p>
+                             <p class="font-semibold mt-2">二、债的产生原因:</p>
+                             <p class="ml-4">(一) 合同之债</p>
+                             <p class="ml-4">(二) 侵权行为</p>
+                             <p class="ml-4">(三) 无因管理: 管理人无法定或约定义务,为免他人利益受损而管理其事务,可请求受益人偿还必要费用及补偿损失。</p>
+                             <p class="ml-4">(四) 不当得利: 成立要件 (一方得利；一方受损；得利与受损有因果关系；无法律根据)。效力 (返还原物及孳息)。</p>
+                             <p class="font-semibold mt-2">三、民法典中的合同编:</p>
+                             <p class="ml-4">合同是民事主体间设立、变更、终止民事法律关系的协议。婚姻收养监护等身份关系协议适用其专门规定,无规定可参照合同编。</p>
+                             <p class="ml-4"><strong>(一) 要约、要约邀请和承诺:</strong></p>
+                             <p class="ml-8">1. <strong>要约:</strong> 希望与他人订合同的意思表示 (内容具体确定；表明经承诺即受约束)。</p>
+                             <p class="ml-8">2. <strong>要约邀请:</strong> 希望他人向自己发要约的表示 (拍卖/招标公告、招股说明书、商业广告宣传、寄送价目表等)。商业广告宣传内容符合要约条件构成要约。</p>
+                             <p class="ml-8">3. <strong>承诺:</strong> 受要约人同意要约的意思表示。承诺生效合同成立 (另有规定约定除外)。承诺内容应与要约一致,实质性变更 (标的、数量、质量、价款报酬、履行期限地点方式、违约责任、争议解决等) 为新要约。网络商品服务信息符合要约条件,对方提交订单成功时合同成立 (另有约定除外)。</p>
+                             <p class="ml-4"><strong>(二) 买卖合同:</strong></p>
+                             <p class="ml-8">1. <strong>分期付款:</strong> 买受人未付到期价款达总价1/5,经催告合理期限内仍未付,出卖人可请求支付全部或解除合同 (可请求支付使用费)。</p>
+                             <p class="ml-8">2. <strong>试用买卖:</strong> 买受人试用期内可购买或拒绝。期满未表示视为购买。</p>
+                             <p class="ml-4"><strong>(三) 赠与合同:</strong></p>
+                             <p class="ml-8"><strong>任意撤销权:</strong> 赠与财产权利转移前可撤销 (公证或公益道德义务性质赠与除外)。</p>
+                             <p class="ml-4"><strong>(四) 借款合同:</strong></p>
+                             <p class="ml-8">自然人间借款合同自贷款人提供借款时成立。禁止高利贷。未约定利息视为无息。约定不明按当地或交易方式习惯市场利率确定；自然人间视为无息。</p>
+                             <p class="ml-4"><strong>(五) 保证合同:</strong></p>
+                             <p class="ml-8">主债权债务合同的从合同。主合同无效则保证合同无效 (法律另有规定除外)。</p>
+                             <p class="ml-8">1. <strong>保证人范围:</strong> 机关法人不得为保证人 (例外: 国务院批准为外国政府/国际经济组织贷款转贷)。公益非营利法人/非法人组织不得为保证人。</p>
+                             <p class="ml-8">2. <strong>保证方式:</strong> 一般保证和连带责任保证。未约定或约定不明按一般保证【民法典变动】。</p>
+                             <p class="ml-8">3. <strong>保证期间:</strong> 主债务履行期满起6个月。</p>
+                             <p class="ml-4"><strong>(六) 租赁合同:</strong></p>
+                             <p class="ml-8">1. <strong>租赁期限:</strong> 不得超20年,超出的无效。可续订,续订期也不超20年。</p>
+                             <p class="ml-8">2. <strong>租赁合同形式:</strong> 6个月以上应书面。未书面无法确定期限视为不定期租赁。</p>
+                             <p class="ml-8">3. <strong>维修义务:</strong> 出租人承担 (另有约定除外)。承租人可请求合理期限内维修,出租人未履行承租人可自行维修费用出租人负担。因承租人过错致需维修出租人不承担。</p>
+                             <p class="ml-8">4. <strong>买卖不破租赁。</strong></p>
+                             <p class="ml-8">5. <strong>优先购买权 vs 优先承租权:</strong> 出租人出卖租赁房屋应合理期限内通知承租人,承租人同等条件优先购买 (房屋按份共有人行使优先购买权或出租人出卖给近亲属除外)。租赁期满房屋承租人同等条件优先承租。</p>
+                             <p class="ml-4"><strong>(七) 其他:</strong></p>
+                             <p class="ml-8">1. <strong>保理合同:</strong> 应收账款债权人将现有/将有应收账款转让给保理人,保理人提供资金融通、管理催收、付款担保等服务。</p>
+                             <p class="ml-8">2. <strong>物业服务合同。</strong></p>
+                             <p class="ml-8">3. <strong>合伙合同:</strong> 合伙人应按约定出资。一或数合伙人不履约,其他合伙人不能因此拒出资。</p>
+                             <p class="ml-8">4. <strong>中介合同:</strong> 委托人接受服务后利用中介提供机会/媒介服务绕开中介人直接订合同,应向中介人支付报酬。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">第三部分 知识产权 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p class="font-semibold">一、著作权:</p>
+                             <p class="ml-4"><strong>(一) 产生:</strong> 中国自然人、法人或非法人组织作品,不论是否发表,依法享有著作权。</p>
+                             <p class="ml-4"><strong>(二) 保护范围:</strong> 文学艺术科学领域具独创性并能以一定形式表现的智力成果 (文字、口述、音乐戏剧曲艺舞蹈杂技、美术建筑、摄影、视听、工程/产品设计图地图示意图模型、计算机软件等)。不适用: 法律法规国家机关文件及译文；单纯事实消息；历法通用数表表格公式。</p>
+                             <p class="ml-4"><strong>(三) 归属:</strong> 视听作品 (电影电视剧著作权归制作者,编剧导演等享署名权报酬权；其他视听作品归属约定或归制作者但作者享署名报酬权)。职务作品 (一般作者享有,单位优先使用；特定职务作品如设计图软件等著作权归单位,作者享署名奖励权)。委托作品 (合同约定,无约定归受托人)。美术摄影作品原件所有权转移不改著作权归属,但原件所有人享展览权。汇编作品 (著作权归汇编人,不得侵犯原作品著作权)。</p>
+                             <p class="ml-4"><strong>(四) 保护期:</strong> 署名权修改权保护作品完整权无限制。其他权利为作者终生及死后50年 (合作作品以最后死亡作者为准)。</p>
+                             <p class="font-semibold mt-2">二、专利权:</p>
+                             <p class="ml-4"><strong>(一) 种类:</strong> 发明 (对产品方法或改进的新技术方案)；实用新型 (对产品形状构造或结合的适于实用新技术方案)；外观设计 (对产品整体/局部形状图案或结合及色彩与形状图案结合的富有美感适于工业应用新设计)。</p>
+                             <p class="ml-4"><strong>(二) 授予条件:</strong> 发明和实用新型应具新颖性、创造性、实用性。不授予专利权: 科学发现；智力活动规则方法；疾病诊断治疗方法；动植物品种；原子核变换方法及所得物质；主要起标识作用的平面印刷品图案色彩等设计。</p>
+                             <p class="ml-4"><strong>(三) 保护期限:</strong> 发明20年,实用新型10年,外观设计15年 (均自申请日起算)。</p>
+                             <p class="font-semibold mt-2">三、商标权:</p>
+                             <p class="ml-4"><strong>(一) 范围:</strong> 能将商品与他人商品区别的标志 (文字图形字母数字三维标志颜色组合声音等及组合)。</p>
+                             <p class="ml-4"><strong>(二) 保护期限:</strong> 注册商标有效期10年 (自核准注册日起算)。</p>
+                             <p class="ml-4"><strong>(三) 注册审查核准:</strong> 同一种/类似商品上相同/近似商标申请,初审公告申请在先；同日申请初审公告使用在先。申请不得损他人在先权利,不得以不正当手段抢注他人已使用有一定影响商标。</p>
+                        </div>
+                    </details>
+                     <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">第四部分 财产继承权 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p class="font-semibold">一、财产继承权的概述:</p>
+                             <p class="ml-4"><strong>(一) 继承的方式:</strong> 遗赠抚养协议、遗赠(或遗嘱)、法定继承。</p>
+                             <p class="ml-4"><strong>(二) 遗产:</strong> 自然人死亡时遗留的个人合法财产 (法律规定或性质不得继承除外)。</p>
+                             <p class="font-semibold mt-2">二、继承的方式:</p>
+                             <p class="ml-4"><strong>1. 法定继承:</strong> 第一顺序 (配偶、子女、父母；尽主要赡养义务的丧偶儿媳对公婆、丧偶女婿对岳父母)；第二顺序 (兄弟姐妹、祖父母、外祖父母)。</p>
+                             <p class="ml-4"><strong>2. 代位继承:</strong> 被继承人子女先于被继承人死亡,由其子女的直系晚辈血亲代位。被继承人兄弟姐妹先于被继承人死亡,由其兄弟姐妹的子女代位。一般只能继承被代位人有权继承份额。</p>
+                             <p class="ml-4"><strong>3. 转继承:</strong> 被继承人死亡后遗产分割前继承人死亡,其应继承份额转给其合法继承人。</p>
+                             <p class="ml-4"><strong>4. 遗嘱继承:</strong> 按被继承人合法有效遗嘱继承。种类 (公证、自书、代书、录音、口头、打印、录像遗嘱,各有形式要求)。遗嘱人可撤回变更,数份遗嘱内容相抵触以最后为准。无效情形 (无/限制行为能力人所立；受胁迫欺骗所立；伪造；篡改部分；处分国家集体他人财产部分)。</p>
+                             <p class="ml-4"><strong>5. 遗赠:</strong> 自然人通过遗嘱将遗产无偿赠给国家、社会组织或法定继承人以外自然人。受遗赠人应60日内作接受或放弃表示,到期未表示视为放弃。继承人放弃继承应遗产处理前书面表示,无表示视为接受。</p>
+                             <p class="ml-4"><strong>6. 遗赠抚养协议:</strong> 公民与扶养人签订,扶养人承担生养死葬义务,享受遗赠权利。</p>
+                             <p class="font-semibold mt-2">三、遗产的处理:</p>
+                             <p class="ml-4"><strong>(一) 继承开始:</strong> 被继承人死亡时 (自然死亡或宣告死亡)。</p>
+                             <p class="ml-4"><strong>(二) 特殊情况:</strong> 无人继承又无人受遗赠遗产归国家 (用于公益)；死者生前是集体组织成员归集体。无人继承遗产也应先清偿税款债务。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">第五部分 人身权 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p class="font-semibold">一、人身权的概念:</p>
+                             <p class="ml-4">民事主体依法享有的与其人身不可分离而又不直接涉及财产内容的民事权利。</p>
+                             <p class="font-semibold mt-2">二、人身权的一般规定:</p>
+                             <p class="ml-4">自然人人身自由、人格尊严受法律保护。享生命权、身体权、健康权、姓名权、肖像权、名誉权、荣誉权、隐私权等。法人、非法人组织享名称权、名誉权、荣誉权等。因婚姻家庭关系产生人身权利受保护。</p>
+                             <p class="font-semibold mt-2">三、民法典人格权编相关要点:</p>
+                             <p class="ml-4"><strong>1. 一般规定:</strong> 人格权不得放弃、转让、继承。可许可他人使用姓名名称肖像等 (法律规定或性质不得许可除外)。死者姓名肖像名誉等受侵害,近亲属有权请求担责。</p>
+                             <p class="ml-4"><strong>2. 生命权、身体权和健康权:</strong> (1)人体组织器官捐献 (完全民事行为能力人依法自主决定无偿捐献,书面或有效遗嘱形式。生前未表示不同意,死后近亲属可共同决定)。(2)性骚扰 (违背他人意愿实施,受害人有权请求担民事责任。单位应采预防处置措施)。</p>
+                             <p class="ml-4"><strong>3. 姓名权与名称权:</strong> 自然人享姓名权,法人非法人组织享名称权。不得干涉盗用假冒。</p>
+                             <p class="ml-4"><strong>4. 肖像权:</strong> 自然人享肖像权。不得丑化污损伪造。未经同意不得制作使用公开 (合理使用除外: 个人学习欣赏教学科研；新闻报道不可避免；国家机关依法履职；展示特定公共环境；维护公共利益或肖像权人合法权益其他行为)。</p>
+                             <p class="ml-4"><strong>5. 其他:</strong> 民事主体享荣誉权 (不得非法剥夺诋毁贬损)。民事主体享名誉权 (不得侮辱诽谤)。自然人享隐私权 (不得刺探侵扰泄露公开)。自然人个人信息受保护 (能单独或结合识别特定自然人的各种信息)。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section5_civil_liability" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第五节 民事责任</h2>
+                 <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、民事责任概述 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 种类:</p>
+                            <p class="ml-4">1. 违约责任; 2. 侵权责任; 3. 缔约过失责任。</p>
+                            <p class="font-semibold mt-2">(二) 对见义勇为者的保护:</p>
+                            <p class="ml-4">因保护他人民事权益使自己受损,由侵权人担责,受益人可适当补偿。无侵权人、逃逸或无力担责,受害人请求补偿,受益人应适当补偿。</p>
+                            <p class="font-semibold mt-2">(三) 对英雄烈士的保护:</p>
+                            <p class="ml-4">侵害英雄烈士等姓名肖像名誉荣誉,损社会公共利益,应担民事责任。</p>
+                            <p class="font-semibold mt-2">(四) 自甘风险:</p>
+                            <p class="ml-4">自愿参加有一定风险文体活动,因其他参加者行为受损,不得请求其担责 (其他参加者有故意或重大过失除外)。</p>
+                            <p class="font-semibold mt-2">(五) 民事责任优先:</p>
+                            <p class="ml-4">同一行为应担民事、行政、刑事责任,承担行政或刑事责任不影响担民事责任；财产不足支付,优先担民事责任。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、违约责任 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 违约责任的概念:</p>
+                            <p class="ml-4">当事人一方不履行合同义务或履行不符约定,应承担继续履行、采取补救措施或赔偿损失等。方式: 继续履行,补救措施 (修理更换重作退货减价等),支付违约金,定金罚则,赔偿损失。</p>
+                            <p class="font-semibold mt-2">(二) 适用定金罚则:</p>
+                            <p class="ml-4">定金为确保合同履行预付款项。数额约定,不超主合同标的额20%。实际交付定金时合同成立。债务人履约定金抵作价款或收回。给付方不履约无权返还；收受方不履约应双倍返还。定金和违约金不能并用,可选其一。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、侵权责任 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p class="font-semibold">(一) 关于责任主体的特殊规定:</p>
+                             <p class="ml-4">1. <strong>无/限制民事行为能力人致人损害:</strong> 由监护人担责 (尽到监护责可减轻)。有财产的从本人财产支付,不足由监护人赔。监护职责委托他人,监护人担责,受托人有过错担相应责任。</p>
+                             <p class="ml-4">2. <strong>用人者侵权责任:</strong> 工作人员因执行工作任务致人损害,用人单位担责 (可向有故意或重大过失工作人员追偿)。劳务派遣期间,被派遣者因执行工作任务致损,用工单位担责,派遣单位有过错担相应责任。</p>
+                             <p class="ml-4">3. <strong>网络侵权:</strong> 网络用户利用网络服务侵权,权利人可通知网络服务提供者采必要措施。提供者接到通知应及时转送并采措施,未及时对扩大部分与用户担连带责任。网络用户可提交不侵权声明,提供者转送权利人并告知可投诉或诉讼。合理期限内未收到权利人已投诉或诉讼通知,应及时终止所采措施。</p>
+                             <p class="ml-4">4. <strong>教育机构责任:</strong> 无民事行为能力人在幼儿园学校等学习生活期间受人身损害,教育机构应担责 (能证明尽到教育管理职责不担责)。限制民事行为能力人受损,教育机构未尽到教育管理职责应担责。在教育机构内受第三方侵权,第三方担责,教育机构未尽管理职责担相应补充责任 (可向第三方追偿)。</p>
+                             <p class="font-semibold mt-2">(二) 特殊侵权:</p>
+                             <p class="ml-4">1. <strong>产品责任:</strong> 因产品缺陷致损,生产者担责。被侵权人可向生产者或销售者请求赔偿。缺陷由生产者造成销售者赔偿后可追偿；因销售者过错致缺陷生产者赔偿后可追偿。</p>
+                             <p class="ml-4">2. <strong>机动车交通事故责任:</strong> 依道交法和本法规定担责。租赁借用等所有人管理人与使用人不同时,属机动车一方责任由使用人担责；所有人管理人有过错担相应责任。</p>
+                             <p class="ml-4">3. <strong>医疗损害责任:</strong> 患者诊疗活动中受损,医疗机构或医务人员有过错,医疗机构担赔偿责任。</p>
+                             <p class="ml-4">4. <strong>饲养动物损害责任:</strong> 动物饲养人或管理人担责 (能证明因被侵权人故意或重大过失造成可不担或减轻)。动物园动物致损,动物园担责 (能证明尽到管理职责不担责)。因第三人过错致动物致损,被侵权人可向饲养人/管理人或第三人请求赔偿,饲养人/管理人赔偿后可追偿。</p>
+                             <p class="ml-4">5. <strong>物件损害责任 (高空抛物):</strong> 禁止从建筑物抛掷物品。抛掷或坠落物致损,由侵权人担责；难确定具体侵权人,除能证明自己不是侵权人的外,由可能加害建筑物使用人补偿 (补偿后可追偿)。物业等管理人应采必要安全保障措施,未采取担未履行安全保障义务侵权责任。公安等机关应及时调查查清责任人。</p>
+                             <p class="ml-4">6. <strong>公共场所安全保障义务:</strong> 在公共场所或道路挖掘修缮安装地下设施等致损,施工人不能证明已设明显标志和采安全措施,应担侵权责任。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section6_marriage_family" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第六节 婚姻家庭关系</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、结婚 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 结婚登记与婚姻关系:</p>
+                            <p class="ml-4">1. <strong>结婚条件:</strong> 男女双方完全自愿；男不早于22周岁,女不早于20周岁；非直系血亲或三代以内旁系血亲。</p>
+                            <p class="ml-4">2. <strong>结婚登记:</strong> 双方亲自到婚姻登记机关申请。符合规定予以登记发结婚证,确立婚姻关系。未登记应补办。</p>
+                            <p class="font-semibold mt-2">(二) 无效婚姻:</p>
+                            <p class="ml-4">情形: (1)重婚；(2)有禁止结婚的亲属关系；(3)未到法定婚龄。</p>
+                            <p class="font-semibold mt-2">(三) 可撤销的婚姻:</p>
+                            <p class="ml-4">1. <strong>胁迫的婚姻:</strong> 受胁迫一方可向法院请求撤销 (胁迫行为终止起1年内提出；被非法限制人身自由的自恢复自由起1年内提出)。</p>
+                            <p class="ml-4">2. <strong>重大疾病的婚姻:</strong> 一方患重大疾病婚前未如实告知,另一方可向法院请求撤销 (知道或应知道撤销事由起1年内提出)。</p>
+                            <p class="ml-4">婚姻无效或被撤销,无过错方有权请求损害赔偿。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、家庭关系 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 夫妻共同财产:</p>
+                            <p class="ml-4">婚姻关系存续期间所得: (一)工资、奖金、劳务报酬；(二)生产、经营、投资的收益；(三)知识产权的收益；(四)继承或者受赠的财产 (遗嘱或赠与合同确定只归一方的除外)；(五)其他应归共同所有的财产。</p>
+                            <p class="font-semibold mt-2">2. 夫妻个人财产:</p>
+                            <p class="ml-4">(一)一方的婚前财产；(二)一方因受到人身损害获得的赔偿或者补偿；(三)遗嘱或者赠与合同中确定只归一方的财产；(四)一方专用的生活用品；(五)其他应当归一方的财产。</p>
+                            <p class="font-semibold mt-2">3. 夫妻约定财产制:</p>
+                            <p class="ml-4">可书面约定婚内所得及婚前财产归各自所有、共同所有或部分各自、部分共同。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、离婚 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 离婚的方式:</p>
+                            <p class="ml-4"><strong>1. 协议离婚:</strong> 双方自愿,签订书面离婚协议 (载明自愿离婚、子女抚养、财产债务处理等协商一致意见),亲自到婚姻登记机关申请。有30日离婚冷静期,期间任何一方可撤回。冷静期满后30日内双方亲自申请发离婚证,未申请视为撤回。</p>
+                            <p class="ml-4"><strong>2. 诉讼离婚:</strong> 一方要求离婚,可调解或直接诉讼。法院审理应调解,感情确已破裂调解无效应准予。应准予离婚情形: (一)重婚或与他人同居；(二)实施家庭暴力或虐待、遗弃家庭成员；(三)有赌博、吸毒等恶习屡教不改；(四)因感情不和分居满二年；(五)其他导致感情破裂情形。一方被宣告失踪另一方诉离应准予。判决不准离后又分居满一年一方再诉离应准予。</p>
+                            <p class="font-semibold mt-2">(二) 离婚后的子女和财产问题:</p>
+                            <p class="ml-4">1. <strong>子女问题:</strong> 父母与子女关系不因离婚消除,仍有抚养教育保护权利义务。不满2周岁子女以母直接抚养为原则。已满2周岁协议不成由法院按最有利未成年子女原则判决。子女已满8周岁应尊重其真实意愿。</p>
+                            <p class="ml-4">2. <strong>债务问题:</strong> (1)夫妻共同债务认定: 双方共同签名或一方事后追认等共同意思表示所负；一方以个人名义为家庭日常生活需要所负。一方以个人名义超家庭日常生活需要所负不属共同债务 (债权人能证明用于共同生活生产经营或基于双方共同意思表示除外)。(2)清偿: 共同偿还。共同财产不足或财产归各自所有的,协议清偿,不成由法院判决。</p>
+                            <p class="font-semibold mt-2">(三) 离婚时,无过错方损害赔偿请求权:</p>
+                            <p class="ml-4">导致离婚情形 (重婚；与他人同居；家庭暴力；虐待遗弃家庭成员；有其他重大过错),无过错方有权请求损害赔偿。</p>
+                            <p class="font-semibold mt-2">(四) 离婚中的特殊保护:</p>
+                            <p class="ml-4">现役军人配偶要求离婚,应征得军人同意 (军人一方有重大过错除外)。女方怀孕期间、分娩后一年内或终止妊娠后六个月内,男方不得提出离婚 (女方提出或法院认为确有必要受理男方请求除外)。</p>
+                        </div>
+                    </details>
+                     <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、收养 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 被收养人:</strong> (1)丧失父母的孤儿；(2)查找不到生父母的未成年人；(3)生父母有特殊困难无力抚养的子女。</p>
+                            <p><strong>2. 收养人条件:</strong> (1)无子女或只有一名子女；(2)有抚养教育保护能力；(3)未患有医学上认为不应收养子女疾病；(4)无不利于被收养人健康成长违法犯罪记录；(5)年满30周岁。无子女可收养两名；有子女只能收养一名。无配偶者收养异性子女,年龄差40周岁以上。收养8周岁以上未成年人应征得其同意。</p>
+                            <p><strong>3. 收养关系成立与效力:</strong> 向县级以上民政部门登记,自登记日起成立。养子女与生父母及其他近亲属权利义务关系因收养成立而消除。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section7_statute_of_limitations" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第七节 诉讼时效</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、概念 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>诉讼时效是指民事权利受到侵害的权利人在法定的时效期间内不行使权利,当时效期间届满时,人民法院对权利人的权利不再进行保护的制度。人民法院不得主动适用诉讼时效的规定。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、诉讼时效种类 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 普通诉讼时效:</strong> 向人民法院请求保护民事权利的诉讼时效期间为3年,法律另有规定的除外。</p>
+                            <p><strong>2. 最长诉讼时效:</strong> 自权利受到损害之日起超过二十年的,人民法院不予保护,有特殊情况的,人民法院可以根据权利人的申请决定延长。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、诉讼时效的起算 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>一般情况下,诉讼时效期间自权利人知道或者应当知道权利受到损害以及义务人之日起计算。当事人约定同一债务分期履行的,诉讼时效期间自最后一期履行期限届满之日起计算。未成年人遭受性侵害的损害赔偿请求权的诉讼时效期间,自受害人年满十八周岁之日起计算。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、诉讼时效中止 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>在诉讼时效期间的最后六个月内,因下列障碍,不能行使请求权的,诉讼时效中止: (1)不可抗力；(2)无民事行为能力人或者限制民事行为能力人没有法定代理人,或者法定代理人死亡、丧失民事行为能力、丧失代理权；(3)继承开始后未确定继承人或者遗产管理人；(4)权利人被义务人或者其他人控制；(5)其他导致权利人不能行使请求权的障碍。自中止时效的原因消除之日起满六个月,诉讼时效期间届满。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">五、诉讼时效中断 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>诉讼时效中断是指非因权利人怠于行使权利,使已经过的时效期间丧失其效力,而须重新起算时效期间的制度。情形: (1)权利人向义务人提出履行请求；(2)义务人同意履行义务；(3)权利人提起诉讼或者申请仲裁；(4)与提起诉讼或者申请仲裁具有同等效力的其他情形。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">六、诉讼时效届满的后果 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>诉讼时效期间届满的,义务人可以提出不履行义务的抗辩。诉讼时效期间届满后,义务人同意履行的,不得以诉讼时效期间届满为由抗辩;义务人已经自愿履行的,不得请求返还。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="exercises_ch4_civil_law" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">相关习题 (民法)</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="example-box">
+                        <p class="font-medium">1.下列属于民事法律行为的是( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 签订买卖合同</li><li>B. 搭乘便车</li><li>C. 订婚</li><li>D. 顺路代为投递信件</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">2. 王某购进的电热水器因漏电对王某的人身及财产造成损害,该电热水器生产厂家对此应()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 不承担责任</li><li>C. 承担过错责任</li><li>B. 承担公平责任</li><li>D. 承担无过错责任</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong> (产品责任一般为无过错责任)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">3. 甲委托乙代购惠普打印机,而乙代购的是佳能打印机,乙的代购行为( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 无效</li><li>C. 效力待定</li><li>B. 可撤销</li><li>D. 可变更</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong> (属于无权代理或超越代理权的行为,需被代理人追认)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">4.12岁的李某接受叔叔5000元的赠与,并用这5000元购买电脑的行为( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 前者无效,后者无效</li><li>B. 前者无效,后者效力待定</li><li>C. 前者有效,后者无效</li><li>D. 前者有效,后者效力待定</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong> (接受赠与是纯获利益行为,有效。购买电脑行为与其年龄智力是否适应需判断,一般认为效力待定)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">31.甲方和乙方签订了一份燃料买卖合同,合同签订后,出现了双方当事人无法预见的情势变更,但甲方并没有将该情势变更事实通知乙方,导致乙方无法将货物按时发送给甲方。上述案例中,甲方违反了()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 诚实信用原则</li><li>C. 公序良俗原则</li><li>B. 公平原则</li><li>D. 禁止权利滥用原则</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function toggleExplanation(button) {
+            const explanationDiv = button.nextElementSibling;
+            if (explanationDiv.style.display === 'none' || explanationDiv.style.display === '') {
+                explanationDiv.style.display = 'block';
+                button.textContent = '隐藏答案与解析';
+            } else {
+                explanationDiv.style.display = 'none';
+                button.textContent = '显示答案与解析';
+            }
+        }
+
+        const mainContentSections = document.querySelectorAll('main > section.content-section');
+        const allSidebarLinks = document.querySelectorAll('aside nav a.sidebar-link');
+        const bodyEl = document.body;
+        const menuButton = document.getElementById('menu-button');
+        
+        function showSection(sectionIdToShow) {
+            mainContentSections.forEach(section => {
+                section.classList.toggle('active', section.id === sectionIdToShow);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.innerWidth >= 768) { 
+                bodyEl.classList.add('sidebar-visible');
+                bodyEl.classList.remove('sidebar-globally-hidden');
+            } else {
+                bodyEl.classList.remove('sidebar-visible');
+                bodyEl.classList.add('sidebar-globally-hidden'); 
+            }
+
+            const hash = window.location.hash.substring(1);
+            let sectionToActivate = 'introduction_ch4_civil_law'; 
+            let specificElementToScrollTo = null;
+
+            if (hash) {
+                const targetElementByHash = document.getElementById(hash);
+                if (targetElementByHash && targetElementByHash.classList.contains('content-section')) {
+                    sectionToActivate = hash; 
+                    specificElementToScrollTo = targetElementByHash;
+                } else if (targetElementByHash) { 
+                    const parentSection = targetElementByHash.closest('section.content-section');
+                    if (parentSection) {
+                        sectionToActivate = parentSection.id;
+                        specificElementToScrollTo = targetElementByHash;
+                    }
+                }
+            }
+            
+            showSection(sectionToActivate);
+
+            allSidebarLinks.forEach(link => {
+                const linkHrefId = link.getAttribute('href').substring(1);
+                const isActive = linkHrefId === sectionToActivate || linkHrefId === hash;
+                link.classList.toggle('active', isActive);
+            });
+            
+            if (specificElementToScrollTo) {
+                 if (specificElementToScrollTo.tagName === 'SUMMARY') {
+                    specificElementToScrollTo.parentElement.open = true;
+                } else if (specificElementToScrollTo.tagName === 'DETAILS' && !specificElementToScrollTo.open) {
+                    // specificElementToScrollTo.open = true; 
+                }
+                setTimeout(() => { 
+                    specificElementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            } else if (document.getElementById(sectionToActivate)) { 
+                 setTimeout(() => {
+                    document.getElementById(sectionToActivate).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        });
+
+        allSidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                
+                let targetId = this.getAttribute('href').substring(1);
+                let sectionToDisplayId = targetId; 
+                const targetElement = document.getElementById(targetId);
+                
+                allSidebarLinks.forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+
+                showSection(sectionToDisplayId);
+                window.location.hash = targetId; 
+
+                if (targetElement) {
+                     setTimeout(() => { 
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 50); 
+                }
+                
+                if (window.innerWidth < 768 && bodyEl.classList.contains('sidebar-visible')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                     bodyEl.classList.add('sidebar-globally-hidden');
+                }
+            });
+        });
+        
+        menuButton.addEventListener('click', () => {
+            bodyEl.classList.toggle('sidebar-globally-hidden');
+            bodyEl.classList.toggle('sidebar-visible', !bodyEl.classList.contains('sidebar-globally-hidden'));
+        });
+        
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) { 
+                if (!bodyEl.classList.contains('sidebar-globally-hidden')) { 
+                    bodyEl.classList.add('sidebar-visible');
+                } else { 
+                    bodyEl.classList.remove('sidebar-visible');
+                }
+            } else { 
+                if (bodyEl.classList.contains('sidebar-globally-hidden')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                }
+            }
+        });
+
+        document.querySelectorAll('details > summary').forEach(summary => {
+            const marker = summary.querySelector('.details-marker');
+            const detailsElement = summary.parentElement;
+            
+            if (marker) { 
+                 marker.style.transform = detailsElement.open ? 'rotate(90deg)' : 'rotate(0deg)';
+            }
+
+            detailsElement.addEventListener('toggle', function() {
+                if (marker) {
+                    marker.style.transform = this.open ? 'rotate(90deg)' : 'rotate(0deg)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

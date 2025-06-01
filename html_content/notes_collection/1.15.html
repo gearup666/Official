@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行政法知识学习网页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: padding-left 0.3s ease-in-out;
+        }
+        .content-section {
+            scroll-margin-top: 70px; 
+            display: none; 
+        }
+        .content-section.active {
+            display: block;
+        }
+        details > summary { 
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            background-color: #065f46; 
+            color: white;
+            border-radius: 0.375rem; 
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            list-style: none; 
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        details > summary::-webkit-details-marker {
+            display: none; 
+        }
+        details > summary:hover {
+            background-color: #047857; 
+        }
+        details[open] > summary {
+            background-color: #047857; 
+            border-radius: 0.375rem 0.375rem 0 0;
+        }
+        details > div.p-4 { 
+             border: 1px solid #047857; 
+             border-top: none;
+             border-radius: 0 0 0.375rem 0.375rem;
+             background-color: #f0fdfa; 
+        }
+        .key-point {
+            background-color: #d1fae5; 
+            border-left: 4px solid #10b981; 
+            color: #047857; 
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0 0.375rem 0.375rem 0; 
+        }
+        .example-box { 
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.5rem; 
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); 
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .explanation {
+            display: none;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background-color: #ecfdf5; 
+            border: 1px solid #a7f3d0; 
+            border-radius: 0.375rem; 
+        }
+        .btn {
+            background-color: #10b981; 
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; 
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #059669; 
+        }
+        
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+            height: calc(100vh - 4rem); 
+            transform: translateX(-100%); 
+            width: 22rem; 
+        }
+        main {
+            transition: margin-left 0.3s ease-in-out;
+            width: 100%; 
+            margin-left: 0;
+        }
+
+        body.sidebar-visible #sidebar {
+            transform: translateX(0);
+        }
+        body.sidebar-visible main {
+           margin-left: 22rem; 
+        }
+         @media (min-width: 768px) { 
+            body:not(.sidebar-globally-hidden) #sidebar {
+                transform: translateX(0);
+            }
+            body:not(.sidebar-globally-hidden) main {
+                margin-left: 22rem; 
+            }
+            body.sidebar-globally-hidden #sidebar {
+                transform: translateX(-100%);
+            }
+            body.sidebar-globally-hidden main {
+                margin-left: 0;
+            }
+        }
+
+        .sidebar-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            color: #d1fae5; 
+            text-decoration: none;
+            border-radius: 0.375rem; 
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: 600; 
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #10b981; 
+            color: white;
+        }
+         .details-marker { 
+            font-size: 0.8em;
+            margin-left: 0.5rem;
+            transition: transform 0.2s ease-in-out;
+        }
+        details[open] > summary > .details-marker {
+            transform: rotate(90deg);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        th, td {
+            border: 1px solid #a1a1aa; 
+            padding: 0.5rem;
+            text-align: left;
+        }
+        th {
+            background-color: #e4e4e7; 
+            font-weight: 600;
+        }
+        .image-placeholder { 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 400px; 
+            margin: 1rem auto;
+            padding: 1rem;
+            background-color: #f4f4f5;
+            border: 1px dashed #a1a1aa;
+            border-radius: 0.375rem;
+            text-align: center;
+            color: #71717a;
+        }
+    </style>
+</head>
+<body class="bg-slate-100">
+    <header class="bg-emerald-700 text-white p-4 fixed w-full top-0 z-50 shadow-md flex justify-between items-center">
+        <button id="menu-button" class="p-2 rounded-md text-emerald-200 hover:text-white hover:bg-emerald-600">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </button>
+        <h1 class="text-xl font-bold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">行政法知识学习网页</h1>
+    </header>
+
+    <div class="flex pt-16">
+        <aside id="sidebar" class="bg-emerald-800 text-white p-4 space-y-1 fixed top-16 left-0 z-40 overflow-y-auto">
+            <nav>
+                <a href="#introduction_ch5_admin_law" class="sidebar-link">行政法概览</a>
+                <a href="#section1_admin_law_overview" class="sidebar-link">第一节 行政法概述</a>
+                <a href="#section2_admin_acts" class="sidebar-link">第二节 行政行为</a>
+                <a href="#section3_admin_licensing" class="sidebar-link">第三节 行政许可</a>
+                <a href="#section4_admin_penalty" class="sidebar-link">第四节 行政处罚</a>
+                <a href="#section5_admin_coercion" class="sidebar-link">第五节 行政强制</a>
+                <a href="#section6_admin_reconsideration" class="sidebar-link">第六节 行政复议</a>
+                <a href="#section7_admin_litigation" class="sidebar-link">第七节 行政诉讼</a>
+                <a href="#section8_state_compensation" class="sidebar-link">第八节 国家赔偿法</a>
+                <a href="#section9_civil_servant_law" class="sidebar-link">第九节 公务员法</a>
+                <a href="#section10_govt_info_openness" class="sidebar-link">第十节 政府信息公开条例</a>
+                <a href="#exercises_ch5_admin_law" class="sidebar-link">相关习题</a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-6">
+            <section id="introduction_ch5_admin_law" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第五章 行政法概览</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="mb-3 text-gray-700 leading-relaxed">
+                        本章主要介绍行政法的基本原则、行政法律关系主体、行政行为、行政许可、行政处罚、行政强制、行政复议、行政诉讼、国家赔偿法以及公务员法和政府信息公开条例等核心内容。
+                    </p>
+                    <div class="key-point">
+                        <h4 class="font-semibold text-lg mb-2">核心内容：</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>行政法的基本原则。</li>
+                            <li>行政行为的概念、特征和分类。</li>
+                            <li>行政许可的设定、实施程序和费用。</li>
+                            <li>行政处罚的种类、设定、管辖和适用程序。</li>
+                            <li>行政强制措施与行政强制执行。</li>
+                            <li>行政复议的范围、参加人、程序和决定。</li>
+                            <li>行政诉讼的受案范围、管辖、参加人和程序。</li>
+                            <li>国家赔偿的范围、请求人、义务机关和程序。</li>
+                            <li>公务员的条件、义务权利、职务职级、录用考核、奖惩、回避、辞职辞退退休等。</li>
+                            <li>政府信息公开的主体、范围、主动公开与依申请公开等。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section1_admin_law_overview" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第一节 行政法概述</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、行政法的基本原则 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <ol class="list-decimal list-inside ml-4">
+                                <li>合法行政原则</li>
+                                <li>合理行政原则</li>
+                                <li>行政应急性原则 (合法性原则的例外)</li>
+                                <li>程序正当原则 (行政公开、公众参与、回避)</li>
+                                <li>高效便民原则</li>
+                                <li>诚实守信原则 (行政信息真实、保护信赖利益)</li>
+                                <li>权责统一原则</li>
+                            </ol>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、行政法律关系主体 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <div class="image-placeholder"><p>[行政法主体关系图占位符：行政法主体分为行政主体和行政相对人；行政主体包括行政机关和法律法规授权的组织]</p></div>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section2_admin_acts" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第二节 行政行为</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、行政行为的概念和特征 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p class="font-semibold">(一) 概念:</p>
+                             <p class="ml-4">行政行为是指行政主体行使行政职权,做出的能够产生行政法律效果的行为。</p>
+                             <p class="font-semibold mt-2">(二) 特征:</p>
+                             <ol class="list-decimal list-inside ml-4">
+                                <li>主体是行政主体。</li>
+                                <li>行为必须是行使行政职权的行为。</li>
+                             </ol>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、行政行为的分类 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 内部行政行为与外部行政行为 (按适用与效力对象范围):</p>
+                            <p class="ml-4">内部行政行为 (如行政处分); 外部行政行为 (如行政许可)。</p>
+                            <p class="font-semibold mt-2">(二) 抽象行政行为与具体行政行为 (按对象是否特定):</p>
+                            <p class="ml-4">抽象行政行为 (如制定行政法规、规章); 具体行政行为 (如行政许可、处罚)。</p>
+                            <p class="font-semibold mt-2">(三) 羁束行政行为与自由裁量行政行为 (按受法律规范拘束程度):</p>
+                            <p class="ml-4">羁束行政行为 (如税务机关征税)。</p>
+                            <p class="font-semibold mt-2">(四) 依职权的行政行为与依申请的行政行为 (按主体是否可主动作出):</p>
+                            <p class="ml-4">依职权 (如征税); 依申请 (如颁发营业执照)。</p>
+                            <p class="font-semibold mt-2">(五) 授益行政行为与损益行政行为 (按内容对相对人是否有利):</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+            
+            <section id="section3_admin_licensing" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第三节 行政许可</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、行政许可的概念和特征 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 概念:</p>
+                            <p class="ml-4">行政许可是指行政机关根据行政相对方的申请,经审查依法赋予其从事某种活动的法律资格或者实施某种行为的法律权利的具体行政行为。</p>
+                            <p class="font-semibold mt-2">(二) 特征:</p>
+                            <ol class="list-decimal list-inside ml-4">
+                                <li>行政许可是一种依申请的行政行为。</li>
+                                <li>行政许可是对一般禁止的解除。</li>
+                                <li>行政许可是一种授益性行政行为。</li>
+                                <li>行政许可是一种要式行政行为。</li>
+                            </ol>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、行政许可的设定 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 行政许可设定的范围 (可以设定许可的事项):</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>① 特许: 有限自然资源的开发利用、公共资源的配置或特定行业的市场准入 (如采矿许可、出租车经营许可)。</li>
+                                <li>② 认可: 特定职业行业资格、资质的确定 (如教师资格证、律师资格)。</li>
+                                <li>③ 核准: 特定设备、设施、产品、物品的检验、检测、检疫 (如消防核准、电梯安装运行标准)。</li>
+                                <li>④ 登记: 企业或其他组织的设立 (如工商企业登记、社团登记)。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">(二) 行政许可设定的权限:</p>
+                            <ol class="list-decimal list-inside ml-4">
+                                <li>法律可以设定行政许可。</li>
+                                <li>尚未制定法律的,行政法规可以设定行政许可。必要时,国务院可以采用发布决定的方式设定。</li>
+                                <li>尚未制定法律、行政法规的,地方性法规可以设定行政许可。</li>
+                                <li>尚未制定法律、行政法规和地方性法规的,省、自治区、直辖市人民政府规章可以设定临时性的行政许可 (满一年需提请本级人大制定地方性法规)。</li>
+                            </ol>
+                            <p class="ml-4">注: 部门规章不能设定行政许可,但一定程度上可以设定行政处罚。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、行政许可的实施 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 实施程序:</p>
+                            <p class="ml-4"><strong>1. 一般程序:</strong> 申请 -> 受理 -> 审查 -> 决定。</p>
+                            <p class="ml-8">(1) 申请程序: 申请人自己或委托代理人提出,书面形式 (信函、电报、电传、传真、电子邮件等)。</p>
+                            <p class="ml-8">(2) 受理程序: 材料齐全、符合法定形式则受理。特殊情况处理: ①无需许可即时告知不受理; ②不属本机关职权即时作不予受理决定并告知向有关机关申请; ③材料可当场更正则允许更正; ④材料不齐或不符法定形式当场或5日内一次告知补正全部内容,逾期不告知视为受理; ⑤符合条件或补正后应受理; ⑥受理或不受理均出具书面凭证。</p>
+                            <p class="ml-4"><strong>2. 听证程序:</strong></p>
+                            <p class="ml-8">(1) 程序启动: ①依职权 (法律法规规章规定应听证,或行政主体认为需听证的重大公共利益事项); ②依申请 (直接涉及申请人与他人重大利益关系,行政主体应告知听证权,申请人或利害关系人5日内提出,行政主体20日内组织)。</p>
+                            <p class="ml-8">(2) 程序设计: ①听证通知 (7日前通知时间地点,必要时公告); ②申请回避 (主持人应为非审查人员,有利害关系可申请回避); ③听证公开; ④听证笔录 (交参加人确认签字盖章); ⑤听证费用 (行政主体承担)。</p>
+                        </div>
+                    </details>
+                     <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、行政许可的费用 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1. 只有法律、行政法规才能规定许可收费,地方性法规、规章等一律不准规定收费。</p>
+                            <p>2. 行政机关提供行政许可申请书格式文本,不得收费。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section4_admin_penalty" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第四节 行政处罚</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、概述 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>行政处罚是指行政机关依法对违反行政管理秩序的公民、法人或者其他组织,以减损权益或者增加义务的方式予以惩戒的行为。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、行政处罚的种类 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <ol class="list-decimal list-inside ml-4">
+                                <li>警告、通报批评;</li>
+                                <li>罚款、没收违法所得、没收非法财物;</li>
+                                <li>暂扣许可证件、降低资质等级、吊销许可证件;</li>
+                                <li>限制开展生产经营活动、责令停产停业、责令关闭、限制从业;</li>
+                                <li>行政拘留;</li>
+                                <li>法律、行政法规规定的其他行政处罚。</li>
+                            </ol>
+                            <p class="ml-4">限制人身自由的行政处罚权只能由公安机关和法律规定的其他机关行使。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、行政处罚的设定 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <table class="min-w-full divide-y divide-gray-200 my-2">
+                                <thead class="bg-gray-50"><tr><th>设定主体</th><th>可创设种类</th><th>注意问题</th></tr></thead>
+                                <tbody>
+                                    <tr><td>法律</td><td>各种处罚</td><td>限制人身自由的处罚由法律保留</td></tr>
+                                    <tr><td>行政法规</td><td>限制人身自由除外</td><td>可设定吊销营业执照的处罚</td></tr>
+                                    <tr><td>地方性法规</td><td>限制人身自由、吊销营业执照除外</td><td>可设定暂扣营业执照的处罚</td></tr>
+                                    <tr><td>部门规章</td><td rowspan="2">警告、通报批评、罚款</td><td>罚款限额由国务院规定</td></tr>
+                                    <tr><td>地方政府规章</td><td>罚款限额由省、自治区、直辖市人大常委会规定</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="mt-2">法律、行政法规对违法行为未作出行政处罚规定,地方性法规为实施法律、行政法规,可以补充设定行政处罚。拟补充设定应广泛听取意见,并向制定机关书面说明。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、行政处罚的管辖和适用 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 行政处罚的管辖:</p>
+                            <p class="ml-4">由违法行为发生地的行政机关管辖。法律、行政法规、部门规章另有规定的除外。省、自治区、直辖市可决定将基层管理迫切需要的县级政府部门处罚权交由乡镇、街道行使。两个以上行政机关都有管辖权的,由最先立案的管辖。管辖争议协商解决,不成报共同上一级指定,或直接由共同上一级指定。</p>
+                            <p class="font-semibold mt-2">2. 行政处罚的适用:</p>
+                            <p class="ml-4"><strong>(1) 不予处罚:</strong> ①不满14周岁; ②精神病人在不能辨认或控制行为时; ③违法行为轻微并及时纠正,无危害后果; 初次违法且危害后果轻微并及时改正的; ④当事人有证据证明无主观过错 (法律法规另有规定除外); ⑤违法行为2年内未被发现 (涉公民生命健康安全、金融安全且有危害后果的延长至5年)。</p>
+                            <p class="ml-4"><strong>(2) 应当从轻或减轻处罚:</strong> ①已满14周岁不满18周岁; ②主动消除或减轻危害后果; ③受胁迫或诱骗实施; ④配合查处有立功表现; ⑤主动供述尚未掌握的违法行为; ⑥法律法规规章规定其他应从轻减轻情形。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">五、行政处罚的程序 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 一般性规定:</p>
+                            <p class="ml-4">作出处罚决定前,应告知当事人拟处罚内容及事实、理由、依据,并告知其陈述、申辩、要求听证等权利。必须充分听取当事人意见,复核其事实理由证据,成立的应采纳。不得因当事人陈述申辩而加重处罚。</p>
+                            <p class="font-semibold mt-2">(二) 决定程序 (查明事实 -> 履行告知 -> 充分听取意见):</p>
+                            <table class="min-w-full divide-y divide-gray-200 my-2">
+                                <thead class="bg-gray-50"><tr><th>程序种类</th><th>适用条件</th><th>重要制度</th><th>重要时限</th></tr></thead>
+                                <tbody>
+                                    <tr><td>简易程序</td><td>公民处以200元以下、法人或其他组织3000元以下罚款或警告的行政处罚,可当场作出。</td><td>①可以当场决定</td><td>处罚决定书须当场交付</td></tr>
+                                    <tr><td>一般程序</td><td>不适用简易或听证程序时</td><td>①调查检查:至少2人执法<br>②做出决定:由行政机关负责人(集体)作出决定</td><td>当事人不在场的应在7日内送达处罚决定书</td></tr>
+                                    <tr><td>听证程序</td><td>较大数额罚款;没收较大数额违法所得、没收较大价值非法财物;降低资质等级;吊销许可证件;责令停产停业、责令关闭、限制从业;其他较重的行政处罚。</td><td>①公务回避:非本案调查人员主持;当事人可申请回避<br>②委托听证:当事人可委托1-2人代理</td><td>①申请期限:被告知后5日内要求听证<br>②告知期限:行政机关应在听证7日前通知时间地点</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="mt-2">行政机关应自立案之日起90日内作出行政处罚决定 (法律法规规章另有规定除外)。</p>
+                            <p class="font-semibold mt-2">(三) 行政处罚的执行:</p>
+                            <p class="ml-4"><strong>1. 执行原则:</strong> 罚缴分离是原则,当场收缴是例外。当事人应自收到决定书15日内到指定银行或通过电子支付系统缴纳。银行收缴后直接上缴国库。</p>
+                            <p class="ml-4"><strong>2. 当场收缴罚款例外情形:</strong> ①依法给予100元以下罚款; ②不当场收缴事后难以执行; ③边远、水上、交通不便地区,当事人缴纳确有困难,经其提出可当场收缴。</p>
+                            <p class="ml-4">当场收缴须出具财政部门统一制发专用票据,否则当事人可拒缴。当场收缴罚款应在2日内 (水上抵岸后2日内) 交至行政机关,行政机关2日内缴付指定银行。</p>
+                            <p class="font-semibold mt-2">【增补】一事不再罚:</p>
+                            <p class="ml-4">对当事人同一个违法行为,不得给予两次以上罚款。同一个违法行为违反多个法律规范应罚款的,按罚款数额高的规定处罚。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section5_admin_coercion" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第五节 行政强制</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、行政强制措施 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>行政强制措施,是指行政机关在行政管理过程中,为制止违法行为、防止证据损毁、避免危害发生、控制危险扩大等情形,依法对公民的人身自由实施暂时性限制,或者对公民、法人或者其他组织的财物实施暂时性控制的行为。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、行政强制执行 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 定义:</p>
+                            <p class="ml-4">是指行政机关或者行政机关申请人民法院,对不履行行政决定的公民、法人或者其他组织,依法强制履行义务的行为。</p>
+                            <p class="font-semibold mt-2">(二) 种类:</p>
+                            <p class="ml-4"><strong>1. 直接强制执行:</strong> 针对人身、财产或行为直接采取强制手段 (如直接划拨存款、拍卖/收缴财物)。</p>
+                            <p class="ml-4"><strong>2. 间接强制执行:</strong> ①代履行 (他人代替履行,义务人付费); ②执行罚 (按日科以新金钱给付义务)。</p>
+                            <p class="font-semibold mt-2">(三) 设定权限:</p>
+                            <p class="ml-4">行政强制执行由法律设定。法律未规定行政机关强制执行的,应申请法院强制执行。</p>
+                            <p class="font-semibold mt-2">(四) 关于行政强制执行的其他规定:</p>
+                            <ol class="list-decimal list-inside ml-4">
+                                <li>作出强制执行决定前应事先书面催告当事人履行义务。催告书应载明履行期限、方式、金额等。</li>
+                                <li>不得在夜间或法定节假日实施 (情况紧急除外)。不得对居民生活采停止供水电气热等方式迫使履责。</li>
+                                <li>对违法建筑等需强拆的,应公告限期自拆。当事人法定期限内不复议诉讼又不拆的,可依法强拆。</li>
+                            </ol>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section6_admin_reconsideration" class="content-section mb-8">
+                 <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第六节 行政复议</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、行政复议的概念与原则 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>行政复议是指公民、法人或者其他组织认为行政机关的行政行为侵犯其合法权益,向行政复议机关提出行政复议申请,行政复议机关依法对该行政行为进行合法性、适当性审查,并作出行政复议决定的行政行为。</p>
+                            <p>原则: 合法、公正、公开、高效、便民、为民,坚持有错必纠,保障法律、法规的正确实施。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、行政复议的范围 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 可以申请行政复议的范围:</p>
+                             <ul class="list-decimal list-inside ml-4">
+                                <li>(1)对行政机关作出的行政处罚决定不服;</li>
+                                <li>(2)对行政机关作出的行政强制措施、行政强制执行决定不服;</li>
+                                <li>(3)申请行政许可,行政机关拒绝或者在法定期限内不予答复,或者对行政机关作出的有关行政许可的其他决定不服;</li>
+                                <li>(4)对行政机关作出的确认自然资源的所有权或者使用权的决定不服;</li>
+                                <li>(5)对行政机关作出的征收征用决定及其补偿决定不服;</li>
+                                <li>(6)对行政机关作出的赔偿决定或者不予赔偿决定不服;</li>
+                                <li>(7)对行政机关作出的不予受理工伤认定申请的决定或者工伤认定结论不服;</li>
+                                <li>(8)认为行政机关侵犯其经营自主权或者农村土地承包经营权、农村土地经营权;</li>
+                                <li>(9)认为行政机关滥用行政权力排除或者限制竞争;</li>
+                                <li>(10)认为行政机关违法集资、摊派费用或者违法要求履行其他义务;</li>
+                                <li>(11)申请行政机关履行保护人身权利、财产权利、受教育权利等合法权益的法定职责,行政机关拒绝履行、未依法履行或者不予答复;</li>
+                                <li>(12)申请行政机关依法给付抚恤金、社会保险待遇或者最低生活保障等社会保障,行政机关没有依法给付;</li>
+                                <li>(13)认为行政机关不依法订立、不依法履行、未按照约定履行或者违法变更、解除政府特许经营协议、土地房屋征收补偿协议等行政协议;</li>
+                                <li>(14)认为行政机关在政府信息公开工作中侵犯其合法权益;</li>
+                                <li>(15)认为行政机关的其他行政行为侵犯其合法权益。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">2. 行政复议的排除范围:</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>(1) 国防、外交等国家行为;</li>
+                                <li>(2) 行政法规、规章或者行政机关制定、发布的具有普遍约束力的决定、命令等规范性文件;</li>
+                                <li>(3) 行政机关对行政机关工作人员的奖惩、任免等决定;</li>
+                                <li>(4) 行政机关对民事纠纷作出的调解。</li>
+                            </ul>
+                             <p class="font-semibold mt-2">3. 抽象行政行为的附带审查:</p>
+                             <p class="ml-4">认为行政行为所依据的下列规范性文件不合法,在对行政行为申请行政复议时,可以一并向行政复议机关提出对该规范性文件的附带审查申请: (1)国务院部门的规范性文件; (2)县级以上地方各级人民政府及其工作部门的规范性文件; (3)乡、镇人民政府的规范性文件; (4)法律、法规、规章授权的组织的规范性文件。 (所列规范性文件不含规章,规章的审查依照法律、行政法规办理。)</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、行政复议参加人 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 申请人: 公民、法人或者其他组织。公民死亡其近亲属可申请；法人/组织终止其权利义务承受人可申请；无/限制民事行为能力公民其法定代理人可代申请。</p>
+                            <p class="font-semibold mt-2">2. 被申请人: 作出行政行为的行政机关或法律法规规章授权的组织。共同作出的是共同被申请人。委托组织作出的,委托机关是被申请人。机关被撤销或职权变更,继续行使其职权的机关是被申请人。</p>
+                            <p class="font-semibold mt-2">3. 复议机关:</p>
+                            <table class="min-w-full divide-y divide-gray-200 my-2">
+                                <thead class="bg-gray-50"><tr><th>复议机关</th><th>说明</th></tr></thead>
+                                <tbody>
+                                    <tr><td rowspan="5">县级以上地方各级人民政府</td><td>①本级人民政府工作部门作出的行政行为</td></tr>
+                                    <tr><td>②下一级人民政府作出的行政行为</td></tr>
+                                    <tr><td>③本级人民政府依法设立的派出机关作出的行政行为</td></tr>
+                                    <tr><td>④对本级人民政府或者其工作部门管理的法律、法规、规章授权的组织作出的行政行为</td></tr>
+                                    <tr><td>⑤县级以上地方各级人民政府工作部门依法设立的派出机构依照法律、法规、规章规定,以派出机构的名义作出的行政行为</td></tr>
+                                    <tr><td>上一级主管部门</td><td>对海关、金融、外汇管理等实行垂直领导的行政机关、税务和国家安全机关的行政行为</td></tr>
+                                    <tr><td>原机关自己</td><td>省、自治区、直辖市人民政府同时管辖对本机关作出的行政行为不服的行政复议案件。国务院部门管辖对本部门作出的行政行为不服的行政复议案件。【注意】对作出的行政复议决定不服的,①可以向人民法院提起行政诉讼;②也可以向国务院申请裁决,国务院依照规定作出最终裁决。</td></tr>
+                                    <tr><td>本级人民政府或上一级司法行政部门</td><td>对履行行政复议机构职责的地方人民政府司法行政部门的行政行为不服</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="font-semibold mt-2">4. 其他参加人: (1)第三人 (与处理结果有利害关系); (2)代理人 (1-2名律师、基层法律服务工作者等); (3)代表人 (申请人人数众多时推选)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、行政复议的程序 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 申请的提出:</p>
+                            <p class="ml-4">1. 期限: 自知道或应知道行政行为起60日内 (法律规定超60日除外)。未告知权利、机关、期限的,自知道或应知道起算,最长不超1年。不动产复议申请自行行为作出起超20年、其他超5年不受理。</p>
+                            <p class="ml-4">2. 方式: 书面 (邮寄、互联网、当面)；口头 (行政复议机关记录)。对多个行为应分别申请。</p>
+                            <p class="font-semibold mt-2">(二) 复议的受理:</p>
+                            <p class="ml-4">1. 审查时间及条件: 5日内审查。条件 (明确申请人被申请人；有利害关系；具体请求理由；法定期限内；属复议范围；属本机关管辖；未受理过同申请且法院未受理同诉讼)。</p>
+                            <p class="ml-4">2. 审查后处理: 不符规定不予受理并说明理由 (不属本机关管辖告知有管辖权机关)。审查期满未作不予受理决定视为受理。材料不齐或表述不清5日内书面通知补正 (10日内补正)。</p>
+                            <p class="ml-4">3. 行政复议前置: 对当场处罚、侵犯自然资源所有权/使用权、认为未履行法定职责、申请政府信息公开不予公开等情形,应先复议再诉讼。</p>
+                            <p class="ml-4">4. 相关救济: 法律法规规定先复议的,复议机关不予受理、驳回或逾期不答复,可15日内诉讼。无正当理由不予受理等,申请人可向上级反映。</p>
+                            <p class="font-semibold mt-2">(三) 行政复议的审理:</p>
+                            <p class="ml-4">1. 普通程序: 书面答复 (被申请人10日内)；审理方式 (当面或网络电话听取意见,可书面审理)。</p>
+                            <p class="ml-4">2. 复议听证: 应当组织 (重大疑难复杂)；可以组织 (机构认为必要或申请人请求)。听证人员 (主持人1名,听证员2名以上,记录员1名)。5日前通知。申请人无正当理由拒不参加视为放弃。被申请人负责人应参加。</p>
+                            <p class="ml-4">3. 行政复议委员会: 县级以上政府应建立,提供咨询意见。</p>
+                            <p class="ml-4">4. 简易程序: 适用情形 (当场作出行为；警告或通报批评；款额3000元以下；政府信息公开案；当事人同意)。书面答复 (被申请人5日内)。可书面审理。可转为普通程序。</p>
+                            <p class="ml-4">5. 行政复议附带审查: 申请人可对规范性文件提附带审查。复议机关有权处理30日内处理；无权7日内转送。制定机关10日内书面答复。认为合法告知；认为违法决定停止执行并责令纠正。接受转送机关60日内回复。</p>
+                            <p class="ml-4">6. 证据与举证责任: 证据种类同诉讼。被申请人对行政行为合法性适当性负举证责任。申请人对认为不履职、提出赔偿等情形提供证据。</p>
+                            <p class="ml-4">7. 审理依据: 法律、法规、规章。民族自治地方案件同时依自治条例单行条例。</p>
+                            <p class="ml-4">8. 复议中止与终止: 中止情形包括申请人死亡/丧失行为能力、不可抗力、调解和解、需以其他案件结果为依据等。终止情形包括申请人撤回、死亡无近亲属、法人终止无承受人、因同一违法行为涉嫌犯罪被采取刑事强制措施等。</p>
+                            <p class="ml-4">9. 调解与和解: 可调解 (合法自愿原则,不得损公共利益,不得违强制规定),达成协议制调解书。可和解,达成后申请人撤回申请。</p>
+                            <p class="ml-4">10. 其他处理原则: 上级可审理下级管辖案件。复议期间行政行为不停止执行 (例外情形除外)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">五、行政复议决定与执行 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 作出复议决定的时间:</p>
+                            <p class="ml-4">普通程序60日内 (情况复杂可延长最多30日)。简易程序30日内。制作决定书,加盖印章,送达即生效。</p>
+                            <p class="font-semibold mt-2">(二) 行政复议决定的类型:</p>
+                            <p class="ml-4">1. 维持决定; 2. 驳回复议请求; 3. 变更行政行为 (不得对申请人更不利,第三人相反请求除外); 4. 撤销行政行为、责令重做; 5. 确认行政行为违法; 6. 责令履行; 7. 确认无效。</p>
+                            <p class="font-semibold mt-2">(三) 相关文书的履行与执行:</p>
+                            <p class="ml-4">被申请人不履行,复议机关或上级应责令限期履行,可约谈通报。申请人/第三人逾期不诉不履行,由作出行政行为机关或复议机关依法强执,或申法院强执。</p>
+                            <p class="font-semibold mt-2">(四) 公开与抄告:</p>
+                            <p class="ml-4">复议决定书可依规定向社会公开。县级以上地方政府办理以本级部门为被申请人的案件,应将生效决定书抄告被申请人上级主管部门。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section7_admin_litigation" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第七节 行政诉讼</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                     <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、行政诉讼的概念 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>行政诉讼是指公民法人其他组织认为行政主体的行政行为侵犯其合法权益,依法诉诸人民法院,人民法院据此在双方当事人和其他诉讼参与人的参加下,对行政行为的合法性进行审查并作出裁决的制度。当事人特定、被告恒定,诉讼地位不能互换。实质是法院监督、制约行政机关的行政行为的司法活动。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、行政诉讼的受案范围 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 可以提起行政诉讼的情形:</p>
+                            <ul class="list-decimal list-inside ml-4">
+                                <li>(一)对行政拘留、暂扣或者吊销许可证和执照、责令停产停业、没收违法所得、没收非法财物、罚款、警告等行政处罚不服的;</li>
+                                <li>(二)对限制人身自由或者对财产的查封、扣押、冻结等行政强制措施和行政强制执行不服的;</li>
+                                <li>(三)申请行政许可,行政机关拒绝或者在法定期限内不予答复,或者对行政机关作出的有关行政许可的其他决定不服的;</li>
+                                <li>(四)对行政机关作出的关于确认土地、矿藏、水流、森林、山岭、草原、荒地、滩涂、海域等自然资源的所有权或者使用权的决定不服的;</li>
+                                <li>(五)对征收、征用决定及其补偿决定不服的;</li>
+                                <li>(六)申请行政机关履行保护人身权、财产权等合法权益的法定职责,行政机关拒绝履行或者不予答复的;</li>
+                                <li>(七)认为行政机关侵犯其经营自主权或者农村土地承包经营权、农村土地经营权的;</li>
+                                <li>(八)认为行政机关滥用行政权力排除或者限制竞争的;</li>
+                                <li>(九)认为行政机关违法集资、摊派费用或者违法要求履行其他义务的;</li>
+                                <li>(十)认为行政机关没有依法支付抚恤金、最低生活保障待遇或者社会保险待遇的;</li>
+                                <li>(十一)认为行政机关不依法履行、未按照约定履行或者违法变更、解除政府特许经营协议、土地房屋征收补偿协议等协议的;</li>
+                                <li>(十二)认为行政机关侵犯其他人身权、财产权等合法权益的。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">2. 不可以提起行政诉讼的情形:</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>(一) 国防、外交等国家行为;</li>
+                                <li>(二) 行政法规、规章或者行政机关制定、发布的具有普遍约束力的决定、命令;</li>
+                                <li>(三) 行政机关对行政机关工作人员的奖惩、任免等决定;</li>
+                                <li>(四) 法律规定由行政机关最终裁决的行政行为。</li>
+                            </ul>
+                            <p class="ml-4">总结不受理: ①国家行为案件; ②抽象行政行为; ③内部行政行为; ④法定终局裁决; ⑤刑事侦查行为; ⑥仲裁行为; ⑦行政调解、行政指导行为。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、行政诉讼的管辖 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 概念:</p>
+                            <p class="ml-4">人民法院之间受理第一审行政案件的分工和权限。</p>
+                            <p class="font-semibold mt-2">(二) 级别管辖:</p>
+                            <p class="ml-4">1. 基层人民法院管辖第一审行政案件。</p>
+                            <p class="ml-4">2. 中级人民法院管辖: (1)对国务院部门或县级以上地方政府所作行政行为起诉的; (2)海关处理的; (3)本辖区重大、复杂案件; (4)其他法律规定由中院管辖的。</p>
+                            <p class="ml-4">3. 高级人民法院管辖本辖区内重大、复杂的第一审行政案件。</p>
+                            <p class="ml-4">4. 最高人民法院管辖全国范围内重大、复杂的第一审行政案件。</p>
+                            <p class="font-semibold mt-2">(三) 地域管辖:</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>一般案件: 被告住所地管辖。</li>
+                                <li>经行政复议的案件: 复议机关或原机关所在地管辖。</li>
+                                <li>限制人身自由案件: 原告或被告所在地管辖 (原告所在地包括户籍地、经常居住地、被限制人身自由地)。</li>
+                                <li>不动产纠纷案件: 不动产所在地专属管辖。</li>
+                            </ul>
+                            <p class="ml-4">两个以上法院都有管辖权的,原告可选其一。向两个以上有管辖权法院起诉的,由最先立案的管辖。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、行政诉讼参加人 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 原告资格:</p>
+                            <p class="ml-4">行政行为的相对人以及其他与行政行为有利害关系的公民、法人或者其他组织。公民死亡其近亲属可起诉；法人/其他组织终止其权利承受人可起诉。</p>
+                            <p class="font-semibold mt-2">(二) 被告资格:</p>
+                            <p class="ml-4">作出行政行为的行政机关。经复议案件: 复议机关维持原行为,原机关和复议机关共同被告；复议机关改变原行为,复议机关是被告。复议机关法定期限未作决定,起诉原行为则原机关是被告,起诉复议机关不作为则复议机关是被告。共同作出行政行为的是共同被告。委托组织所作行为,委托机关是被告。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">五、行政诉讼程序 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">(一) 起诉:</p>
+                            <p class="ml-4">1. 条件: (1)原告资格; (2)明确被告; (3)具体诉讼请求和事实根据; (4)属法院受案范围和受诉法院管辖。</p>
+                            <p class="ml-4">2. 方式: 递交起诉状及副本。书写困难可口头起诉,法院记录并出具凭证。</p>
+                            <p class="ml-4">3. 期限: 直接起诉应自知道或应知道行政行为起6个月内。经复议不服复议决定起诉一般为15日内；复议机关逾期不作决定可在复议期满15日内起诉。</p>
+                            <p class="font-semibold mt-2">(二) 立案:</p>
+                            <p class="ml-4">法院接到起诉状对符合条件的应登记立案。当场不能判定7日内决定是否立案。不符条件作不予立案裁定。</p>
+                            <p class="font-semibold mt-2">(三) 证据:</p>
+                            <p class="ml-4">1. 证据类型: 书证、物证、视听资料、电子数据、证人证言、当事人陈述、鉴定意见、勘验/现场笔录。需经法庭审查属实才能作认定案件事实根据。</p>
+                            <p class="ml-4">2. 举证责任: 被告对作出的行政行为负举证责任,应提供证据和所依据规范性文件。</p>
+                            <p class="font-semibold mt-2">(四) 行政诉讼的一审程序:</p>
+                            <p class="ml-4">1. 一审普通程序审理期限: 自立案起6个月内作出判决。</p>
+                            <p class="ml-4">2. 公开宣判: 一律公开。当庭宣判10日内发判决书；定期宣判立即发。宣告判决时告知上诉权利、期限、法院。</p>
+                            <p class="ml-4">3. 一审简易程序: 适用情形 (当场作出行为；款额2000元以下；政府信息公开案；当事人同意)。审判员一人独任。立案45日内审结。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section8_state_compensation" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第八节 国家赔偿法</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p>国家赔偿:国家机关和国家机关工作人员行使职权,侵犯公民、法人和其他组织合法权益的情形,造成损害的,受害人有取得国家赔偿的权利。主要分为行政赔偿和司法赔偿。</p>
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、行政赔偿 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">一、赔偿范围:</p>
+                            <p class="ml-4">1.【侵犯人身权】(1)违法拘留或限制人身自由行政强制措施；(2)非法拘禁或以其他方法非法剥夺人身自由；(3)殴打虐待等行为或唆使放纵他人殴打虐待等造成身体伤害/死亡；(4)违法使用武器警械造成身体伤害/死亡；(5)造成身体伤害/死亡的其他违法行为。</p>
+                            <p class="ml-4">2.【侵犯财产权】(1)违法实施罚款、吊销许可证执照、责令停产停业、没收财物等行政处罚；(2)违法对财产采取查封、扣押、冻结等行政强制措施；(3)违法征收、征用财产；(4)造成财产损害的其他违法行为。</p>
+                            <p class="ml-4">3. 不承担赔偿责任的情形: (1)行政机关工作人员与行使职权无关的个人行为；(2)因公民、法人和其他组织自己的行为致使损害发生的；(3)法律规定的其他情形。</p>
+                            <p class="font-semibold mt-2">二、赔偿请求人和赔偿义务机关:</p>
+                            <p class="ml-4">1. 赔偿请求人: 受害的公民、法人和其他组织。受害公民死亡,其继承人和其他有扶养关系亲属有权要求。受害法人/组织终止,其权利承受人有权要求。</p>
+                            <p class="ml-4">2. 赔偿义务机关: 行使职权侵权造成损害的行政机关。共同行使职权则共同为义务机关。法律法规授权组织侵权,被授权组织为义务机关。受委托组织/个人侵权,委托机关为义务机关。义务机关被撤销,继续行使其职权的机关为义务机关 (无则撤销机关为义务机关)。经复议的,最初造成侵权行为的机关为义务机关 (复议决定加重损害,复议机关对加重部分赔偿)。</p>
+                            <p class="font-semibold mt-2">三、赔偿程序:</p>
+                            <p class="ml-4">先向赔偿义务机关提出,也可以在申请行政复议或者提起行政诉讼时一并提出。赔偿请求人单独提起行政赔偿诉讼,须以赔偿义务机关先行处理为前提。赔偿请求人对赔偿义务机关确定的赔偿数额有异议或者赔偿义务机关逾期不予赔偿,赔偿请求人有权向人民法院提起行政赔偿诉讼。</p>
+                            <p class="ml-4">(一) 单独提起行政赔偿诉讼:</p>
+                            <p class="ml-8">1. 申请时效: 赔偿请求人请求国家赔偿的时效为两年,自其知道或者应当知道国家机关及其工作人员行使职权时的行为侵犯其人身权、财产权之日起计算,但被羁押等限制人身自由期间不计算在内。在申请行政复议或者提起行政诉讼时一并提出赔偿请求的,适用行政复议法、行政诉讼法有关时效的规定。</p>
+                            <p class="ml-8">2. 赔偿申请: ①申请书应当载明下列事项: 赔偿请求人的姓名、性别、年龄、工作单位和住所,法人或者其他组织的名称、住所和法定代表人或者主要负责人的姓名、职务;具体的要求、事实根据和理由:申请的年、月、日。②赔偿请求人书写申请书确有困难的,可以委托他人代书;也可以口头申请,由赔偿义务机关记入笔录。③赔偿请求人不是受害人本人的,应当说明与受害人的关系,并提供相应证明。④赔偿请求人当面递交申请书的,赔偿义务机关应当当场出具加盖本行政机关专用印章并注明收讫日期的书面凭证。申请材料不齐全的,赔偿义务机关应当当场或者在五日内一次性告知赔偿请求人需要补正的全部内容。</p>
+                            <p class="ml-8">3. 赔偿处理和送达: 赔偿义务机关应当自收到申请之日起两个月内,作出是否赔偿的决定。赔偿义务机关作出赔偿决定,应当充分听取赔偿请求人的意见,并可以与赔偿请求人就赔偿方式、赔偿项目和赔偿数额依照本法第四章的规定进行协商。赔偿义务机关决定赔偿的,应当制作赔偿决定书,并自作出决定之日起十日内送达赔偿请求人。赔偿义务机关决定不予赔偿的,应当自作出决定之日起十日内书面通知赔偿请求人,并说明不予赔偿的理由。</p>
+                            <p class="ml-8">4. 行政赔偿诉讼: (1)起诉期限: 赔偿义务机关在规定期限内未作出是否赔偿的决定,赔偿请求人可以自期限届满之日起三个月内,向人民法院提起诉讼。赔偿请求人对赔偿的方式、项目、数额有异议的,或者赔偿义务机关作出不予赔偿决定的,赔偿请求人可以自赔偿义务机关作出赔偿或者不予赔偿决定之日起三个月内,向人民法院提起诉讼。赔偿义务机关作出赔偿决定时,未告知赔偿请求人的诉权或者起诉期限,致使赔偿请求人逾期向人民法院起诉的,其起诉期限从赔偿请求人实际知道诉权或者起诉期限时计算,但逾期的期间自赔偿请求人收到赔偿决定之日起不得超过一年。(2)举证责任: 人民法院审理行政赔偿案件,赔偿请求人和赔偿义务机关对自己提出的主张,应当提供证据。原告在行政赔偿诉讼中对自己的主张承担举证责任。被告有权提供不予赔偿或者减少赔偿数额方面的证据。赔偿义务机关采取行政拘留或者限制人身自由的强制措施期间,被限制人身自由的人死亡或者丧失行为能力的,赔偿义务机关的行为与被限制人身自由的人的死亡或者丧失行为能力是否存在因果关系,赔偿义务机关应当提供证据。(3)审理期限: 单独受理的第一审行政赔偿案件的审理期限为三个月,第二审为两个月;一并受理行政赔偿请求案件的审理期限与该行政案件的审理期限相同。如因特殊情况不能按期结案,需要延长审限的,应按照行政诉讼法的有关规定报请批准。(4)申请执行: 发生法律效力的行政赔偿判决、裁定或调解协议,当事人必须履行。一方拒绝履行的,对方当事人可以向第一审人民法院申请执行。(5)其他: 人民法院审理行政赔偿案件在坚持合法、自愿的前提下,可以就赔偿范围、赔偿方式和赔偿数额进行调解。调解成立的,应当制作行政赔偿调解书。被告在一审判决前同原告达成赔偿协议,原告申请撤诉的,人民法院应当依法予以审查并裁定是否准许。</p>
+                            <p class="ml-8">5. 行政追偿: 赔偿义务机关赔偿损失后,应当责令有故意或者重大过失的工作人员或者受委托的组织或者个人承担部分或者全部赔偿费用。对有故意或者重大过失的责任人员,有关机关应当依法给予处分;构成犯罪的,应当依法追究刑事责任。</p>
+                            <p class="ml-4">(二) 一并提起行政赔偿请求: 公民、法人或者其他组织在提起行政诉讼的同时一并提出行政赔偿请求的,其起诉期限按照行政诉讼起诉期限的规定执行。行政案件的原告可以在提起行政诉讼后至人民法院一审庭审结束前,提出行政赔偿请求。</p>
+                        </div>
+                    </details>
+                     <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、刑事赔偿 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">一、赔偿范围:</p>
+                            <p class="ml-4">1.【侵犯人身权】行使侦查、检察、审判职权的机关以及看守所、监狱管理机关及其工作人员在行使职权时有下列侵犯人身权情形之一的,受害人有取得赔偿的权利: (1)违反刑事诉讼法的规定对公民采取拘留措施的,或者依照刑事诉讼法规定的条件和程序对公民采取拘留措施,但是拘留时间超过刑事诉讼法规定的时限,其后决定撤销案件、不起诉或者判决宣告无罪终止追究刑事责任的; (2)对公民采取逮捕措施后,决定撤销案件、不起诉或者判决宣告无罪终止追究刑事责任的; 依照审判监督程序再审改判无罪,原判刑罚已经执行的; (3)刑讯逼供或者以殴打、虐待等行为或者唆使、放纵他人以殴打、虐待等行为造成公民身体伤害或者死亡的; (4)违法使用武器、警械造成公民身体伤害或者死亡的。</p>
+                            <p class="ml-4">2.【侵犯财产权】行使侦查、检察、审判职权的机关以及看守所、监狱管理机关及其工作人员在行使职权时有下列侵犯财产权情形之一的,受害人有取得赔偿的权利: 违法对财产采取查封、扣押、冻结、追缴等措施的; 依照审判监督程序再审改判无罪,原判罚金、没收财产已经执行的。</p>
+                            <p class="ml-4">3.【国家不赔偿情形】国家不承担赔偿责任: (1)因公民自己故意作虚伪供述,或者伪造其他有罪证据被羁押或者被判处刑罚的; (2)依照刑法第十七条、第十八条规定不负刑事责任的人被羁押的; (3)依照刑事诉讼法第十五条、第一百七十三条第二款、第二百七十三条第二款、第二百七十九条规定不追究刑事责任的人被羁押的; (4)行使侦查、检察、审判职权的机关以及看守所、监狱管理机关的工作人员与行使职权无关的个人行为; (5)因公民自伤、自残等故意行为致使损害发生的; (6)法律规定的其他情形。</p>
+                            <p class="font-semibold mt-2">二、赔偿请求人和赔偿义务机关:</p>
+                            <p class="ml-4">1. 赔偿请求人: 确定依照本法第六条的规定 (参照行政赔偿的请求人规定)。</p>
+                            <p class="ml-4">2. 赔偿义务机关: (1)行使侦查、检察、审判职权的机关以及看守所、监狱管理机关及其工作人员在行使职权时侵犯公民、法人和其他组织的合法权益造成损害的,该机关为赔偿义务机关。 (2)对公民采取拘留措施,依照本法的规定应当给予国家赔偿的,作出拘留决定的机关为赔偿义务机关。 (3)对公民采取逮捕措施后决定撤销案件、不起诉或者判决宣告无罪的,作出逮捕决定的机关为赔偿义务机关。 (4)再审改判无罪的,作出原生效判决的人民法院为赔偿义务机关。二审改判无罪,以及二审发回重审后作无罪处理的,作出一审有罪判决的人民法院为赔偿义务机关。</p>
+                            <p class="font-semibold mt-2">三、赔偿程序:</p>
+                            <p class="ml-4">1.【前置程序】赔偿请求人要求赔偿,应当先向赔偿义务机关提出。</p>
+                            <p class="ml-4">2.【赔偿义务机关处理时间】赔偿义务机关应当自收到申请之日起两个月内,作出是否赔偿的决定。赔偿义务机关作出赔偿决定,应当充分听取赔偿请求人的意见,并可以与赔偿请求人就赔偿方式、赔偿项目和赔偿数额依照规定进行协商。赔偿义务机关决定赔偿的,应当制作赔偿决定书,并自作出决定之日起十日内送达赔偿请求人。赔偿义务机关决定不予赔偿的,应当自作出决定之日起十日内书面通知赔偿请求人,并说明不予赔偿的理由。</p>
+                            <p class="ml-4">3.【赔偿复议机关】赔偿义务机关在规定期限内未作出是否赔偿的决定,赔偿请求人可以自期限届满之日起三十日内向赔偿义务机关的上一级机关申请复议。赔偿请求人对赔偿的方式、项目、数额有异议的,或者赔偿义务机关作出不予赔偿决定的,赔偿请求人可以自赔偿义务机关作出赔偿或者不予赔偿决定之日起三十日内,向赔偿义务机关的上一级机关申请复议。赔偿义务机关是人民法院的,赔偿请求人可以依照本条规定向其上一级人民法院赔偿委员会申请作出赔偿决定。</p>
+                            <p class="ml-4">4.【复议机关的处理时间】复议机关应当自收到申请之日起两个月内作出决定。</p>
+                            <p class="ml-4">5.【复议后不服】赔偿请求人不服复议决定的,可以在收到复议决定之日起三十日内向复议机关所在地的同级人民法院赔偿委员会申请作出赔偿决定;复议机关逾期不作决定的,赔偿请求人可以自期限届满之日起三十日内向复议机关所在地的同级人民法院赔偿委员会申请作出赔偿决定。</p>
+                            <p class="ml-4">6.【举证责任】人民法院赔偿委员会处理赔偿请求,赔偿请求人和赔偿义务机关对自己提出的主张,应当提供证据。被羁押人在羁押期间死亡或者丧失行为能力的,赔偿义务机关的行为与被羁押人的死亡或者丧失行为能力是否存在因果关系,赔偿义务机关应当提供证据。</p>
+                            <p class="ml-4">7.【审查原则】人民法院赔偿委员会处理赔偿请求,采取书面审查的办法。必要时,可以向有关单位和人员调查情况、收集证据。赔偿请求人与赔偿义务机关对损害事实及因果关系有争议的,赔偿委员会可以听取赔偿请求人和赔偿义务机关的陈述和申辩,并可以进行质证。</p>
+                            <p class="ml-4">8.【赔偿委员会处理时间】人民法院赔偿委员会应当自收到赔偿申请之日起三个月内作出决定;属于疑难、复杂、重大案件的,经本院院长批准,可以延长三个月。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、赔偿方式及费用 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 赔偿方式:</strong> 国家赔偿以支付赔偿金为主要方式。能够返还财产或者恢复原状的,予以返还财产或者恢复原状。致人精神损害的,应当在侵权行为影响的范围内,为受害人消除影响,恢复名誉,赔礼道歉;造成严重后果的,应当支付相应的精神损害抚慰金。</p>
+                            <p><strong>2. 计算标准:</strong></p>
+                            <p class="ml-4">(1) 侵犯公民人身自由的,每日赔偿金按照国家上年度职工日平均工资计算。</p>
+                            <p class="ml-4">(2) 侵犯公民生命健康权的,赔偿金按照下列规定计算: ①造成身体伤害的,应当支付医疗费、护理费,以及赔偿因误工减少的收入。减少的收入每日的赔偿金按照国家上年度职工日平均工资计算,最高额为国家上年度职工年平均工资的五倍; ②造成部分或者全部丧失劳动能力的,应当支付医疗费、护理费、残疾生活辅助具费、康复费等因残疾而增加的必要支出和继续治疗所必需的费用,以及残疾赔偿金。残疾赔偿金根据丧失劳动能力的程度,按照国家规定的伤残等级确定,最高不超过国家上年度职工年平均工资的二十倍。造成全部丧失劳动能力的,对其扶养的无劳动能力的人,还应当支付生活费; ③造成死亡的,应当支付死亡赔偿金、丧葬费,总额为国家上年度职工年平均工资的二十倍。对死者生前扶养的无劳动能力的人,还应当支付生活费。</p>
+                            <p class="ml-4">(3) 侵犯财产权的赔偿处理标准: ①处罚款、罚金、追缴、没收财产或者违法征收、征用财产的,返还财产; ②应当返还的财产损坏的,能够恢复原状的恢复原状,不能恢复原状的,按照损害程度给付相应的赔偿金; ③应当返还的财产灭失的,给付相应的赔偿金: ④财产已经拍卖或者变卖的,给付拍卖或者变卖所得的价款;变卖的价款明显低于财产价值的,应当支付相应的赔偿金; ⑤吊销许可证和执照、责令停产停业的,赔偿停产停业期间必要的经常性费用开支;返还执行的罚款或者罚金、追缴或者没收的金钱,解除冻结的存款或者汇款的,应当支付银行同期存款利息:对财产权造成其他损害的,按照直接损失给予赔偿。</p>
+                            <p><strong>3. 其他:</strong> (1)赔偿费用列入各级财政预算。(2)赔偿请求人凭生效的判决书、复议决定书、赔偿决定书或者调解书,向赔偿义务机关申请支付赔偿金。赔偿义务机关应当自收到支付赔偿金申请之日起七日内,依照预算管理权限向有关的财政部门提出支付申请。财政部门应当自收到支付申请之日起十五日内支付赔偿金。赔偿费用预算与支付管理的具体办法由国务院规定。(3)赔偿请求人要求国家赔偿的,赔偿义务机关、复议机关和人民法院不得向赔偿请求人收取任何费用。对赔偿请求人取得的赔偿金不予征税。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section9_civil_servant_law" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第九节 公务员法</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、概述(总则) <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>为了规范公务员的管理,保障公务员的合法权益,加强对公务员的监督,促进公务员正确履职尽责,建设信念坚定、为民服务、勤政务实、敢于担当、清正廉洁的高素质专业化公务员队伍。</p>
+                            <p>公务员,是指依法履行公职、纳入国家行政编制、由国家财政负担工资福利的工作人员。公务员是干部队伍的重要组成部分,是社会主义事业的中坚力量,是人民的公仆。</p>
+                            <p>贯彻新时代中国共产党的组织路线,坚持党管干部原则。</p>
+                            <p>公务员的管理,坚持公开、平等、竞争、择优的原则,依照法定的权限、条件、标准和程序进行。</p>
+                            <p>公务员的任用,坚持德才兼备、以德为先,坚持五湖四海、任人唯贤,坚持事业为上、公道正派,突出政治标准,注重工作实绩。</p>
+                            <p>公务员就职时应当依照法律规定公开进行宪法宣誓。</p>
+                            <p>中央公务员主管部门负责全国公务员的综合管理工作。县级以上地方各级公务员主管部门负责本辖区内公务员的综合管理工作。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、公务员的条件、义务与权利 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1.公务员应当具备下列条件:</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>(一)具有中华人民共和国国籍;</li>
+                                <li>(二)年满十八周岁;</li>
+                                <li>(三)拥护中华人民共和国宪法,拥护中国共产党领导和社会主义制度;</li>
+                                <li>(四)具有良好的政治素质和道德品行;</li>
+                                <li>(五)具有正常履行职责的身体条件和心理素质;</li>
+                                <li>(六)具有符合职位要求的文化程度和工作能力;</li>
+                                <li>(七)法律规定的其他条件。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">2. 公务员应当履行下列义务:</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>(一)忠于宪法,模范遵守、自觉维护宪法和法律,自觉接受中国共产党领导;</li>
+                                <li>(二)忠于国家,维护国家的安全、荣誉和利益;</li>
+                                <li>(三)忠于人民,全心全意为人民服务,接受人民监督;</li>
+                                <li>(四)忠于职守,勤勉尽责,服从和执行上级依法作出的决定和命令,按照规定的权限和程序履行职责,努力提高工作质量和效率;</li>
+                                <li>(五)保守国家秘密和工作秘密;</li>
+                                <li>(六)带头践行社会主义核心价值观,坚守法治,遵守纪律,恪守职业道德,模范遵守社会公德、家庭美德;</li>
+                                <li>(七)清正廉洁,公道正派;</li>
+                                <li>(八)法律规定的其他义务。</li>
+                            </ul>
+                            <p class="font-semibold mt-2">3.公务员享有下列权利:</p>
+                             <ul class="list-disc list-inside ml-4">
+                                <li>(一)获得履行职责应当具有的工作条件;</li>
+                                <li>(二)非因法定事由、非经法定程序,不被免职、降职、辞退或者处分;</li>
+                                <li>(三)获得工资报酬,享受福利、保险待遇;</li>
+                                <li>(四)参加培训;</li>
+                                <li>(五)对机关工作和领导人员提出批评和建议;</li>
+                                <li>(六)提出申诉和控告;</li>
+                                <li>(七)申请辞职;</li>
+                                <li>(八)法律规定的其他权利。</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、职务、职级与级别 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 分类管理:</p>
+                            <p class="ml-4">国家实行公务员职位分类制度。公务员职位类别按照公务员职位的性质、特点和管理需要,划分为综合管理类、专业技术类和行政执法类等类别。</p>
+                            <p class="font-semibold mt-2">2. 职务和职级并行:</p>
+                            <p class="ml-4">国家实行公务员职务与职级并行制度,根据公务员职位类别和职责设置公务员领导职务、职级序列。</p>
+                            <p class="ml-4">领导职务层次分为:国家级正副职、省部级正副职、厅局级正副职、县处级正副职、乡科级正副职。</p>
+                            <p class="ml-4">公务员职级在厅局级以下设置。综合管理类公务员职级序列分为:一级巡视员至二级科员等12个层级。</p>
+                            <p class="ml-4">公务员的领导职务、职级应当对应相应的级别。</p>
+                            <p class="font-semibold mt-2">3.职务、职级的任免:</p>
+                            <p class="ml-4">领导职务实行选任制、委任制和聘任制。职级实行委任制和聘任制。领导成员职务实行任期制。</p>
+                            <p class="ml-4">公务员因工作需要在机关外兼职,应经批准,不得领取兼职报酬。</p>
+                            <p class="font-semibold mt-2">【增补】职位聘任:</p>
+                            <p class="ml-4">(1)适用情形: 机关可对专业性较强和辅助性职位实行聘任制 (经省级以上公务员主管部门批准)。涉国家秘密不实行聘任制。</p>
+                            <p class="ml-4">(2)聘用合同: 书面签订,确定双方权利义务。变更解除需协商一致。报同级公务员主管部门备案。</p>
+                            <p class="ml-4">(3)合同期限和试用期: 合同期限1-5年。可约定试用期1-12个月。</p>
+                            <p class="ml-4">(4)争议解决: 60日内申请仲裁。对仲裁不服15日内向法院起诉。一方不履行生效仲裁可申请法院执行。</p>
+                            <p class="font-semibold mt-2">4. 职务、职级升降:</p>
+                            <p class="ml-4">领导职务应逐级晋升。特别优秀或工作特殊需要可破格或越级晋升。</p>
+                            <p class="ml-4">年度考核不称职的,按规定程序降低一个职务或职级层次任职。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、录用 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 录用方式:</p>
+                            <p class="ml-4">一级主任科员以下及其他相当职级层次的公务员,采公开考试、严格考察、平等竞争、择优录取。中央机关及其直属机构由中央公务员主管部门组织。地方各级由省级公务员主管部门组织 (可授权设区的市级组织)。初次从事行政处罚决定审核、行政复议、行政裁决、法律顾问的公务员实行统一法律职业资格考试制度。</p>
+                            <p class="font-semibold mt-2">2. 录用与公示:</p>
+                            <p class="ml-4">(1)不得录用情形: ①因犯罪受过刑事处罚的; ②被开除党籍的; ③被开除公职的; ④被依法列为失信联合惩戒对象的; ⑤有法律规定不得录用的其他情形。</p>
+                            <p class="ml-4">(2)招录机关根据考试成绩、考察、体检结果,提拟录用名单并公示 (不少于5工作日)。公示期满,中央一级报中央公务员主管部门备案；地方各级报省级或设区的市级公务员主管部门审批。</p>
+                            <p class="ml-4">(3)录用特殊职位,经省级以上公务员主管部门批准,可简化程序或采其他测评办法。</p>
+                            <p class="font-semibold mt-2">3. 试用期:</p>
+                            <p class="ml-4">新录用公务员试用期为一年。试用期满合格任职；不合格取消录用。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">五、考核 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 考核内容:</p>
+                            <p class="ml-4">全面考核德、能、勤、绩、廉,重点考核政治素质和工作实绩。指标根据不同职位类别、层级机关分别设置。</p>
+                            <p class="font-semibold mt-2">2. 考核方式:</p>
+                            <p class="ml-4">平时考核、专项考核和定期考核等。定期考核以平时、专项为基础。非领导成员定期考核采年度考核方式。领导成员考核由主管机关按规定办理。</p>
+                            <p class="font-semibold mt-2">3. 考核的结果:</p>
+                            <p class="ml-4">定期考核结果分优秀、称职、基本称职和不称职四个等次。书面通知本人。作为调整职位、职务、职级、级别、工资及奖励、培训、辞退依据。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">六、奖励 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>坚持定期与及时奖励结合,精神与物质奖励结合、以精神奖励为主。种类: 嘉奖、记三等功、记二等功、记一等功、授予称号。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">七、监督与惩戒 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 一般细节:</p>
+                            <p class="ml-4">①发现问题区分情况予以谈话提醒、批评教育、责令检查、诫勉、组织调整、处分。②涉嫌职务违法犯罪的依法移送监察机关。③执行上级错误决定命令,后果由上级负责 (执行明显违法的除外)。</p>
+                            <p class="font-semibold mt-2">2.处分【重点】:</p>
+                            <p class="ml-4">①监察机关已作政务处分,所在机关不再处分。②种类: 警告、记过、记大过、降级、撤职、开除。③有权陈述申辩,不因此加重处分。④书面通知本人。⑤处分影响和期间: 受处分期间不得晋升职务职级级别,受记过以上处分不得晋升工资档次。受撤职按规定降级。警告6个月；记过12个月；记大过18个月；降级撤职24个月。⑥处分解除: 开除以外处分,期满悔改且无再犯自动解除。解除后晋升等不再受原处分影响 (但降级撤职不恢复原级别职务职级)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">八、交流与回避 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 交流:</p>
+                            <p class="ml-4">可在公务员和参公人员队伍内部交流,也可与国企和不参公事业单位从事公务人员交流。方式: 调任、转任。国企高校科研院所等人员可调入机关任领导职务或四级调研员以上职级。省部级正职以下领导成员应有计划有重点跨地区跨部门转任。</p>
+                            <p class="font-semibold mt-2">2. 挂职:</p>
+                            <p class="ml-4">机关可采挂职方式选派公务员承担重大工程项目任务等。挂职期间不改变与原机关人事关系。</p>
+                            <p class="font-semibold mt-2">3. 回避:</p>
+                            <p class="ml-4">(1)任职回避: 夫妻、直系血亲、三代以内旁系血亲、近姻亲关系,不得在同一机关双方直接隶属同一领导人员职位或有直接上下级领导关系职位工作,不得在一方任领导职务机关从事组织人事纪检监察审计财务工作。不得在其配偶子女及其配偶经营的企业、营利性组织行业监管或主管部门任领导成员。特殊情况可由省级以上公务员主管部门规定变通。</p>
+                            <p class="ml-4">(2)地域回避: 担任乡县市级机关及其部门主要领导职务的,按规定实行地域回避。</p>
+                            <p class="ml-4">(3)公务回避: 执行公务时,①涉及本人利害关系；②涉及与规定亲属关系人员利害关系；③其他可能影响公正执行公务的,应回避。</p>
+                            <p class="ml-4">(4)回避处理: 本人申请或利害关系人申请或单位提出,由机关审查决定。决定前可视情况先行退出。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">九、工资、福利与保险 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>公务员工资包括基本工资、津贴、补贴和奖金。因公牺牲或病故,其亲属享受国家规定抚恤和优待。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">十、辞职、辞退与退休 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 一般审批 (辞职):</p>
+                            <p class="ml-4">书面申请,任免机关30日内审批 (领导成员90日内)。</p>
+                            <p class="font-semibold mt-2">2. 辞去公职的限制:</p>
+                            <p class="ml-4">不得辞职情形: ①未满最低服务年限；②涉密职位或离职不满脱密期；③重要公务未处理完毕须本人处理；④正接受审计、纪律审查、监察调查或涉嫌犯罪司法程序未终结；⑤法律法规规定其他不得辞职情形。</p>
+                            <p class="font-semibold mt-2">3. 辞退:</p>
+                            <p class="ml-4">(1)予以辞退情形: ①年度考核连续两年不称职；②不胜任现职又不接受其他安排；③因机关调整撤销合并缩编需调工,本人拒合理安排；④不履行义务不守纪律经教育无转变不适合继续工作又不宜开除；⑤旷工或因公外出请假期满无正当理由逾期不归连续超15天或一年累计超30天。</p>
+                            <p class="ml-4">(2)不得辞退: ①因公致残丧失/部分丧失工作能力；②患病/负伤在规定医疗期内；③女性在孕期产假哺乳期内；④法律法规规定其他不得辞退情形。</p>
+                            <p class="ml-4">(3)辞退通知: 书面通知并告知依据理由。可领辞退费或享失业保险。</p>
+                            <p class="font-semibold mt-2">4. 退休:</p>
+                            <p class="ml-4">(1)提前退休: 本人自愿申请,任免机关批准。条件: ①工作年限满30年；②距国家规定退休年龄不足5年且工龄满20年；③符合国家规定其他可提前退休情形。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">十一、申诉与控告 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p class="font-semibold">1. 复核申诉情形:</p>
+                             <p class="ml-4">对涉及本人下列人事处理不服,可30日内向原处理机关申复核；对复核结果不服15日内向同级公务员主管部门或原处理机关上一级机关申诉；也可不经复核30日内直接申诉: ①处分；②辞退或取消录用；③降职；④定期考核定为不称职；⑤免职；⑥申请辞职、提前退休未批；⑦不按规定确定或扣减工资福利保险待遇；⑧法律法规规定可申诉其他情形。</p>
+                             <p class="font-semibold mt-2">2. 复核申诉的处理:</p>
+                             <p class="ml-4">原处理机关30日内作复核决定。受理申诉机关60日内作处理决定 (复杂可延长不超30日)。复核申诉期间不停止人事处理执行。不因申请复核申诉被加重处理。</p>
+                        </div>
+                    </details>
+                     <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">十二、其他 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                             <p>公务员辞去公职或退休的,原系领导成员、县处级以上领导职务的公务员在离职三年内,其他公务员在离职两年内,不得到与原工作业务直接相关的企业或者其他营利性组织任职,不得从事与原工作业务直接相关的营利性活动。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="section10_govt_info_openness" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第十节 政府信息公开条例</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                     <details class="mb-6" open>
+                        <summary class="text-xl flex justify-between items-center">一、政府信息公开概述 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 政府信息的定义:</strong> 行政机关在履行行政管理职能过程中制作或者获取的,以一定形式记录、保存的信息。</p>
+                            <p><strong>2. 主管部门:</strong> 国务院办公厅 (全国)；县级以上地方政府办公厅(室) (本行政区域)。</p>
+                            <p><strong>3. 工作机构具体职能:</strong> (1)办理本机关公开事宜；(2)维护更新公开信息；(3)组织编制指南、目录、年报；(4)组织审查拟公开信息；(5)其他相关职能。</p>
+                            <p><strong>4. 信息公开原则:</strong> 以公开为常态、不公开为例外,遵循公正、公平、合法、便民。及时、准确公开。加强信息化管理,推进平台融合。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、公开的主体和范围【重点】 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p class="font-semibold">1. 公开的主体:</p>
+                            <p class="ml-4">【行政机关制作】由制作机关公开。【从公民组织获取】由保存机关公开。【从其他机关获取】由制作或最初获取机关公开。派出机构、内设机构对外以自己名义履职的,可由其负责相关信息公开。两个以上机关共同制作的,由牵头制作机关公开。涉及其他机关应协商确认。需批准的经批准公开。</p>
+                            <p class="font-semibold mt-2">2. 公开的范围:</p>
+                            <p class="ml-4">除特定不予公开信息外,应公开。方式: 主动公开和依申请公开。</p>
+                            <p class="ml-4">① 不予公开: 国家秘密；法律法规禁止公开；公开后可能危及国家安全、公共安全、经济安全、社会稳定。</p>
+                            <p class="ml-4">② 不得公开 (例外情况除外): 涉及商业秘密、个人隐私等公开会对第三方合法权益造成损害 (第三方同意或行政机关认为不公开会对公共利益造成重大影响的除外)。</p>
+                            <p class="ml-4">③ 可以不予公开: 行政机关内部事务信息 (人事、后勤、内部流程等)；过程性信息 (讨论记录、过程稿、磋商信函、请示报告等) 及行政执法案卷信息 (法律法规规章规定应公开的除外)。</p>
+                            <p class="ml-4">应建动态调整机制,对不予公开信息定期评估审查,可公开的应公开。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、主动公开 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>对涉及公众利益调整、需公众广泛知晓或参与决策的政府信息,应主动公开。</p>
+                            <p class="font-semibold">1. 主动公开信息的内容 (15项, 详见PDF原文, 包括行政法规规章规范性文件；机关职能机构设置联系方式；规划政策；统计信息；行政许可对外管理服务事项；行政处罚强制依据条件程序及有影响的处罚决定；财政预决算；行政事业性收费；政府集采；重大建设项目；扶贫教育医疗社保就业政策措施；突发公共事件应急预案预警应对；环保公卫安全生产食药产品质量监督检查；公务员招考；其他应主动公开信息)。</p>
+                            <p class="font-semibold mt-2">2. 信息主动公开的途径:</p>
+                            <p class="ml-4">政府公报、政府网站/其他互联网政务媒体、新闻发布会、报刊广播电视等。各级政府应在国家档案馆、公共图书馆、政务服务场所设查阅场所。可设公共查阅室、资料索取点、信息公告栏、电子屏等。及时向档案馆、图书馆提供主动公开信息。</p>
+                            <p class="font-semibold mt-2">3. 公开的时间:</p>
+                            <p class="ml-4">自信息形成或变更起20个工作日内及时公开 (法律法规另有规定除外)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、依申请公开 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>除主动公开外,公民法人其他组织可向地方各级政府、对外以自己名义履职的县级以上政府部门申请获取相关政府信息。</p>
+                            <p class="font-semibold">1. 申请的方式:</p>
+                            <p class="ml-4">向政府信息公开工作机构提出,书面形式 (信件、数据电文等)；书面困难可口头提出,由受理机构代填。</p>
+                            <p class="font-semibold mt-2">2. 信息公开申请的程序:</p>
+                            <p class="ml-4">(1)申请内容: ①申请人姓名/名称、身份证明、联系方式；②申请公开信息名称文号或特征描述；③申请公开信息形式要求 (获取方式途径)。</p>
+                            <p class="ml-4">(2)材料补正: 内容不明确,7个工作日内一次告知补正。答复期自收到补正申请起算。无正当理由逾期不补正视为放弃。</p>
+                            <p class="ml-4">(3)收到申请日期确定: 当面提交以提交日；邮寄以签收日；互联网/传真以双方确认日。</p>
+                            <p class="ml-4">(4)特殊情况处理: ①涉第三方权益,书面征求意见 (15工作日内提)。第三方不同意且有合理理由不公开 (不公开可能对公共利益造成重大影响的除外)。②两以上机关共同制作,牵头制作机关征求意见 (15工作日内提,逾期视为同意)。</p>
+                            <p class="ml-4">(5)答复期限: ①能当场答复则当场。②不能当场,收到申请20工作日内答复；需延长经负责人同意并告知申请人,最长不超20工作日。征求意见时间不计入。</p>
+                            <p class="ml-4">(6)答复结果 (7种情形, 详见PDF原文, 包括已主动公开的告知获取方式；可公开的提供或告知获取方式；不予公开的告知理由；无此信息告知不存在；非本机关公开的告知并说明理由,可能时告知负责机关；重复申请不予重复处理；含不应公开内容作区分处理并说明理由)。</p>
+                            <p class="ml-4">(7)其他: 提供已制作或获取信息。需加工分析可不提供。以申请形式进行信访投诉举报,告知不作信息公开处理并可告知渠道。申请公开出版物可告知获取途径。</p>
+                            <p class="font-semibold mt-2">3. 申请的费用:</p>
+                            <p class="ml-4">不收费。但申请数量频次明显超合理范围可收信息处理费 (办法由国务院价格、财政、信息公开主管部门制定)。</p>
+                        </div>
+                    </details>
+                     <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">五、信息公开工作年度报告 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>1. 年度报告的发布:</strong> 县级以上政府部门每年1月31日前向本级主管部门提交上年度报告并向社会公布。县级以上地方政府主管部门每年3月31日前向社会公布本级政府上年度报告。</p>
+                            <p><strong>2. 年度报告的内容:</strong> (1)主动公开情况；(2)收到和处理申请情况；(3)因信息公开被申请行政复议、提起行政诉讼情况；(4)存在主要问题及改进情况,各级政府年报还应包括工作考核、社会评议和责任追究结果；(5)其他需报告事项。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="exercises_ch5_admin_law" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">相关习题 (行政法)</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="example-box">
+                        <p class="font-medium">1. 根据市政府整顿农贸市场的决定,某区工商局和公安局对集贸市场进行检查。在检查过程中,因某个体户乱设摊点,给予其吊销营业执照的处罚。该个体户不服,申请复议。此案应以谁为被申请人</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 某区工商局</li><li>B. 某区公安局</li><li>C. 某区工商局和公安局为共同被申请人</li><li>D. 某区工商局和公安局共同的上一级机关为被申请人</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong> (通常由作出具体行政行为的行政机关作为被申请人，吊销营业执照一般是工商局的职权范围。如果公安局也参与了处罚决定且是以共同名义作出，则C也可能。根据题目描述，更倾向于A。)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">2. 居民赵四涉嫌打架斗殴,被济南市槐荫区公安分局处以拘留10日、罚款3000元的治安处罚赵四不服,向济南市公安局提出复议,经复议后济南市公安局将处罚决定改为拘留5日,罚款500元。赵四对此仍然不服,欲提起行政诉讼,应以( )为被告。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 槐荫区公安分局</li><li>C. 槐荫区公安局和市公安局</li><li>B. 济南市公安局</li><li>D. 山东省公安厅</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong> (复议机关改变原行政行为的，复议机关是被告)</p></div>
+                    </div>
+                     <div class="example-box">
+                        <p class="font-medium">【习题1】根据《国家赔偿法》的规定,下列情形不属于国家赔偿的是( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 某地政府为挽救当地一濒临倒闭的国有企业,强令另一企业与该国有企业订立订购合同。该企业不服,政府将其银行账户冻结</li><li>B. 税务局工作人员钱某与个体户赵某素有矛盾,以赵某偷税为名借税务局名义没收其 5000元的财物</li><li>C. 狱警李某的朋友被犯人张某打伤,李某指使同监犯人将张某打伤</li><li>D. 工商局孙某骑自行车上班途中与人相撞,发生争执后将人打伤</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong> (属于个人行为)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题1】根据《公务员法》的规定,下列选项中错误的是( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 根据工作需要和领导职务与职级的对应关系,公务员担任的领导职务和职级可以互相转任、兼任;符合规定资格条件的,可以晋升领导职务或者职级</li><li>B. 公务员职位类别按照公务员职位的性质、特点和管理需要,划分为综合管理类、专业技术类和行政执法类等类别</li><li>C. 公务员因为工作需要在机关外兼职,要经过批准,一定情况下可以领报酬</li><li>D. 公务员不得在其配偶、子女及其配偶经营的企业、营利性组织的行业监管或者主管部门担任领导成员</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong> (公务员在机关外兼职不得领取兼职报酬)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题1】关于主动公开的政府信息,行政机关的下列哪一做法符合《政府信息公开条例》的规定()</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 甲县规定,乡、镇政府制作的政府信息,统一由县政府负责公开</li><li>B. 乙市一项行政事业性收费的标准发生变动,在标准变动以后第30日予以公开</li><li>C. 丙区规定,行政机关应当编制、公布政府信息公开指南或政府信息公开目录,并及时更新</li><li>D. 丁市政府在市图书馆设置政府信息查阅场所,并配备相应的设备,为公民、法人或者其他组织获取政府信息提供便利</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong> (A错误，应由制作机关公开；B错误，应在20个工作日内；C正确，但D更全面体现条例要求)</p></div>
+                    </div>
+                 </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function toggleExplanation(button) {
+            const explanationDiv = button.nextElementSibling;
+            if (explanationDiv.style.display === 'none' || explanationDiv.style.display === '') {
+                explanationDiv.style.display = 'block';
+                button.textContent = '隐藏答案与解析';
+            } else {
+                explanationDiv.style.display = 'none';
+                button.textContent = '显示答案与解析';
+            }
+        }
+
+        const mainContentSections = document.querySelectorAll('main > section.content-section');
+        const allSidebarLinks = document.querySelectorAll('aside nav a.sidebar-link');
+        const bodyEl = document.body;
+        const menuButton = document.getElementById('menu-button');
+        
+        function showSection(sectionIdToShow) {
+            mainContentSections.forEach(section => {
+                section.classList.toggle('active', section.id === sectionIdToShow);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.innerWidth >= 768) { 
+                bodyEl.classList.add('sidebar-visible');
+                bodyEl.classList.remove('sidebar-globally-hidden');
+            } else {
+                bodyEl.classList.remove('sidebar-visible');
+                bodyEl.classList.add('sidebar-globally-hidden'); 
+            }
+
+            const hash = window.location.hash.substring(1);
+            let sectionToActivate = 'introduction_ch5_admin_law'; 
+            let specificElementToScrollTo = null;
+
+            if (hash) {
+                const targetElementByHash = document.getElementById(hash);
+                if (targetElementByHash && targetElementByHash.classList.contains('content-section')) {
+                    sectionToActivate = hash; 
+                    specificElementToScrollTo = targetElementByHash;
+                } else if (targetElementByHash) { 
+                    const parentSection = targetElementByHash.closest('section.content-section');
+                    if (parentSection) {
+                        sectionToActivate = parentSection.id;
+                        specificElementToScrollTo = targetElementByHash;
+                    }
+                }
+            }
+            
+            showSection(sectionToActivate);
+
+            allSidebarLinks.forEach(link => {
+                const linkHrefId = link.getAttribute('href').substring(1);
+                const isActive = linkHrefId === sectionToActivate || linkHrefId === hash;
+                link.classList.toggle('active', isActive);
+            });
+            
+            if (specificElementToScrollTo) {
+                 if (specificElementToScrollTo.tagName === 'SUMMARY') {
+                    specificElementToScrollTo.parentElement.open = true;
+                } else if (specificElementToScrollTo.tagName === 'DETAILS' && !specificElementToScrollTo.open) {
+                    // specificElementToScrollTo.open = true; 
+                }
+                setTimeout(() => { 
+                    specificElementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            } else if (document.getElementById(sectionToActivate)) { 
+                 setTimeout(() => {
+                    document.getElementById(sectionToActivate).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        });
+
+        allSidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                
+                let targetId = this.getAttribute('href').substring(1);
+                let sectionToDisplayId = targetId; 
+                const targetElement = document.getElementById(targetId);
+                
+                allSidebarLinks.forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+
+                showSection(sectionToDisplayId);
+                window.location.hash = targetId; 
+
+                if (targetElement) {
+                     setTimeout(() => { 
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 50); 
+                }
+                
+                if (window.innerWidth < 768 && bodyEl.classList.contains('sidebar-visible')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                     bodyEl.classList.add('sidebar-globally-hidden');
+                }
+            });
+        });
+        
+        menuButton.addEventListener('click', () => {
+            bodyEl.classList.toggle('sidebar-globally-hidden');
+            bodyEl.classList.toggle('sidebar-visible', !bodyEl.classList.contains('sidebar-globally-hidden'));
+        });
+        
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) { 
+                if (!bodyEl.classList.contains('sidebar-globally-hidden')) { 
+                    bodyEl.classList.add('sidebar-visible');
+                } else { 
+                    bodyEl.classList.remove('sidebar-visible');
+                }
+            } else { 
+                if (bodyEl.classList.contains('sidebar-globally-hidden')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                }
+            }
+        });
+
+        document.querySelectorAll('details > summary').forEach(summary => {
+            const marker = summary.querySelector('.details-marker');
+            const detailsElement = summary.parentElement;
+            
+            if (marker) { 
+                 marker.style.transform = detailsElement.open ? 'rotate(90deg)' : 'rotate(0deg)';
+            }
+
+            detailsElement.addEventListener('toggle', function() {
+                if (marker) {
+                    marker.style.transform = this.open ? 'rotate(90deg)' : 'rotate(0deg)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

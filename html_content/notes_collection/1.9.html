@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自然科技知识学习网页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: padding-left 0.3s ease-in-out; /* For sidebar toggling */
+        }
+        .content-section {
+            scroll-margin-top: 70px; 
+            display: none; /* Hidden by default, shown by JS */
+        }
+        .content-section.active {
+            display: block;
+        }
+        details > summary { /* For details elements WITHIN a section, e.g. "一、生物圈" */
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            background-color: #065f46; /* emerald-800, slightly darker for internal details */
+            color: white;
+            border-radius: 0.375rem; /* rounded-lg for internal details */
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            list-style: none; 
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        details > summary::-webkit-details-marker {
+            display: none; 
+        }
+        details > summary:hover {
+            background-color: #047857; /* emerald-700 */
+        }
+        details[open] > summary {
+            background-color: #047857; /* emerald-700 */
+            border-radius: 0.375rem 0.375rem 0 0;
+        }
+        details > div.p-4 { /* Content of internal details */
+             border: 1px solid #047857; /* emerald-700 */
+             border-top: none;
+             border-radius: 0 0 0.375rem 0.375rem;
+             background-color: #f0fdfa; /* emerald-50 for a very light green background */
+        }
+        .key-point {
+            background-color: #d1fae5; /* emerald-100 */
+            border-left: 4px solid #10b981; /* emerald-500 */
+            color: #047857; /* emerald-700 */
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0 0.375rem 0.375rem 0; /* rounded-r-lg */
+        }
+        .example-box { /* Used for 【习题】 */
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* shadow-md */
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .explanation {
+            display: none;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background-color: #ecfdf5; /* emerald-50 */
+            border: 1px solid #a7f3d0; /* emerald-200 */
+            border-radius: 0.375rem; /* rounded-md */
+        }
+        .highlight { /* For inline highlights if needed */
+            background-color: #fef3c7; /* amber-200 - a contrasting highlight */
+            padding: 0.125rem 0.25rem; /* px-1 */
+            border-radius: 0.125rem; /* rounded-sm */
+        }
+        .btn {
+            background-color: #10b981; /* emerald-500 */
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #059669; /* emerald-600 */
+        }
+        
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+            height: calc(100vh - 4rem); 
+            transform: translateX(-100%); 
+            width: 20rem; /* w-80 */
+        }
+        main {
+            transition: margin-left 0.3s ease-in-out;
+            width: 100%; 
+            margin-left: 0;
+        }
+
+        body.sidebar-visible #sidebar {
+            transform: translateX(0);
+        }
+        body.sidebar-visible main {
+           margin-left: 20rem; /* w-80 */
+        }
+         @media (min-width: 768px) { /* md breakpoint */
+            body:not(.sidebar-globally-hidden) #sidebar {
+                transform: translateX(0);
+            }
+            body:not(.sidebar-globally-hidden) main {
+                margin-left: 20rem; /* w-80 */
+            }
+            body.sidebar-globally-hidden #sidebar {
+                transform: translateX(-100%);
+            }
+            body.sidebar-globally-hidden main {
+                margin-left: 0;
+            }
+        }
+
+        .sidebar-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            color: #d1fae5; /* emerald-100 */
+            text-decoration: none;
+            border-radius: 0.375rem; /* rounded-md */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: 600; /* Make all main links bold */
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #10b981; /* emerald-500 */
+            color: white;
+        }
+         .details-marker { 
+            font-size: 0.8em;
+            margin-left: 0.5rem;
+            transition: transform 0.2s ease-in-out;
+        }
+        details[open] > summary > .details-marker {
+            transform: rotate(90deg);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem; /* text-sm for tables */
+        }
+        th, td {
+            border: 1px solid #a1a1aa; /* zinc-400 */
+            padding: 0.5rem;
+            text-align: left;
+        }
+        th {
+            background-color: #e4e4e7; /* zinc-200 */
+            font-weight: 600;
+        }
+        .image-placeholder {
+            display: flex;
+            flex-direction: column; /* Stack text */
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 600px; 
+            min-height: 150px; /* Ensure some height */
+            margin: 1rem auto;
+            padding: 1rem;
+            background-color: #f4f4f5; /* zinc-100 */
+            border: 1px dashed #a1a1aa; /* zinc-400 */
+            border-radius: 0.375rem;
+            text-align: center;
+            color: #71717a; /* zinc-500 */
+        }
+    </style>
+</head>
+<body class="bg-slate-100">
+    <header class="bg-emerald-700 text-white p-4 fixed w-full top-0 z-50 shadow-md flex justify-between items-center">
+        <button id="menu-button" class="p-2 rounded-md text-emerald-200 hover:text-white hover:bg-emerald-600">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </button>
+        <h1 class="text-xl font-bold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">自然科技知识学习网页</h1>
+    </header>
+
+    <div class="flex pt-16">
+        <aside id="sidebar" class="bg-emerald-800 text-white p-4 space-y-1 fixed top-16 left-0 z-40 overflow-y-auto">
+            <nav>
+                <a href="#introduction" class="sidebar-link">自然科技概览</a>
+                <a href="#ch9_sec1" class="sidebar-link">第一节 三次工业革命</a>
+                <a href="#ch9_sec2" class="sidebar-link">第二节 生物知识</a>
+                <a href="#ch9_sec3" class="sidebar-link">第三节 医学知识</a>
+                <a href="#ch9_sec4" class="sidebar-link">第四节 物理常识</a>
+                <a href="#ch9_sec5" class="sidebar-link">第五节 化学常识</a>
+                <a href="#ch9_sec6" class="sidebar-link">第六节 航天和能源</a>
+                <a href="#ch9_sec7" class="sidebar-link">第七节 地理知识</a>
+                <a href="#exercises" class="sidebar-link">综合习题</a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-6">
+            <section id="introduction" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">自然科技知识概览</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="mb-3 text-gray-700 leading-relaxed">
+                        欢迎学习自然科技相关知识。本平台将系统梳理自然科学的基础知识，涵盖工业革命、生物、医学、物理、化学、航天能源及地理等领域。
+                    </p>
+                    <div class="key-point">
+                        <h4 class="font-semibold text-lg mb-2">学习要点：</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>了解三次工业革命的标志性成就与影响。</li>
+                            <li>掌握生物圈、生物进化、遗传等核心生物学概念。</li>
+                            <li>熟悉人体构造、营养、常见疾病及急救知识。</li>
+                            <li>理解光、声、热、压力、电磁等基本物理现象和规律。</li>
+                            <li>认识常见气体、金属、酸碱盐等化学常识。</li>
+                            <li>了解中国航天技术发展和能源分类。</li>
+                            <li>掌握太阳系、地球、气候、中国地理及世界地理等基础知识。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ch9_sec1" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第一节 三次工业革命</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">方面</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">第一次工业革命</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">第二次工业革命</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">第三次工业革命</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">开始时间</td>
+                                <td class="px-6 py-4 whitespace-nowrap">18世纪60年代</td>
+                                <td class="px-6 py-4 whitespace-nowrap">19世纪70年代</td>
+                                <td class="px-6 py-4 whitespace-nowrap">20世纪四五十年代</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">完成时间</td>
+                                <td class="px-6 py-4 whitespace-nowrap">19世纪上半期</td>
+                                <td class="px-6 py-4 whitespace-nowrap">19世纪末20初</td>
+                                <td class="px-6 py-4 whitespace-nowrap">正在进行</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4">主要标志</td>
+                                <td class="px-6 py-4">蒸汽机的改良</td>
+                                <td class="px-6 py-4">电力的广泛应用</td>
+                                <td class="px-6 py-4">原子能,电子计算机,航天工程,生物技术等领域取得重大突破</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4">理论基础</td>
+                                <td class="px-6 py-4">牛顿的力学</td>
+                                <td class="px-6 py-4">法拉第的电磁感应学</td>
+                                <td class="px-6 py-4">爱因斯坦的相对论</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4">领先国家</td>
+                                <td class="px-6 py-4">英国</td>
+                                <td class="px-6 py-4">美、德</td>
+                                <td class="px-6 py-4">美国</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4">进入的时代</td>
+                                <td class="px-6 py-4">蒸汽时代</td>
+                                <td class="px-6 py-4">电气时代</td>
+                                <td class="px-6 py-4">网络信息时代</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4">交通工具</td>
+                                <td class="px-6 py-4">汽船(轮船)、火车</td>
+                                <td class="px-6 py-4">电车、汽车、飞艇、飞机</td>
+                                <td class="px-6 py-4">宇宙飞船</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4">主要发明成果</td>
+                                <td class="px-6 py-4">瓦特改良蒸汽机, 富尔顿发明汽船, 斯蒂芬孙发明火车</td>
+                                <td class="px-6 py-4">爱迪生发明电灯, 西门子发明发电机, 贝尔发明电话, 卡尔·本茨发明内燃机、汽车, 莱特兄弟发明飞机</td>
+                                <td class="px-6 py-4">1964年第一颗原子弹爆炸成功。1966年第一颗装有核弹头的地地导弹飞行爆炸成功。1967年第一颗氢弹空爆试验成功。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="ch9_sec2" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第二节 生物知识</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">一、生物圈 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1. 生物圈是所有生物链的一个统称,他包含了生物链和所有细微的生物和生态环境,生态系统等。</p>
+                            <p>2. 生物圈包括海平面以上约10000米至海平面以下10000米处,包括大气圈底部,岩石圈的表面,水圈的全部。生物圈为生物的生存提供了基本条件:营养物质、阳光、空气和水、适宜的温度和一定的生存空间。</p>
+                            <p>3. 可将生物圈中的各种生物分为:</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>生产者:</strong> 主要是绿色植物,它能通过光合作用将无机物合成为有机物。</li>
+                                <li><strong>消费者:</strong> 主要指动物。一级消费者（如羚羊），二级消费者，三级消费者。人是杂食动物。</li>
+                                <li><strong>分解者:</strong> 主要指微生物,可将有机物分解为无机物。</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、生物的进化 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>生物进化是指一切生命形态发生、发展的演变过程。生物进化的历程反映了生物进化的顺序是由简单到复杂,由低等到高等,由水生到陆生。</p>
+                            <p><strong>生物进化的顺序:</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>动物:</strong> 从无脊椎动物到脊椎动物 (鱼类 -> 两栖类 -> 爬行类 -> 鸟类、哺乳类)。</li>
+                                <li><strong>植物:</strong> 从藻类到苔藓类 -> 蕨类 -> 裸子植物 -> 被子植物。</li>
+                                <li><strong>人类:</strong> 从猿人到直立人 -> 智人。</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、遗传 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>遗传,是指经由基因的传递,使后代获得亲代的特征。地球上现存的生命主要是以DNA为遗传物质。</p>
+                            <p><strong>遗传物质:</strong></p>
+                            <p class="ml-4"><strong>1. 核酸:</strong></p>
+                            <p class="ml-8">(1) 定义: 一切生物的遗传物质,是遗传信息的载体。</p>
+                            <p class="ml-8">(2) 分类: 核糖核酸(RNA)和脱氧核糖核酸(DNA)。基本单位是核苷酸。DNA是储存、复制和传递遗传信息的主要物质基础。</p>
+                            <p class="ml-4"><strong>2. 基因:</strong></p>
+                            <p class="ml-8">(1) 定义: 遗传的物质基础,是带有遗传讯息的DNA片段。</p>
+                            <p class="ml-8">(2) 特征: 能忠实复制自己；能够“突变”（多数致病，少数非致病为自然选择提供材料）。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="ch9_sec3" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第三节 医学知识</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">一、人体构造 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>人体由九大系统组成：运动系统、消化系统、呼吸系统、泌尿系统、生殖系统、内分泌系统、免疫系统、神经系统和循环系统。</p>
+                            <table class="min-w-full divide-y divide-gray-200 my-4">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">系统</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">组成</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">常见疾病</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr> <td>运动系统</td> <td>骨、关节和骨骼肌</td> <td>肩周炎、骨质增生、佝偻病、骨质疏松等</td> </tr>
+                                    <tr> <td>消化系统</td> <td>1.消化道:口、咽、食道、胃、小肠、大肠、肛门<br>2.消化腺:胰腺、肝脏、唾液腺、胃腺、肠腺</td> <td>肝胆疾病(胆结石、肝硬化、肝炎)、消化道溃疡、肠胃炎、痔疮等</td> </tr>
+                                    <tr> <td>呼吸系统</td> <td>呼吸道、肺血管、肺和呼吸肌</td> <td>肺部疾病(肺炎、肺心病、肺结核等)、支气管炎、哮喘、感冒等</td> </tr>
+                                    <tr> <td>循环系统</td> <td>输送营养物质和代谢产物 (心脏、血管、血液)</td> <td>心血管疾病(冠心病、高血压、心绞痛等)</td> </tr>
+                                    <tr> <td>生殖系统</td> <td>繁殖后代和形成并保持第二性特征</td> <td>不孕症、痛经、前列腺炎等</td> </tr>
+                                    <tr> <td>神经系统</td> <td>1.中枢神经系统:脑和脊髓<br>2.周围神经系统:脑神经、脊神经和内脏神经</td> <td>智商低下、癫痫、多动症、老年痴呆</td> </tr>
+                                    <tr> <td>免疫系统</td> <td>1.免疫器官:骨髓、脾脏、淋巴结、扁桃体等<br>2.免疫细胞:淋巴细胞等<br>3.免疫分子:免疫球蛋白、干扰素等</td> <td>艾滋病、风湿性关节炎</td> </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、人体的营养 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>(一) 营养物质</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>蛋白质: 构成人体细胞的基本物质。</li>
+                                <li>脂肪: 人体最重要的功能物质。</li>
+                                <li>水: 占体重的60%-70%。</li>
+                                <li>无机盐: 构成人体组织的重要成分 (钙、磷、铁等)。</li>
+                                <li>维生素: 对人体生命活动起调节作用。</li>
+                            </ul>
+                            <p><strong>(二) 三大类营养物质的主要作用和食物来源</strong></p>
+                            <table class="min-w-full divide-y divide-gray-200 my-4">
+                                <thead class="bg-gray-50">
+                                    <tr> <th class="px-6 py-3">营养素</th> <th class="px-6 py-3">特点</th> <th class="px-6 py-3">功能</th> </tr>
+                                </thead>
+                                <tbody>
+                                    <tr> <td>糖</td> <td>单糖(葡萄糖)、多糖(食用糖、淀粉)</td> <td>①提供热能 (70%左右) ②构成组织和保护肝脏</td> </tr>
+                                    <tr> <td>蛋白质</td> <td>氨基酸是基本单位</td> <td>①生命的主要物质基础 ②构成组织和细胞 ③生长发育、新陈代谢所需 ④氧化供能</td> </tr>
+                                    <tr> <td>脂肪</td> <td>油性物质,脂肪酸的甘油脂</td> <td>①供给热量 ②保持体温 ③构成组织和生物活性物质 ④储存“燃料” ⑤保护内脏,滋润皮肤等</td> </tr>
+                                </tbody>
+                            </table>
+                            <p><strong>(三) 无机盐——矿物质</strong></p>
+                            <p class="ml-4">生理功能: (1)构成机体组织 (钙、磷、镁)。 (2)特殊生理功能物质组成 (碘-甲状腺素, 铁-血红蛋白)。 (3)维持酸碱平衡及渗透压。</p>
+                            <p><strong>(四) 维生素的作用及其缺乏症</strong></p>
+                            <table class="min-w-full divide-y divide-gray-200 my-4">
+                                <thead class="bg-gray-50">
+                                    <tr><th>维生素</th><th>可溶性</th><th>食物来源</th><th>缺乏症</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>维生素A</td><td>脂溶性</td><td>鱼肝油、动物肝脏、绿色蔬菜</td><td>夜盲症</td></tr>
+                                    <tr><td>维生素B1</td><td>水溶性</td><td>豆类、谷类、硬果类、水果、牛奶和绿叶菜</td><td>脚气病、神经性皮炎</td></tr>
+                                    <tr><td>维生素B2</td><td>水溶性</td><td>肝脏、牛奶、鸡蛋、豆类、绿色蔬菜</td><td>口腔溃疡等</td></tr>
+                                    <tr><td>维生素C</td><td>水溶性</td><td>新鲜蔬菜、水果</td><td>坏血病</td></tr>
+                                    <tr><td>维生素D</td><td>脂溶性</td><td>鱼肝油、蛋黄、乳制品、酵母 (多晒太阳可合成)</td><td>软骨病(佝偻病)</td></tr>
+                                    <tr><td>维生素E</td><td>脂溶性</td><td>鸡蛋、肝脏、鱼类、植物油</td><td>(未列缺乏症)</td></tr>
+                                    <tr><td>叶酸</td><td>水溶性</td><td>酵母、肝脏、绿叶蔬菜</td><td>贫血</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、人体内物质运输 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>(一) 血液:</strong> 由血浆、血细胞 (红细胞、白细胞、血小板) 构成。功能: 运输、防御保护、调节体温。</p>
+                            <table class="min-w-full divide-y divide-gray-200 my-4">
+                                <thead class="bg-gray-50"><tr><th>名称</th><th>概述</th></tr></thead>
+                                <tbody>
+                                    <tr><td>静脉血</td><td>含较多二氧化碳,呈暗红色。</td></tr>
+                                    <tr><td>动脉血</td><td>含氧较多、二氧化碳较少,呈鲜红色。</td></tr>
+                                    <tr><td>红细胞</td><td>主要功能是运送氧。</td></tr>
+                                    <tr><td>白细胞</td><td>主要扮演免疫角色,吞噬病菌。</td></tr>
+                                    <tr><td>血小板</td><td>在止血、伤口愈合、炎症反应、血栓形成等有重要作用。</td></tr>
+                                </tbody>
+                            </table>
+                            <p><strong>(二) 血型:</strong> 1900年兰德斯坦纳发现ABO血型 (A、B、AB、O型)。还有Rh血型等。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、医疗方法 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <table class="min-w-full divide-y divide-gray-200 my-4">
+                                 <thead class="bg-gray-50"><tr><th>方法</th><th>描述</th></tr></thead>
+                                 <tbody>
+                                    <tr><td>放疗</td><td>射线照射肿瘤</td></tr>
+                                    <tr><td>化疗</td><td>化学药物治疗恶性肿瘤</td></tr>
+                                    <tr><td>B超</td><td>向人体发射超声波,同时接受体内脏器的反射波</td></tr>
+                                    <tr><td>CT扫描</td><td>电子计算机X射线断层扫描技术的简称</td></tr>
+                                    <tr><td>酒精</td><td>吸收细菌蛋白的水分,使其脱水变性凝固,杀灭细菌</td></tr>
+                                 </tbody>
+                            </table>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">五、急救知识 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>(一) 发烧:</strong> 1.物理降温 (温水擦浴、酒精擦浴、冷敷)。 2.服用退热剂 (多饮水)。</p>
+                            <p><strong>(二) 急性扭伤:</strong> 立即冰敷30分钟。伤后24-48小时内冰敷,3-4天后热敷。</p>
+                            <p><strong>(三) 烫伤的处理:</strong> 自来水淋洗或浸泡30分钟至1小时,及时到医院敷药膏。</p>
+                            <p><strong>(四) 动物伤害 (犬咬伤):</strong> 立即掰开伤口冲洗干净,盖纱布,速去医院。注射狂犬病疫苗和破伤风抗毒素。</p>
+                            <p><strong>(五) 蜂蜇伤:</strong> 拔出毒刺,挤出毒液。蜜蜂蜇涂氨水或苏打水；黄蜂蜇涂醋酸水。局部冷敷。异常反应立即就医。</p>
+                            <p><strong>(六) 煤气中毒:</strong> 立即关煤气,开窗透气。抢救者捂口鼻。勿动电器开关。移中毒者至通风处,松衣领。观察意识心跳呼吸。无心跳呼吸立即人工呼吸和胸外按压。有则打急救电话送医。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="ch9_sec4" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第四节 物理常识</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">一、光 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1. 光是沿射线传播的,光的传播不需要任何介质。</p>
+                            <p>2. 小孔成像 (墨子)。</p>
+                            <p><strong>(一) 光的反射:</strong> 光遇到物质分界面时都会发生反射。</p>
+                            <p class="ml-4">1. 分类: 镜面反射和漫反射。</p>
+                            <p class="ml-8">(1) 镜面反射 (水面倒影、平面镜成像、潜望镜)。球面镜: 凸面镜 (后视镜、反光镜), 凹面镜 (太阳灶、手电筒反射面)。</p>
+                            <p class="ml-8">(2) 漫反射。</p>
+                            <p><strong>(二) 光的折射:</strong> 使池水“变浅”、筷子“弯折”、水中人看岸上树“变高”。海市蜃楼、沙漠绿洲、星星眨眼等。</p>
+                            <p class="ml-4">1. 透镜: 凸透镜 (照相机、投影仪、放大镜), 凹透镜 (近视矫治)。</p>
+                            <p><strong>(三) 光的色散:</strong> 复色光分解为单色光的现象。红色光波长最长,穿透力最强 (红绿灯)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、声 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1. 声音的要素:</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>音调:</strong> 声音的高低 (与频率有关)。</li>
+                                <li><strong>响度:</strong> 声音的强弱 (与振幅有关)。</li>
+                                <li><strong>音色:</strong> 不同发声体发出的声音特征。</li>
+                            </ul>
+                            <p>2. 声音的传播:</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>(1) 声音靠介质传播 (气体、液体、固体)。真空不能传声。</li>
+                                <li>(2) 传播速度: 固体 > 液体 > 气体。</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、热 (物态变化) <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <table class="min-w-full divide-y divide-gray-200 my-4">
+                                <thead class="bg-gray-50"><tr><th>变化</th><th>过程</th><th>吸/放热</th><th>例子</th></tr></thead>
+                                <tbody>
+                                    <tr><td>汽化</td><td>液态→气态</td><td>吸热</td><td>沸腾(烧水)</td></tr>
+                                    <tr><td>液化</td><td>气态→液态</td><td>放热</td><td>压缩(液化气)</td></tr>
+                                    <tr><td>熔化</td><td>固态→液态</td><td>吸热</td><td>冰、蜡熔化</td></tr>
+                                    <tr><td>凝固</td><td>液态→固态</td><td>放热</td><td>池塘结冰</td></tr>
+                                    <tr><td>升华</td><td>固态→气态</td><td>吸热</td><td>碘、冰、干冰、樟脑、钨</td></tr>
+                                    <tr><td>凝华</td><td>气态→固态</td><td>放热</td><td>窗花</td></tr>
+                                </tbody>
+                            </table>
+                            <p>物体热胀冷缩 (夏天路面膨胀、温度计、夏天架电线下垂)。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、压力与压强 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>(一) 固体压力与压强:</strong></p>
+                            <p class="ml-4">1. 公式: P = F/S (P-压强, F-压力, S-接触面积)。</p>
+                            <p class="ml-4">2. 改变压强大小方法: 减小压力或增大受力面积可减小压强；增大压力或减小受力面积可增大压强。</p>
+                            <p><strong>(二) 浮力:</strong></p>
+                            <p class="ml-4">1. 浮力公式: F<sub>浮</sub> = ρ<sub>液</sub>gV<sub>排</sub>。应用: 潜水艇。</p>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">五、电与磁 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1. 串联和并联。</p>
+                            <p>2. 欧姆定律: I = U/R (电流与电压成正比,与电阻成反比)。超导现象: 材料低于某温度电阻为零。</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="ch9_sec5" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第五节 化学常识</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">一、常见气体 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <table class="min-w-full divide-y divide-gray-200 my-4">
+                                <thead class="bg-gray-50"><tr><th>气体</th><th>组成与特点/应对措施</th></tr></thead>
+                                <tbody>
+                                    <tr><td>空气 (混合物)</td><td>氮气(78%)、氧气(21%)、稀有气体(0.94%)、二氧化碳(0.03%)等</td></tr>
+                                    <tr><td>天然气和沼气</td><td>主要成分甲烷。无毒但有窒息作用。5-15%遇火源爆炸。</td></tr>
+                                    <tr><td>一氧化碳</td><td>煤气主要成分,中毒元凶(与血红蛋白结合)。无味。应对:疏散,开窗,关气源,勿动电器,报警。</td></tr>
+                                    <tr><td>二氧化碳</td><td>不支持燃烧(灭火),不供呼吸。干冰(固态CO2)用于制冷、人工降雨。引起温室效应。</td></tr>
+                                    <tr><td>氧气</td><td>供呼吸(潜水、急救);支持燃烧(燃料、炼钢)。</td></tr>
+                                    <tr><td>氮气</td><td>惰性保护气、重要原料(硝酸、化肥)、液氮冷冻。</td></tr>
+                                    <tr><td>稀有气体</td><td>氦、氖、氩等。反应性低。保护气、激光、电光源(霓虹灯)。</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、常见的金属材料 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <ul class="list-disc list-inside ml-4">
+                                <li>地壳中含量最多的金属元素: 铝</li>
+                                <li>人体中含量最多的金属元素: 钙</li>
+                                <li>目前世界年产量最多的金属: 铁 > 铝 > 铜</li>
+                                <li>导电、导热性最好的金属: 银 > 铜 > 金 > 铝</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、酸、碱和盐 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>1. 浓盐酸: 刺激性气味,无色液体。金属除锈,制氯化物、药物等。</p>
+                            <p>2. NaOH (氢氧化钠): 烧碱、火碱、苛性钠。白色固体,易溶于水(放热),易潮解,强腐蚀性。固体干燥剂。</p>
+                            <p>3. Ca(OH)<sub>2</sub> (氢氧化钙): 熟石灰、消石灰。白色粉末,微溶于水,弱腐蚀性。建筑材料石灰浆。</p>
+                            <p>4. NaCl: 食盐。食用,消除积雪,防腐剂等。</p>
+                            <p>5. Na<sub>2</sub>CO<sub>3</sub> (碳酸钠): 纯碱。用于玻璃、造纸、纺织、洗涤、食品工业等。</p>
+                            <p>6. 化学肥料 (氮肥、钾肥、磷肥):</p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>(1) 氮肥: 缺氮叶黄。豆科植物根瘤菌固氮。</li>
+                                <li>(2) 钾肥: 缺钾叶尖发黄。草木灰 (主要K<sub>2</sub>CO<sub>3</sub>), 呈碱性。</li>
+                                <li>(3) 磷肥: 缺磷生长迟缓,根系不发达。(不能与碱性物质混用)。</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">四、化学生活小常识 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <ul class="list-disc list-inside ml-4">
+                                <li>铁锅炒菜。</li>
+                                <li>石灰岩是生产水泥主要材料。</li>
+                                <li>石英可用于制作半导体。</li>
+                                <li>稀土有“工业维生素”美称。</li>
+                                <li>隐形飞机材料吸收电磁波,特殊形状减弱反射。</li>
+                                <li>鳄鱼流泪是排除盐分。</li>
+                                <li>碘盐储存: 棕色遮光瓶罐,阴凉干燥,不久存。</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="ch9_sec6" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第六节 航天和能源</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">一、航天技术 (中国成就) <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>1970年:</strong> 我国第一颗人造地球卫星“东方红”1号发射成功。</li>
+                                <li><strong>1999年:</strong> 第一艘无人实验飞船神舟一号发射成功。</li>
+                                <li><strong>2003年:</strong> “神舟”五号发射成功,杨利伟为我国首个进入太空的航天员。</li>
+                                <li><strong>2007年:</strong> 我国首个月球探测器“嫦娥一号”发射。</li>
+                                <li><strong>2010年:</strong> “嫦娥二号”发射。</li>
+                                <li><strong>2011年:</strong> 我国首个目标飞行器“天宫一号”发射,与“神舟八号”对接。</li>
+                                <li><strong>2016年:</strong> 9月发射“天宫二号”空间实验室。10月发射神舟十一号飞船 (景海鹏、陈冬),总飞行33天。</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、能源技术 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <table class="min-w-full divide-y divide-gray-200 my-4">
+                                <thead class="bg-gray-50"><tr><th>分类方式</th><th>能源类型</th><th>举例</th></tr></thead>
+                                <tbody>
+                                    <tr><td rowspan="2">产生方式</td><td>一次能源: 自然界直接获得</td><td>水、煤炭、石油、天然气、潮汐能、生物能、太阳能、风能等</td></tr>
+                                    <tr><td>二次能源: 消耗一次能源获得</td><td>电力、煤气、汽油、柴油、焦炭、洁净煤、激光、沼气等</td></tr>
+                                    <tr><td rowspan="2">是否可再生</td><td>可再生能源: 源源不断得到</td><td>太阳能、风能、水能、生物质能、地热能、海洋能等</td></tr>
+                                    <tr><td>不可再生能源: 消耗完不能再生</td><td>煤、石油等</td></tr>
+                                    <tr><td rowspan="2">历史发展状况</td><td>常规能源: 技术成熟,广泛利用</td><td>煤炭、石油、天然气等</td></tr>
+                                    <tr><td>新能源: 尚未大规模利用</td><td>海洋能、风能、生物质能等</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="ch9_sec7" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">第七节 地理知识</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">一、太阳系 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p>八大行星 (离太阳由近及远): 水星、金星、地球、火星、(小行星带)、木星、土星、天王星、海王星。</p>
+                            <div class="image-placeholder"><p>[太阳系示意图占位符]</p></div>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">二、日食和月食 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>(一) 日食:</strong> 月球在太阳和地球中间,挡住太阳光。发生在朔 (农历初一)。类型: 日偏食、日全食、日环食。过程: 初亏,食既,食甚,生光,复圆。从西边开始。最早记录: 中国《尚书》。</p>
+                            <div class="image-placeholder"><p>[日食成因示意图占位符]</p></div>
+                            <p><strong>(二) 月食:</strong> 地球在太阳和月球中间,月球被地球影子遮掩。发生在望 (农历十五前后)。类型: 月偏食、月全食、半影月食 (无环食)。最早记录: 美索不达米亚。张衡科学解释。</p>
+                            <div class="image-placeholder"><p>[月食成因示意图占位符]</p></div>
+                        </div>
+                    </details>
+                    <details class="mb-6">
+                        <summary class="text-xl flex justify-between items-center">三、地球 <span class="details-marker">▶</span></summary>
+                        <div class="p-4">
+                            <p><strong>(一) 地球的形状和大小:</strong> 扁球体 (梨状旋转体)。距太阳第三位,平均距离1.496亿千米 (1天文单位)。平均半径6371千米,赤道半径6378千米,赤道周长4万千米。</p>
+                            <p><strong>(二) 地球内部构造:</strong> 由内到外: 地核、地幔、地壳。</p>
+                            <div class="image-placeholder"><p>[地球内部构造图占位符]</p></div>
+                            <p><strong>(三) 板块运动:</strong> 1968年勒皮顺等创板块构造学说。六大板块: 亚欧、非洲、美洲、太平洋、印度洋、南极洲。板块交界处地壳活跃,多火山、地震、地热。</p>
+                            <div class="image-placeholder"><p>[世界六大板块图占位符]</p></div>
+                            <p><strong>(四) 地震:</strong></p>
+                            <p class="ml-4">1. 震级 (里氏震级,1-10级,每差1级能量差约30倍) 和烈度 (地面破坏程度)。</p>
+                            <div class="image-placeholder"><p>[地震构造示意图占位符]</p></div>
+                            <table class="min-w-full divide-y divide-gray-200 my-4">
+                                <thead class="bg-gray-50"><tr><th>烈度</th><th>级称</th><th>判据</th><th>相对震级</th></tr></thead>
+                                <tbody>
+                                    <tr><td>I</td><td>微震</td><td>只有仪器能记录</td><td>&lt;3</td></tr>
+                                    <tr><td>II</td><td>小震</td><td>室内个别静止中人有感</td><td>3.5</td></tr>
+                                    <tr><td>III</td><td>小震</td><td>少数人有感,仪器能记录到</td><td>4</td></tr>
+                                    <tr><td>IV</td><td>小震</td><td>摇晃,如重型车辆驶过。活动中人亦有感</td><td>4.5</td></tr>
+                                    <tr><td>V</td><td>中小地震</td><td>睡觉的人会惊醒:架上物品掉落</td><td>5</td></tr>
+                                    <tr><td>VI</td><td>中地震</td><td>树木摇动;老朽和危、劣房屋轻微损害</td><td>5.5</td></tr>
+                                    <tr><td>VII</td><td>中地震</td><td>房屋普遍掉土,墙裂,危、房屋倾倒</td><td>6</td></tr>
+                                    <tr><td>VIII</td><td>中地震</td><td>房屋破裂,烟囱倒,一般建筑严重破坏</td><td>6.5</td></tr>
+                                    <tr><td>IX</td><td>大地震</td><td>地裂,喷水、喷沙:水管撕裂;建筑物多数倒塌</td><td>7</td></tr>
+                                    <tr><td>X</td><td>大地震</td><td>地裂成渠,山崩滑坡:桥梁、水坝损坏;铁轨轻弯</td><td>7.5</td></tr>
+                                    <tr><td>XI</td><td>特大地震</td><td>很少建筑能保存;铁轨扭曲:地下管道破坏;水灾泛滥</td><td>8</td></tr>
+                                    <tr><td>XII</td><td>特大地震</td><td>全面破坏,地面起伏如波浪,大规模变形</td><td>≥8.5</td></tr>
+                                </tbody>
+                            </table>
+                            <p class="ml-4">2. 地震分类: 天然地震 (构造地震-最主、火山地震、塌陷地震), 诱发地震 (水库蓄水), 人工地震 (爆破)。</p>
+                            <p class="ml-4">3. 地震波: 地震体波 (纵波P, 横波S), 地震面波 (L波)。</p>
+                            <p class="ml-4">4. 地震自救: 切断电源气源,逃至室外空旷处。来不及则躲承重墙根/墙角、水管暖气管处。单元楼内选小开间卫生间、厨房、储藏室。</p>
+                            <p><strong>(五) 地球上的大气:</strong></p>
+                            <p class="ml-4">1. 大气垂直分层: 对流层 (天气现象,高度随纬度变化), 平流层 (天气晴朗,飞机理想飞行空间,含臭氧层), 高层大气 (含中间层-极光)。</p>
+                            <div class="image-placeholder"><p>[大气垂直分层示意图占位符]</p></div>
+                            <p class="ml-4">2. 臭氧层: 平流层一部分,吸收有害短波紫外线。“地球生命保护神”。破坏元凶: 氟利昂 (氯原子), 哈龙 (溴原子), 氮氧化物。</p>
+                            <p><strong>(六) 地轴、两级、赤道:</strong></p>
+                            <p class="ml-4">1. 地轴与两级: 地轴穿过地心,交地球表面于南北两极。北极指向北极星附近。</p>
+                            <p class="ml-4">2. 赤道: 分地球为南北半球,纬度0°,最长纬线,重力最小处。</p>
+                            <p class="ml-4">3. 地球公转轨道面 (黄道面) 与赤道面的交角 (黄赤交角,约23°26′) 及其影响: 四季变化。</p>
+                            <div class="image-placeholder"><p>[黄赤交角示意图占位符]</p></div>
+                            <p><strong>(七) 经线和纬线:</strong></p>
+                            <p class="ml-4">1. 经线 (子午线): 连接两极,示南北。0°经线 (本初子午线)。东西经各180°。180°经线为国际日期变更线基础。</p>
+                            <p class="ml-4">2. 纬线: 圆圈,示东西。赤道 (0°) 最长。南北回归线 (23°26′) 为热带与温带界。极圈 (66°34′) 为温带与寒带界。</p>
+                            <div class="image-placeholder"><p>[经纬网示意图占位符]</p></div>
+                            <p><strong>(八) 地球的公转:</strong> 环绕太阳运动。轨道为封闭曲线 (黄道)。地轴倾斜 (与黄道面交角66°34′) 且指向不变。</p>
+                            <div class="image-placeholder"><p>[地球公转与二分二至日晨昏线图、太阳直射点移动图占位符]</p></div>
+                            <p><strong>(九) 地球的自转:</strong> 自西向东。周期约23时56分4秒。意义: 昼夜交替,地方时差异 (经度差15°时差1小时), 时区划分 (24个,中国用东八区北京时间), 日界线。</p>
+                            <div class="image-placeholder"><p>[时区和日界线图占位符]</p></div>
+                            <p><strong>(十) 天气、气候与自然带:</strong></p>
+                            <p class="ml-4">1. 天气 (短时大气状态) 与气候 (长时平均状态)。</p>
+                            <p class="ml-4">2. 主要气候要素: 气温 (日变化、年变化、水平变化、垂直变化), 降水 (垂直降水-雨雪雹, 水平降水-霜露雾)。</p>
+                            <p class="ml-8">雨的类型: 对流雨 (赤道、夏季午后), 锋面雨 (长江梅雨), 地形雨 (迎风坡), 台风雨 (沿海)。</p>
+                            <table class="min-w-full divide-y divide-gray-200 my-4">
+                                <thead class="bg-gray-50"><tr><th>纬度带</th><th>气候类型</th><th>特点</th></tr></thead>
+                                <tbody>
+                                    <tr class="bg-emerald-50"><td rowspan="4">低纬度</td><td>热带雨林气候</td><td>全年高温多雨</td></tr>
+                                    <tr><td>热带草原气候</td><td>分干湿两季,夏季降水集中</td></tr>
+                                    <tr><td>热带沙漠气候</td><td>降水稀少,温度较高</td></tr>
+                                    <tr><td>热带季风气候</td><td>季风显著,夏季降水集中</td></tr>
+                                    <tr class="bg-emerald-50"><td rowspan="4">中纬度</td><td>亚热带季风气候</td><td>夏热湿、冬温干,四季分明</td></tr>
+                                    <tr><td>温带季风气候</td><td>冬冷干,夏暖湿</td></tr>
+                                    <tr><td>地中海气候</td><td>夏干热,冬温雨</td></tr>
+                                    <tr><td>温带海洋性气候</td><td>冬暖夏凉,年降水均匀</td></tr>
+                                     <tr><td></td><td>温带大陆性气候</td><td>夏季降水较多,季节鲜明,天气变化剧烈</td></tr>
+                                    <tr class="bg-emerald-50"><td>高纬度</td><td>寒带气候</td><td>全年严寒</td></tr>
+                                    <tr><td>(特殊)</td><td>高山气候</td><td>气温、降水随地势垂直变化</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="image-placeholder"><p>[世界气候类型分布图占位符]</p></div>
+                            <p class="mt-2 text-gray-700">（中国地理及世界地理详细内容见PDF，此处为节选框架）</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section id="exercises" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-4 border-b-2 border-emerald-500 pb-2">综合习题</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="example-box">
+                        <p class="font-medium">【习题】“压轴”是双曲术语。演压轴戏的一般都是戏班挂头牌的主要演员。在演出中,压轴戏一般是指( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 最后一个演出的剧目</li><li>B. 倒数第二个演出的剧目</li><li>C. 倒数第三个演出的剧目</li><li>D. 返场演出的剧目</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：B</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】美国医生海姆里克发明了“海姆里克急救法”,下列紧急情况适宜采用该急救法的是()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 呼吸道突然吸入异物</li><li>B. 突然性意识障碍</li><li>C. 缺血性脑卒中</li><li>D. 心脏骤停</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：A</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】某些智能头盔或眼镜能使佩戴者具有身临其境的沉浸感,具有与环境完善的交互作用能力,并有助于启发构思。这采用的技术是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. AR技术</li><li>B. VR技术</li><li>C. CR技术</li><li>D. MR 技术</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：B</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】第五代移动电话行动通信标准(5G),也称第五代移动通信技术。相对4G网络,其特点不包含( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 高可靠性</li><li>B. 毫秒级时延</li><li>C. 超高密度连接</li><li>D. 高耗能高效率</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：D</strong> (5G特点是低耗能)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】【多选】二维码目前广泛应用于网络浏览、下载、在线视频、网上购物和支付等场景。下列关于二维码的说法,正确的是()。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 二维码是一种比一维码更高级的条码格式</li><li>B. 彩色二维码包含的信息量大于黑白二维码</li><li>C. 扫描二维码不会感染病毒</li><li>D. 二维码具有存储量大、保密性高、成本便宜等特点</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：A, D</strong> (B不一定，C可能感染病毒)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】下列有关进化论内容的表述中,不正确的是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 个体是生物进化的基本单位</li><li>B. 隔离是物种形成的必要条件</li><li>C. 自然选择主导着进化的方向</li><li>D. 突变为生物提供材料</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：A</strong> (种群是生物进化的基本单位)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】稀土是一组典型的金属元素,被称为“万能之士”。下列关于稀土说法不正确的是( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A.“中国稀土之父”是徐光宪</li><li>B. 我国稀土矿产量居世界第一</li><li>C. 我国稀土存储量居世界第二</li><li>D. 稀土是关系尖端国防技术开发的关键性资源</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：C</strong> (我国稀土存储量也居世界第一)</p></div>
+                    </div>
+                     <div class="example-box">
+                        <p class="font-medium">【习题】【多选】2018年冬天,某地接连发生数起煤气中毒事故,共造成13人死亡,教训十分惨痛,引人警觉。应对煤气中毒,正确做法有()</p>
+                        <ul class="list-disc list-inside ml-4 my-1">
+                            <li>A. 觉察到自己煤气中毒时,应尽快打开门窗,迅速离开现场</li>
+                            <li>B. 觉察到自己煤气中毒已全身无力,要赶紧趴在地上,爬至门边或窗前,打开门窗呼救</li>
+                            <li>C. 发现他人煤气中毒,应立即打开门窗,将患者抬离现场</li>
+                            <li>D. 如煤气中毒者呼吸、心跳停止,应立即进行体外心脏按压和人工呼吸,并送往就医</li>
+                        </ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：A, B, C, D</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】关于物理学原理在实际生活中的运用,以下说法错误的是:</p>
+                        <ul class="list-disc list-inside ml-4 my-1">
+                            <li>A. 气压越高,沸点越低 高压锅能更快地煮好食物</li>
+                            <li>B. 冰刀作用于冰面的压力促使冰面融化 溜冰运动员能快速在冰面移动</li>
+                            <li>C. 凸面镜的视野比平面镜广阔———汽车前方两侧的后视镜是凸面镜</li>
+                            <li>D. 冷空气下沉————空调安装在房间上方</li>
+                        </ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：A</strong> (气压越高，沸点越高)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】下列关于医学知识的说法不正确的是( )。</p>
+                        <ul class="list-disc list-inside ml-4 my-1">
+                            <li>A. 砒霜在中医里可以入药</li>
+                            <li>B. 放疗中要使用放射线进行照射</li>
+                            <li>C. 针灸中的“灸”是指用针扎刺人体穴位</li>
+                            <li>D. 肝脏的主要功能之一是分解排除血液中的毒素</li>
+                        </ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：C</strong> (“灸”指用艾绒等熏灼穴位)</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】茶壶的壶盖上往往有个小孔,这种设计是为了( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1">
+                            <li>A. 使茶香得以散发</li>
+                            <li>B. 保持壶内外的气压平衡,便于更好的倒水</li>
+                            <li>C. 便于观察壶内水面的高度</li>
+                            <li>D. 透气散热,加快冷却</li>
+                        </ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：B</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】成年人中的夜盲症、脚气病、坏血病都属于营养缺乏症,缺少的营养物质依次是( )<br>①维生素B1②维生素C③维生素A④维生素D</p>
+                        <ul class="list-disc list-inside ml-4 my-1"><li>A. 132</li><li>B. 142</li><li>C. 312</li><li>D. 341</li></ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：C</strong> (夜盲症-VA(3), 脚气病-VB1(1), 坏血病-VC(2))</p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】日常生活中关于光现象的正确说法是( )</p>
+                        <ul class="list-disc list-inside ml-4 my-1">
+                            <li>A. 汽车后视镜用平面镜是为了扩大视野</li>
+                            <li>B. 夜间路灯下行人的倒影是光的反射现象</li>
+                            <li>C. 光从空气进入水中,传播方向一定改变</li>
+                            <li>D. 湖水的深度看上去比实际浅一些,其原因是发生了光的折射现象</li>
+                        </ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：D</strong></p></div>
+                    </div>
+                    <div class="example-box">
+                        <p class="font-medium">【习题】下列与生活相关的化学常识中,不正确的是()</p>
+                        <ul class="list-disc list-inside ml-4 my-1">
+                            <li>A. 为避免药物中的化学成分与金属锅发生反应,产生毒素或降低药效,在煎药时应使用瓦罐或陶瓷罐</li>
+                            <li>B. 因为草木中含有少量的碳酸钾,其水溶液成碱性,有一定的去污作用,所以可用草木灰清洗一些厨房用品</li>
+                            <li>C. 在五金商店买到的铁丝,上面往往镀有一种防腐的金属,它是锌</li>
+                            <li>D. 水壶,保温瓶和锅炉中水垢的主要成分是碳酸镁和氢氧化钙</li>
+                        </ul>
+                        <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                        <div class="explanation"><p><strong>答案：D</strong> (水垢主要成分是碳酸钙和氢氧化镁)</p></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Function to toggle visibility of explanation for exercises
+        function toggleExplanation(button) {
+            const explanationDiv = button.nextElementSibling;
+            if (explanationDiv.style.display === 'none' || explanationDiv.style.display === '') {
+                explanationDiv.style.display = 'block';
+                button.textContent = '隐藏答案与解析';
+            } else {
+                explanationDiv.style.display = 'none';
+                button.textContent = '显示答案与解析';
+            }
+        }
+
+        // DOM elements
+        const mainContentSections = document.querySelectorAll('main > section.content-section');
+        const allSidebarLinks = document.querySelectorAll('aside nav a.sidebar-link');
+        // Removed sidebarGroups as it's not used in the simplified sidebar structure
+        const bodyEl = document.body;
+        const menuButton = document.getElementById('menu-button');
+        
+        function showSection(sectionIdToShow) {
+            mainContentSections.forEach(section => {
+                section.classList.toggle('active', section.id === sectionIdToShow);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.innerWidth >= 768) { 
+                bodyEl.classList.add('sidebar-visible');
+                bodyEl.classList.remove('sidebar-globally-hidden');
+            } else {
+                bodyEl.classList.remove('sidebar-visible');
+                bodyEl.classList.add('sidebar-globally-hidden'); 
+            }
+
+            const hash = window.location.hash.substring(1);
+            let sectionToActivate = 'introduction'; 
+            let specificElementToScrollTo = null;
+
+            if (hash) {
+                const targetElementByHash = document.getElementById(hash);
+                if (targetElementByHash && targetElementByHash.classList.contains('content-section')) {
+                    sectionToActivate = hash; // If hash directly targets a main section
+                    specificElementToScrollTo = targetElementByHash;
+                } else if (targetElementByHash) { // If hash targets an element within a section (e.g. a details summary)
+                    const parentSection = targetElementByHash.closest('section.content-section');
+                    if (parentSection) {
+                        sectionToActivate = parentSection.id;
+                        specificElementToScrollTo = targetElementByHash;
+                    }
+                }
+            }
+            
+            showSection(sectionToActivate);
+
+            allSidebarLinks.forEach(link => {
+                const linkHrefId = link.getAttribute('href').substring(1);
+                // A link is active if its href matches the section to activate OR the specific hash (if it's a sub-element)
+                const isActive = linkHrefId === sectionToActivate || linkHrefId === hash;
+                link.classList.toggle('active', isActive);
+            });
+            
+            if (specificElementToScrollTo) {
+                // If the target is a details summary, its parent details element should be opened.
+                if (specificElementToScrollTo.tagName === 'SUMMARY') {
+                    specificElementToScrollTo.parentElement.open = true;
+                } else if (specificElementToScrollTo.tagName === 'DETAILS' && !specificElementToScrollTo.open) {
+                     // specificElementToScrollTo.open = true; // Let user open if they clicked a sub-topic link
+                }
+                setTimeout(() => { 
+                    specificElementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            } else if (document.getElementById(sectionToActivate)) { 
+                 setTimeout(() => {
+                    document.getElementById(sectionToActivate).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
+        });
+
+        allSidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                
+                let targetId = this.getAttribute('href').substring(1);
+                // All sidebar links now point directly to a content-section ID
+                let sectionToDisplayId = targetId; 
+                const targetElement = document.getElementById(targetId);
+                
+                allSidebarLinks.forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+
+                showSection(sectionToDisplayId);
+                window.location.hash = targetId; // Update hash to the section ID
+
+                if (targetElement) {
+                     setTimeout(() => { 
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 50); 
+                }
+                
+                if (window.innerWidth < 768 && bodyEl.classList.contains('sidebar-visible')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                     bodyEl.classList.add('sidebar-globally-hidden');
+                }
+            });
+        });
+        
+        menuButton.addEventListener('click', () => {
+            bodyEl.classList.toggle('sidebar-globally-hidden');
+            bodyEl.classList.toggle('sidebar-visible', !bodyEl.classList.contains('sidebar-globally-hidden'));
+        });
+        
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) { 
+                if (!bodyEl.classList.contains('sidebar-globally-hidden')) { 
+                    bodyEl.classList.add('sidebar-visible');
+                } else { 
+                    bodyEl.classList.remove('sidebar-visible');
+                }
+            } else { 
+                if (bodyEl.classList.contains('sidebar-globally-hidden')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                }
+            }
+        });
+
+        // This script handles the toggle markers for <details> elements within each section
+        document.querySelectorAll('details > summary').forEach(summary => {
+            const marker = summary.querySelector('.details-marker');
+            const detailsElement = summary.parentElement;
+            
+            if (marker) { // Initial state for markers within sections
+                 marker.style.transform = detailsElement.open ? 'rotate(90deg)' : 'rotate(0deg)';
+            }
+
+            detailsElement.addEventListener('toggle', function() {
+                if (marker) {
+                    marker.style.transform = this.open ? 'rotate(90deg)' : 'rotate(0deg)';
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
