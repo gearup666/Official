@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>言语理解与表达互动学习网页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: padding-left 0.3s ease-in-out; /* For sidebar toggling */
+        }
+        .content-section {
+            scroll-margin-top: 70px; 
+            display: none; /* Hidden by default, shown by JS */
+        }
+        .content-section.active {
+            display: block;
+        }
+        details > summary {
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            background-color: #0369a1; /* sky-700 */
+            color: white;
+            border-radius: 0.375rem 0.375rem 0 0; /* rounded-t-lg */
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            list-style: none; 
+        }
+        details > summary::-webkit-details-marker {
+            display: none; 
+        }
+        details > summary:hover {
+            background-color: #0284c7; /* sky-600 */
+        }
+        details[open] > summary {
+            background-color: #0284c7; /* sky-600 */
+        }
+        .key-point {
+            background-color: #e0f2fe; /* sky-100 */
+            border-left: 4px solid #0ea5e9; /* sky-500 */
+            color: #0369a1; /* sky-700 */
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0 0.375rem 0.375rem 0; /* rounded-r-lg */
+        }
+        .example-box {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* shadow-md */
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .explanation {
+            display: none;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background-color: #f0f9ff; /* sky-50 */
+            border: 1px solid #bae6fd; /* sky-200 */
+            border-radius: 0.375rem; /* rounded-md */
+        }
+        .highlight {
+            background-color: #fef9c3; /* yellow-200 */
+            padding: 0.125rem 0.25rem; /* px-1 */
+            border-radius: 0.125rem; /* rounded-sm */
+        }
+        .btn {
+            background-color: #0ea5e9; /* sky-500 */
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem; /* rounded-md */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0284c7; /* sky-600 */
+        }
+        
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+            height: calc(100vh - 4rem); 
+            transform: translateX(-100%); /* Hidden by default on all screens initially */
+            width: 18rem; /* w-72 */
+        }
+        main {
+            transition: margin-left 0.3s ease-in-out;
+            width: 100%; /* Takes full width when sidebar is hidden */
+            margin-left: 0;
+        }
+
+        /* Sidebar visible states */
+        body.sidebar-visible #sidebar {
+            transform: translateX(0);
+        }
+        body.sidebar-visible main {
+           margin-left: 18rem; /* w-72 */
+        }
+        /* On larger screens, sidebar is visible by default unless body.sidebar-globally-hidden is set */
+         @media (min-width: 768px) { /* md breakpoint */
+            body:not(.sidebar-globally-hidden) #sidebar {
+                transform: translateX(0);
+            }
+            body:not(.sidebar-globally-hidden) main {
+                margin-left: 18rem; /* w-72 */
+            }
+            /* When globally hidden on desktop */
+            body.sidebar-globally-hidden #sidebar {
+                transform: translateX(-100%);
+            }
+            body.sidebar-globally-hidden main {
+                margin-left: 0;
+            }
+        }
+
+
+        .sidebar-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            color: #e0f2fe; /* sky-100 */
+            text-decoration: none;
+            border-radius: 0.375rem; /* rounded-md */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #0ea5e9; /* sky-500 */
+            color: white;
+        }
+        .sidebar-link.sub-link {
+            padding-left: 2rem;
+            font-size: 0.875rem; /* text-sm */
+        }
+        .sidebar-group .sub-links {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .sidebar-group .sub-links.open {
+            max-height: 1000px; /* Increased max-height for more sub-items */
+        }
+        .toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 0.8em;
+        }
+         .details-marker { /* For details/summary arrow in main content */
+            font-size: 0.8em;
+            margin-left: 0.5rem;
+        }
+    </style>
+
+</head>
+<body class="bg-slate-50">
+    <header class="bg-sky-700 text-white p-4 fixed w-full top-0 z-50 shadow-md flex justify-between items-center">
+        <button id="menu-button" class="p-2 rounded-md text-sky-200 hover:text-white hover:bg-sky-600">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </button>
+
+        <h1 class="text-xl font-bold absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">言语理解与表达知识点学习网页</h1>
+    </header>
+
+
+
+    <div class="flex pt-16">
+        <aside id="sidebar" class="bg-sky-800 text-white p-4 space-y-1 fixed top-16 left-0 z-40 overflow-y-auto">
+            <nav>
+                <a href="#introduction" class="sidebar-link">引言</a>
+                
+                <div class="sidebar-group">
+                    <a href="#chapter1" class="sidebar-link font-semibold">第一章 中心理解题 <span class="toggle-icon text-xs">▶</span></a>
+                    <div class="sub-links">
+                        <a href="#ch1_sec1" class="sidebar-link sub-link">第一节 绪论</a>
+                        <a href="#ch1_sec2" class="sidebar-link sub-link">第二节 有总有分类</a>
+                        <a href="#ch1_sec3" class="sidebar-link sub-link">第三节 提出对策类</a>
+                        <a href="#ch1_sec4" class="sidebar-link sub-link">第四节 并列结构类</a>
+                        <a href="#ch1_sec5" class="sidebar-link sub-link">第五节 微观把握复句</a>
+                    </div>
+                </div>
+                
+                <a href="#chapter2" class="sidebar-link font-semibold">第二章 标题填入题</a>
+                <a href="#chapter3" class="sidebar-link font-semibold">第三章 态度理解题</a>
+                <a href="#chapter4" class="sidebar-link font-semibold">第四章 道理启示题</a>
+                <a href="#chapter5" class="sidebar-link font-semibold">第五章 词句理解题</a>
+                <a href="#chapter6" class="sidebar-link font-semibold">第六章 提炼关键词</a>
+                
+                <div class="sidebar-group">
+                    <a href="#chapter7" class="sidebar-link font-semibold">第七章 语句填空题 <span class="toggle-icon text-xs">▶</span></a>
+                    <div class="sub-links">
+                         </div>
+                </div>
+
+                <a href="#chapter8" class="sidebar-link font-semibold">第八章 接语选择题</a>
+
+                <div class="sidebar-group">
+                    <a href="#chapter9" class="sidebar-link font-semibold">第九章 逻辑填空题 <span class="toggle-icon text-xs">▶</span></a>
+                     <div class="sub-links">
+                        <a href="#ch9_sec1" class="sidebar-link sub-link">第一节 绪论</a>
+                        <a href="#ch9_sec2" class="sidebar-link sub-link">第二节 合理假设</a>
+                        <a href="#ch9_sec3" class="sidebar-link sub-link">第三节 小心求证</a>
+                    </div>
+                </div>
+                <a href="#chapter10" class="sidebar-link font-semibold">第十章 细节判断题</a>
+                <a href="#chapter11" class="sidebar-link font-semibold">第十一章 语句排序题</a>
+                <a href="#chapter12" class="sidebar-link font-semibold">第十二章 篇章阅读题</a>
+                <a href="#practice2025" class="sidebar-link font-semibold">2025年国考(回忆)</a>
+                <a href="#practice2024" class="sidebar-link font-semibold">2024年国考(回忆)</a>
+                <a href="#answers" class="sidebar-link font-semibold">讲义答案汇总</a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-6">
+            <section id="introduction" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">引言</h2>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <p class="mb-3 text-gray-700 leading-relaxed">言语理解与表达主要考察对母语的“正确理解与恰当表达”。</p>
+                    <div class="key-point">
+                        <h4 class="font-semibold text-lg mb-2">正确理解：</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>避免单纯依赖“语感”或机械套用技巧。</li>
+                            <li>树立“逻辑思维”，理解每句话的作用和材料的谋篇布局。</li>
+                            <li>熟悉机关语言体系的规范、严谨特点。</li>
+                        </ul>
+                    </div>
+                    <div class="key-point mt-4">
+                        <h4 class="font-semibold text-lg mb-2">恰当表达：</h4>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>结合语境逻辑，而非单纯依赖词汇量。</li>
+                            <li>通过研究真题积累词汇和辨析近义词。</li>
+                            <li>将阅读理解和表达统一学习，提高效率。</li>
+                        </ul>
+                    </div>
+                    <p class="mt-4 text-sm text-gray-600">本资料旨在帮助同学们打下坚实的言语基础，通过逻辑分析和适当积累，掌握解题方法。</p>
+                </div>
+            </section>
+
+            <section id="chapter1" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">第一章 中心理解题</h2>
+                <details id="ch1_sec1" class="mb-6 content-section-details" open> 
+                    <summary class="text-xl flex justify-between items-center">第一节 绪论 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point">
+                            <h4 class="font-semibold">提问方式：</h4>
+                            <p>“这段文字主要/旨在/重在/意在/想要说明(论述、强调)的是…”</p>
+                            <p>“这段文字的主旨/主题/观点是…”</p>
+                            <p>“对这段文字概括最恰当的一项是…”</p>
+                        </div>
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">一、关联词套用，重点在哪儿？</h4>
+                        <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>可能多数人都会认为, 我们的五官是感知外部世界的窗口, 五官感觉非常真实而精确地反映着外部世界的现实。 <span class="highlight">殊不知</span>, 我们信赖有加的感官事实上也会“欺骗”我们, 我们所感知的有可能并非真实世界的反映, 各种感官知觉, 特别是视觉, 有时只是大脑的幻觉和虚构。加拿大不列颠哥伦比亚大学心理学家罗恩·雷恩辛克指出,“你的体验在很大程度上是大脑活动的产物, 大脑通过眼睛来获取视觉信息, 但这并不是现实的直接反映。”</p>
+                            <p class="mt-2"><strong>这段文字意在:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 介绍加拿大不列颠哥伦比亚大学心理学家的研究成果</li><li>B. 批驳普遍存在的关于“感知”的错误认识</li><li>C. 揭示我们信赖有加的感官事实上一直在“欺骗”我们</li><li>D. 说明我们所感知的有可能并非真实的世界</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p><p><strong>解析：</strong>文段通过转折关联词“殊不知”引出重点，即我们的感官可能会“欺骗”我们，我们所感知的并非真实世界。后文心理学家的观点是对这一核心意思的进一步佐证。D选项准确概括了文段的核心观点。</p></div>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例2:</p>
+                            <p>中国传统观念认为, 中药就是模糊的概念, 药材种植条件不同, 质量、药效就存在差异。 <span class="highlight">但事实上</span>, 中药的某些参数是可以人为控制的。以德国产的银杏黄为例, 尽管原材料银杏也是从中国各地收取的, 原材料本身存在差异, 但通过德国的技术萃取之后, 产品质量最终是统一的。 <span class="highlight">这也意味着</span>, 后期生产加工工艺对于原材料本身存在的差异具有一定的缓冲作用。</p>
+                            <p class="mt-2"><strong>这段文字说明了:</strong></p>
+                             <ul class="list-disc list-inside ml-4"><li>A. 中药受原材料质量差异的影响在一定程度上可以通过技术控制</li><li>B. 中国中药药材不如国外的质量好</li><li>C. 中药的质量存在很大的差异性</li><li>D. 德国技术萃取之后的药材质量更好</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p><p><strong>解析：</strong>文段首先提出传统观念，然后用“但事实上”进行转折，指出中药参数可控。通过德国银杏黄的例子论证了技术可以统一产品质量。最后一句“这也意味着”总结了观点，即后期生产加工工艺能缓冲原材料差异。A选项是对这一核心观点的准确概括。</p></div>
+                        </div>
+                        <h4 class="text-lg font-semibold mt-6 mb-2 text-sky-600">二、作者带情绪（反问、假设等），重点是什么？</h4>
+                         <div class="example-box">
+                            <p class="font-medium">例3:</p>
+                            <p>作为整体, 中国在世界上举足轻重; 但作为个人, 不少中国人还觉得自己一无所有。国家之强和个人之弱使一些人心理失衡, 觉得自己活得还是像在半殖民地时代受人家欺负的受害者。 <span class="highlight">如果我们对自己生存的状态缺乏理性的认识, 无法克服狭隘的“受害者情绪”, 那么崛起的中国将难以担当与自己的国际地位相称的责任。</span></p>
+                            <p class="mt-2"><strong>这段话谈论的核心意思是:</strong></p>
+                             <ul class="list-disc list-inside ml-4"><li>A. 中国急需提高国民的个人地位</li><li>B. 中国人需要调整自己的心理状态</li><li>C. 中国人为什么有“受害者情结”</li><li>D. 崛起的中国要承担相应的国际地位</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p><p><strong>解析：</strong>文段末句通过假设反面论证，指出如果不能克服“受害者情绪”，中国将难以担当相应责任。这反过来强调了克服这种情绪、调整心理状态的重要性。B选项准确抓住了这一核心。</p></div>
+                        </div>
+                         <div class="example-box">
+                            <p class="font-medium">例4:</p>
+                            <p>据悉, 一只成熟的母鼠大约20天左右就繁殖一次, 一胎少的可生六七只、多则十来只小老鼠。而一只小老鼠出生1.5-2.5个月就可达到性成熟, 具备繁殖能力。 <span class="highlight">有趣的是</span>, 科学家们发现, 老鼠具有“计划生育”的功能。当一个地区老鼠的总量较多时, 老鼠会减缓其繁殖频率, 而在老鼠较少或人们大举灭鼠后, 它们会加快繁殖力度, 使老鼠快速地成倍增长。</p>
+                            <p class="mt-2"><strong>这段文字的主旨是:</strong></p>
+                             <ul class="list-disc list-inside ml-4"><li>A. 老鼠的寿命短, 因此生育周期也短</li><li>B. 老鼠中存在着生育数量自我调节现象</li><li>C. 老鼠的繁殖能力惊人, 危害性很大</li><li>D. 老鼠的繁殖能力取决于外界环境因素</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p><p><strong>解析：</strong>文段在介绍了老鼠的基本繁殖能力后，用“有趣的是”引出科学家的新发现，即老鼠具有“计划生育”功能，能根据种群数量调节繁殖频率。这正是文段的核心内容。B选项准确概括了这一点。</p></div>
+                        </div>
+                        <h4 class="text-lg font-semibold mt-6 mb-2 text-sky-600">三、做事儿比空谈更重要！(提对策、行动)</h4>
+                        <div class="example-box">
+                            <p class="font-medium">例5 (2018国考):</p>
+                            <p>目前, 国内的多家快递企业开始尝试拓展无人机送货业务, 这样既能缓解地面交通拥堵, 又能提高快递企业运营效率。但是, 自无人机技术应用以来, 安全事故屡屡发生。无人机在快递业的大规模应用, 还可能对空管秩序造成极大冲击。特别是引入人工智能的无人机技术, 逐渐摆脱了人工干预, 而且还会随着“经验”的不断积累, 优化自己的飞行路线。一旦对其监管落实不到位, 极有可能产生不堪设想的后果。 <span class="highlight">对此, 我们应采取切实有效的措施, 最大限度地发挥人工智能在无人机领域的优势, 防止其可能产生的社会危害。</span></p>
+                            <p class="mt-2"><strong>这段文字意在说明:</strong></p>
+                             <ul class="list-disc list-inside ml-4"><li>A. 无人机的广泛应用需技术和监管共同发力</li><li>B. 引入人工智能的无人机技术潜在风险更大</li><li>C. 快递企业引入无人机业务的时机尚不成熟</li><li>D. 发展人工智能需要更多地考虑其安全隐患</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p><p><strong>解析：</strong>文段在分析了无人机送货的优势和潜在风险后，最后一句明确提出了对策：“对此，我们应采取切实有效的措施...”。这个措施旨在“最大限度地发挥...优势，防止...社会危害”，这表明需要技术发展和有效监管两方面共同努力。A选项是对策的概括。</p></div>
+                        </div>
+                        <div class="key-point mt-6"><h4 class="font-semibold">【知识链接】中心理解题 - 总体思路</h4><ol class="list-decimal list-inside space-y-1"><li>抓住文段的论述对象（核心话题）。</li><li>分析句间关系，找到表达核心观点的句子（中心句）。</li></ol><h4 class="font-semibold mt-3">中心理解题 - 具体操作</h4><ol class="list-decimal list-inside space-y-1"><li>关注文段的开头、结尾，以及重要的关联词。</li><li>排除干扰选项：过于片面、无中生有、偏离主题、非重点等。</li></ol></div>
+                    </div>
+                </details>
+                <details id="ch1_sec2" class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">第二节 有总有分类 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point"><h4 class="font-semibold">【知识链接】</h4><p><strong>总句：</strong>得出观点或对策的句子。</p><ul class="list-disc list-inside ml-4"><li>形式：常在段首、段尾，或由总结性关联词引出。</li><li>内容：概括性强，点明主旨。</li></ul><p class="mt-2"><strong>分句：</strong>服务于观点（观点的引出、观点的论证）的句子。</p><p class="mt-2"><span class="highlight">总句更重要，分句服务于总句。</span></p></div>
+                        <div class="example-box">
+                            <p class="font-medium">例:</p>
+                            <p>当数字化智能化时代到来之后, 将会出现比现在的马云更能“云”的公司。 <span class="highlight">那个时候的公司, 将在坚守其经济属性的基础上, 更加突出其社会属性, 呈现出社会组织的突出特征。</span>因为, 互联网、数字化、云计算、移动终端等技术, 一方面为企业赋能, 让企业强大; 另一方面也为消费者赋能, 让消费者大联合。如果公司不突出社会属性, 全心全意为消费者服务, 它就无法持续“经济”下去。比如, 一位消费者发现自己购买的汽车有“天然”缺陷, 制造企业就会把同类车召回, 否则, 消费者就可能不再买它的任何一款车。</p>
+                            <p class="mt-2"><strong>这段文字意在说明:</strong></p>
+                             <ul class="list-disc list-inside ml-4"><li>A. 数字化智能化时代将改变公司的基本属性</li><li>B. 社会属性是公司在未来必须凸显的一种特质</li><li>C. “全心全意为消费者服务”是公司社会属性的核心内容</li><li>D. 智能化极大地提高了广大消费者团结的可能性</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p><p><strong>解析：</strong>文段第二句是总句，提出了核心观点：“那个时候的公司...更加突出其社会属性...”。后面的内容（“因为”引导原因解释，“比如”引导举例论证）都是围绕这个总句展开的分句，论证了为什么社会属性重要。B选项是对总句的准确概括。</p></div>
+                        </div>
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">一、分句类型：背景引入</h4>
+                        <div class="key-point"><p><strong>标志：</strong>伴随状语（随着……）、时间状语（近年来……）、下定义（……是指……）等。</p><p><strong>作用：</strong>作为背景铺垫，引出观点。</p><p><strong>要点：</strong>背景本身非重点，重点在于背景之后引出的观点或问题。</p></div>
+                         <div class="example-box">
+                            <p class="font-medium">例1 (背景引入):</p>
+                            <p><span class="highlight">随着通讯技术的进步, 当今社会, 政府执政的舆论环境已发生了明显的变化</span>... <span class="highlight">在这样的背景下, 政府对“舆情危机”的处理需要改变以往被动方式...</span></p>
+                            <p class="mt-2"><strong>对这段文字概括最准确的是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 说明政府在新舆论环境下有必要转变应对方式</li><li>B. 对比不同时期政府舆论宣传的客观环境与方式</li><li>C. 剖析政府执政的舆论压力不断增大的外在原因</li><li>D. 分析通讯技术发展与舆论环境变化之间的关系</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p><p><strong>解析：</strong>文段开头用“随着通讯技术的进步”引出背景，核心在于“在这样的背景下”引出的对策句。A选项准确概括了这一核心对策。</p></div>
+                        </div>
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">二、分句类型：举例论证</h4>
+                        <div class="key-point"><p><strong>标志：</strong>比如、例如、以……为例；具体的人名、地名、机构名、书名、年份等。</p><p><strong>作用：</strong>用具体事例来证明、阐述总句的观点，使其更具说服力、更易理解。</p><p><strong>要点：</strong>例子本身不是重点，重点是例子所证明的观点（通常在例子前后）。</p></div>
+                        <div class="example-box">
+                            <p class="font-medium">例1 (举例论证):</p>
+                            <p>肉食悖论指的是...研究者发现,人们通过一种被称为“语言伪装”的方法...来消除这种认知失调。<span class="highlight">例如</span>,我们提到肉时不直接说动物的名称...</p>
+                            <p class="mt-2"><strong>这段文字主要说明:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. “语言伪装”是人类自欺欺人的表现</li><li>B. 日本人对植物的热爱超过动物</li><li>C. 文化因素是消解肉食悖论的关键</li><li>D. “语言伪装”有助于克服认知失调</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p><p><strong>解析：</strong>文段首先解释了“肉食悖论”，然后指出人们通过“语言伪装”来消除认知失调。后文的“例如”部分是用具体例子来说明什么是“语言伪装”以及它是如何运作的。因此，文段的核心是说明“语言伪装”的作用。D选项准确概括了这一点。</p></div>
+                        </div>
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">三、分句类型：原因解释</h4>
+                        <div class="key-point"><p><strong>标志：</strong>因为、由于、原因是、之所以...是因为...等。</p><p><strong>作用：</strong>解释说明总句观点提出的原因或理由。</p><p><strong>要点：</strong>原因本身服务于观点，观点是重点。有时“果”是重点，有时“因”也可能是强调的内容，需结合上下文判断。</p></div>
+                        <div class="example-box">
+                            <p class="font-medium">例1 (原因解释):</p>
+                            <p>人们越来越意识到,相对于动画片,图书对儿童理解能力和情感能力的培养更为基础。<span class="highlight">因为</span>动画片通过快速变换的画面呈现故事,不仅会伤害儿童尚未发育成熟的视力,而且更重要的是会压抑儿童的想象力...</p>
+                            <p class="mt-2"><strong>这段文字意在说明:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 儿童对图书的兴趣要胜过文字</li><li>B. 动画片是幼儿想象力的“杀手”</li><li>C. 图书比动画片更有利于儿童的心智成长</li><li>D. 培养理解力和想象力是儿童教育的关键</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p><p><strong>解析：</strong>文段首句提出观点：图书对儿童培养更基础。随后用“因为”引导解释原因，说明动画片对儿童视力和想象力的不利影响，反衬出图书的优势。C选项是对首句观点的准确概括。</p></div>
+                        </div>
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">四、分句类型：正反论证</h4>
+                        <div class="key-point">
+                            <p><strong>标志：</strong>正面论证: 如果/一旦/倘若 + 观点 → 就会 + (积极影响、意义); 反面论证: 如果不/一旦不/倘若不 + 观点 → 那么/否则/反之 + (消极影响、危害)</p>
+                            <p><strong>作用：</strong>通过正反两方面对比，强调观点的正确性、必要性或重要性。</p>
+                            <p><strong>要点：</strong>正反论证都是为了突出作者所支持的观点。反面论证的弦外之音即为作者的正面观点。</p>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例1 (正反论证):</p>
+                            <p>社会重视老年工作...这自然是对的, <span class="highlight">但同时还需要关注老年人自己还能做什么</span>。发现、发掘老年人自己还能做什么...不仅可以增加老年人对社会、家庭的贡献...更有利于老年人身心愉快,健康长寿。</p>
+                            <p class="mt-2"><strong>这段文字意在说明:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 老年工作的重点是帮助老年人解决他们做不了的事情</li><li>B. 关注老年人更应当组织引导老年人实现老有所为</li><li>C. 老年人实现老有所为可以减轻社会家庭负担,利于长寿</li><li>D. 组织引导老年人做些力所能及的事可以帮助其树立生活信心</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p><p><strong>解析：</strong>文段首先肯定了帮助老年人解决困难的重要性，然后用“但同时还需要”转折，引出更应关注的方面——“老年人自己还能做什么”，并阐述了这样做的好处。这是一种从正面强调“老有所为”重要性的论证。B选项准确概括了这一核心观点。</p></div>
+                        </div>
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">五、分句类型：观点援引</h4>
+                        <div class="key-point">
+                            <p><strong>标志：</strong>某人说、某某认为、研究表明、俗话说、古人云等。</p>
+                            <p><strong>作用：</strong>引出作者观点或论证作者观点。</p>
+                            <p><strong>要点：</strong>需辨别援引的观点是否为作者的最终观点。若作者在援引后有明确表态（赞同、反对、补充），则作者表态是重点。</p>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例1 (观点援引):</p>
+                            <p>美国著名学者伊顿曾预言:“我们深信,在不久的将来,我们国家的最高经济利益,将主要取决于我们同胞的创造才智,而不取决于自然资源。“ <span class="highlight">伊顿的预言在今天已经变为现实。</span>金融危机...国民的创新能力得到许多国家前所未有的重视。</p>
+                            <p class="mt-2"><strong>这段文字意在强调:</strong></p>
+                             <ul class="list-disc list-inside ml-4"><li>A. 人力资源将在经济增长中发挥越来越多的作用</li><li>B. 自然资源在国家发展中的重要性将逐步降低</li><li>C. 国家要发展必须充分发挥国民的创造能力</li><li>D. 国民素质的高低将决定国家未来发展的方向</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p><p><strong>解析：</strong>文段首先援引伊顿的预言，强调创造才智的重要性。随后作者明确表态“伊顿的预言在今天已经变为现实”，并通过当前形势（金融危机等）进一步论证国民创新能力的重要性。C选项是对作者所强调观点的准确概括。</p></div>
+                        </div>
+                    </div>
+                </details>
+                <details id="ch1_sec3" class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">第三节 提出对策类 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point"><h4 class="font-semibold">【知识链接】</h4><p><strong>对策：</strong>为了解决问题或达到某种目的而采取的处理办法。</p><p class="mt-2"><span class="highlight">对策是文段的核心和重点，通常是答案所在。</span></p></div>
+
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">一、文段直接给出对策</h4>
+                        <div class="key-point"><p><strong>典型标志词：</strong>应该、应当、必须、需要、亟待、亟需、务必、要、关键在于、重要的是、最根本的是、措施是、途径是等。</p><p><strong>做题要点：</strong>直接定位含有标志词的对策句。正确选项通常是对策句的同义替换或精炼概括。</p></div>
+                        <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>作为社会的中坚力量, 高收入者往往创富能力强...理应为社会承担更多的社会责任。以税收来调节过高收入, 是维护社会公平正义的客观需要。 <span class="highlight">因此, 完善个税制度, 首先必须“盯紧"高收入者。既需要...又必须...同时, 还必须...</span></p>
+                            <p class="mt-2"><strong>这段文字主要支持的一个观点是:</strong></p>
+                             <ul class="list-disc list-inside ml-4"><li>A. 高收入者是社会的中坚力量</li><li>B. 高收入者生活受资金制约影响小</li><li>C. 完善个税制度, 调节过高收入</li><li>D. 加大对偷税漏税行为的惩处</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p><p><strong>解析：</strong>文段由“因此”引导出核心对策——“完善个税制度，首先必须‘盯紧’高收入者”。后续内容是完善个税制度的具体做法。C选项“完善个税制度，调节过高收入”是对核心对策及其目的的准确概括。</p></div>
+                        </div>
+
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">二、文段通过反面论证给出对策</h4>
+                         <div class="key-point"><p><strong>典型标志词：</strong>如果/倘若/一旦 + (错误做法/消极情况) → 则/那么/否则/反之 + (消极影响/危害)。</p><p><strong>做题要点：</strong>正确答案通常是反面论证所描述的消极情况的反面，即应该怎么做。</p></div>
+                         <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>在大家眼中“挣钱多, 说话少, 疯狂加班”的程序员们, 终于发声...“996”...这本身就表明了问题的严重性和紧迫性。 <span class="highlight">某些互联网企业如还不肯觉醒, 及早调整, 也许会失去更多宝贵的发展资源与进步良机。</span></p>
+                            <p class="mt-2"><strong>这段文字意在强调:</strong></p>
+                             <ul class="list-disc list-inside ml-4"><li>A. 加班成为程序员们无奈的选择</li><li>B. 互联网企业员工开始抵制加班</li><li>C. 互联网企业应高度重视加班问题</li><li>D. “996 成为了当前的热门话题</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p><p><strong>解析：</strong>文段最后一句通过反面论证，“如还不肯觉醒，及早调整，也许会失去...”表明作者的意图是强调互联网企业应该觉醒、调整，即高度重视加班问题。C选项是对这一隐含对策的准确概括。</p></div>
+                        </div>
+
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">三、文段提出问题（分析问题），未提出对策</h4>
+                        <div class="key-point"><p><strong>典型标志：</strong>文段详细描述一个或多个问题，分析其原因、表现或危害，但并未明确给出解决手段。</p><p><strong>做题要点：</strong>作者意在呼吁解决问题或引起对问题的重视。正确选项可能是对问题的概括，或引申出“需要解决该问题”、“应重视该问题”等呼吁性表述。</p></div>
+                        <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>政府采购作为公共财政管理的一项重要制度安排...采购部门不从价格上把关, 便违背了制度的初衷... <span class="highlight">政府采购谁来监督一直是采购制度的软肋所在...</span></p>
+                            <p class="mt-2"><strong>这段文字意在强调:</strong></p>
+                             <ul class="list-disc list-inside ml-4"><li>A. 政府采购制度的初衷是防止腐败</li><li>B. 政府采购需要在相关监督下进行</li><li>C. 采购需求的不合理导致政务腐败</li><li>D. 政府采购中存在大量的违规行为</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p><p><strong>解析：</strong>文段指出了政府采购中存在的问题，并点明“政府采购谁来监督一直是采购制度的软肋所在”。这暗示了解决问题的方向在于加强监督。B选项“政府采购需要在相关监督下进行”是对这一隐含对策的准确表述。</p></div>
+                        </div>
+                    </div>
+                </details>
+                <details id="ch1_sec4" class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">第四节 并列结构类 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point"><h4 class="font-semibold">【知识链接】</h4><p><strong>理论要点：</strong>正确选项：全面概括各并列方面 / 提取共性。错误选项：表述片面 / 无中生有。</p><p class="mt-2"><strong>文段特征：</strong>句与句之间，或段与段之间是并列关系。常使用并列关联词（如：也、又、同时、此外、一方面...另一方面...；顿号、分号）。各部分地位平等，没有主次之分。</p></div>
+                        <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>《史记》的生命力源于历代读者对它的接受。它作为一条文化链...汉魏六朝是传播和初步研究时期... <span class="highlight">《史记》的生命力还来源于其世界性的传播与研究</span>: 在日本...在欧美国家...</p>
+                            <p class="mt-2"><strong>这段文字主要介绍了:</strong></p>
+                             <ul class="list-disc list-inside ml-4"><li>A. 《史记》的传播过程</li><li>B. “史记学”的独特魅力</li><li>C. 《史记》受重视的原因</li><li>D. 《史记》生命力的来源</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p><p><strong>解析：</strong>文段第一句提出《史记》的生命力源于读者接受。接着分别从国内（形成“史记学”并发展）和国际（世界性传播与研究）两个方面阐述其生命力的来源。D选项“《史记》生命力的来源”是对这两个并列方面的全面概括。</p></div>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例3:</p>
+                            <p>青霉素被发现以前,细菌是人类历史上制造肺炎、伤寒、痢疾、肺结核等疾病的最强大杀手。<span class="highlight">50多年前</span>,人类身体内部拥有包括细菌在内的巨大的微生物群落的概念才开始流传。人们逐渐尝试认识,我们体内的这些定居者们究竟如何与我们互动?在敌对之外,我们与这些定居者们是否还存在另一种亲密关系?<span class="highlight">而现在</span>,学术界流行的是“我们只有10%是人类”的说法,指每10个构成人体的细胞中,就有9个是搭便车的细菌。人体微生物已经成为热门话题,攻占了顶尖学术期刊的无数版面。</p>
+                            <p class="mt-2"><strong>对这段文字概括最恰当的一项是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 学界对细菌的研究已达到了高峰</li><li>B. 细菌对人体的作用不能一概而论</li><li>C. 多年来人类对细菌的认识一直存在误区</li><li>D. 人们对人类与细菌关系的认识不断更新</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p><p><strong>解析：</strong>文段通过时间线索（“青霉素被发现以前”、“50多年前”、“而现在”）展现了人类对细菌及其与人体关系的认识的演变过程：从视细菌为强大杀手，到认识到体内微生物群落的存在并探究互动关系，再到现在认识到人体微生物的普遍性。这体现了认识的不断更新和深化。D选项准确概括了这一核心内容。</p></div>
+                        </div>
+                    </div>
+                </details>
+                <details id="ch1_sec5" class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">第五节 微观把握复句 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point"><h4 class="font-semibold">【转折关系】</h4><p><strong>常用格式：</strong>虽然...但是... / 尽管/固然/虽说...可是/不过/然而/却...；其实；事实上，实际上；殊不知。</p><p><strong>重点：</strong><span class="highlight">转折之后的内容往往是重点。</span></p></div>
+                        <div class="key-point mt-3"><h4 class="font-semibold">【因果关系】</h4><p><strong>常用格式：</strong>因为...所以... / 由于...因此...；可见、因而、之所以...是因为...。</p><p><strong>重点：</strong><span class="highlight">通常“果”是重点。</span></p></div>
+                        <div class="key-point mt-3"><h4 class="font-semibold">【必要条件关系】</h4><p><strong>常用格式：</strong>只有...才... / 除非...才...；通过...才能...。</p><p><strong>重点：</strong><span class="highlight">条件是重点，强调其不可或缺性。</span></p></div>
+                        <div class="key-point mt-3"><h4 class="font-semibold">【并列关系】</h4><p><strong>常用格式：</strong>同时、另外、此外、以及、“；”、既...又...。</p><p><strong>重点：</strong><span class="highlight">全面概括各方面，或寻找共性。</span></p></div>
+                        <div class="key-point mt-3"><h4 class="font-semibold">【递进关系】</h4><p><strong>常用格式：</strong>不但...而且... / 不仅...还...；更、甚至、特别是。</p><p><strong>重点：</strong><span class="highlight">递进之后的内容是强调的重点。</span></p></div>
+                         <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>目前我国生活垃圾最主要的构成部分是厨余垃圾... <span class="highlight">但</span>现阶段居民垃圾分类意识仍有待加强...国家<span class="highlight">不仅</span>应加大宣传力度, <span class="highlight">还</span>应... <span class="highlight">此外</span>, ...应尽快建立相应的法律制度...</p>
+                            <p class="mt-2"><strong>这段话意在强调:</strong></p>
+                             <ul class="list-disc list-inside ml-4"><li>A. 垃圾分类应从宣传教育和制度层面加以规范</li><li>B. 提高人们垃圾分类意识只需进行宣传教育即可</li><li>C. 学校和家庭是培养孩子文明习惯的重要场所</li><li>D. 国家应采取强制措施迫使居民进行垃圾分类</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p><p><strong>解析：</strong>文段首先通过“但”转折指出问题（垃圾分类意识有待加强）。接着，通过“不仅...还应...”提出宣传教育层面的对策，再通过“此外”引出制度层面的对策（建立法律制度、制定标准规范）。A选项准确概括了这两个核心对策层面。</p></div>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例4:</p>
+                            <p>中国接入国际互联网以来,互联网信息技术得到迅猛发展...取得了一批显著的成就...<span class="highlight">但应该看到</span>,与世界先进水平相比,我们还存在一定差距。目前世界局势波诡云谲,中国<span class="highlight">必须</span>掌握核心技术,在新时代才能避免受制于人,掌握我国互联网发展的主动权。</p>
+                            <p class="mt-2"><strong>这段文字意在说明:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 核心技术突破才是一个国家科技实力的彰显</li><li>B. 我们与世界先进水平之间依然存在一定差距</li><li>C. 互联网发展的主动权应掌握在我们自己手里</li><li>D. 新时代更需突破互联网核心技术这个“命门”</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p><p><strong>解析：</strong>文段先肯定了我国互联网技术的发展成就，接着用“但应该看到”转折，指出与世界先进水平的差距。最后一句用“必须”强调了掌握核心技术的重要性，以避免受制于人、掌握发展主动权。D选项“新时代更需突破互联网核心技术这个‘命门’”准确地概括了文段强调的核心观点和紧迫性。</p></div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <section id="chapter2" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">第二章 标题填入题</h2>
+                 <details class="mb-6 content-section-details" open> 
+                    <summary class="text-xl flex justify-between items-center">核心理论与解题技巧 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point"><h4 class="font-semibold">【提问方式】</h4><p>“最适合做该文段标题的是?” / “给这段文字加一个最恰当的标题是：”</p></div>
+                        <div class="key-point mt-3"><h4 class="font-semibold">【理论要点】</h4><p>标题是文段内容的“点睛之笔”，应具备：概括性、准确性、简洁性、揭示性。吸引性（次要）。</p></div>
+                        <div class="key-point mt-3"><h4 class="font-semibold">【解题思路与技巧】</h4><ol class="list-decimal list-inside ml-4 space-y-1"><li>通读文段，把握主旨。</li><li>寻找关键词/高频词。</li><li>关注中心句/主旨句。</li><li>注意文体特征（说明文、议论文、记叙文）。</li><li>排除法（过于宽泛/具体、无关/片面、细节）。</li><li>对比择优。</li></ol></div>
+                        <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>科学的发展总带给人类崭新的思维方式。比如, 在大数据背景下, 人类的许多行为都是可以被预测的...再比如, 日常生活中, 我们只能感知和意识到三维世界, 而超弦理论却把我们带进一个十维的宇宙世界...</p>
+                            <p class="mt-2"><strong>下列最适合做这段文字标题的是:</strong></p>
+                             <ul class="list-disc list-inside ml-4"><li>A. 独领风骚的数据科学</li><li>B. 未来世界的无限可能</li><li>C. 科学思维无所不在</li><li>D. 科学之光点亮思维</li></ul>
+                           <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p><p><strong>解析：</strong>文段首句即点明中心“科学的发展总带给人类崭新的思维方式”。随后通过大数据和超弦理论两个例子来具体阐述科学如何带来新的思维方式。D选项“科学之光点亮思维”最能概括这一核心内容，其中“科学之光”对应科学发展，“点亮思维”对应带来新的思维方式。</p></div>
+                        </div>
+                         <div class="example-box">
+                            <p class="font-medium">例2:</p>
+                            <p>蚁巢的防御策略包括堵塞、封闭巢穴洞口...尽管很多蚂蚁具有厚实的外骨骼铠甲...<span class="highlight">但是, 蚂蚁世界的防御中心是巢穴</span>, 这也是群体的最后防线...</p>
+                            <p class="mt-2"><strong>下列最适合做文章标题的是:</strong></p>
+                             <ul class="list-disc list-inside ml-4"><li>A. 巢穴：蚂蚁的终极防御</li><li>B. “全民皆兵”的蚂蚁</li><li>C. 蚂蚁的防御策略</li><li>D. 你所不知道的蚂蚁世界</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p><p><strong>解析：</strong>文段首先列举了一些蚂蚁的防御策略，然后用“但是”转折，强调“蚂蚁世界的防御中心是巢穴”，并进一步说明巢穴作为“最后防线”的重要性。A选项“巢穴：蚂蚁的终极防御”准确抓住了文段强调的核心——巢穴在蚂蚁防御中的中心和终极地位。</p></div>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例4:</p>
+                            <p>染色食品曝光后,许多人表示无法理解:食品色素仅仅是改变颜色,只有“悦目”的作用,为什么一定要染色呢? <span class="highlight">事实并非如此。</span>食物的颜色会改变人们对食物的味觉体验,进而影响对食物的选择。现代食品技术中有一个领域,就是专门研究食物的各种性质如何影响人们对食物的感受的...</p>
+                            <p class="mt-2"><strong>最适合做这段文字标题的是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 你不知道的食品添加剂</li><li>B. 食品色素背后的心理学</li><li>C. 哪些因素影响食物味道</li><li>D. 现代食品制作中的染色技术</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p><p><strong>解析：</strong>文段针对“食品色素仅仅是改变颜色”的普遍看法，用“事实并非如此”进行反驳，接着阐述了食物颜色如何通过影响味觉体验和选择，进而引出现代食品技术中研究食物性质如何影响感受的领域。这实际上是在探讨食品颜色（色素）与人的心理感受、选择之间的关系。B选项“食品色素背后的心理学”能较好地概括这一核心内容。</p></div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+            
+            <section id="chapter3" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">第三章 态度理解题</h2>
+                <details class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">核心理论与解题技巧 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point">
+                            <h4 class="font-semibold">【提问方式】</h4>
+                            <p>“通过这段话可知作者的观点是?” / “作者/某人支持的观点是?” / “作者/某人对……的态度是?” / “符合作者/某人意愿的一项是?”</p>
+                        </div>
+                        <div class="key-point mt-3">
+                            <h4 class="font-semibold">【理论要点】</h4>
+                            <ul class="list-disc list-inside ml-4 space-y-1">
+                                <li><strong>明确观点：</strong>作者通过明确的判断句、评论性词语或总结性语句直接表达态度。</li>
+                                <li><strong>隐含观点：</strong>作者的态度通过选词（褒贬色彩）、语气（感叹、反问）、举例倾向、对比等间接流露。</li>
+                                <li><strong>援引观点：</strong>区分作者是赞同、反对还是客观陈述他人观点。</li>
+                                <li><strong>常见态度词：</strong>积极、消极、肯定、否定、支持、反对、客观、中立、怀疑、担忧、乐观、悲观等。</li>
+                            </ul>
+                        </div>
+                        <div class="key-point mt-3">
+                            <h4 class="font-semibold">【解题技巧】</h4>
+                            <ol class="list-decimal list-inside ml-4 space-y-1">
+                                <li><strong>找准对象：</strong>明确题目问的是作者对“什么”的态度。</li>
+                                <li><strong>定位线索：</strong>寻找文段中能体现作者情感、评价或倾向性的词句（感情色彩词、关联词、特殊句式）。</li>
+                                <li><strong>区分作者与他人观点：</strong>注意“笔者认为”与“有人说”的区别。</li>
+                                <li><strong>整体把握：</strong>避免断章取义。</li>
+                                <li><strong>注意选项的精确度：</strong>选择最能准确反映作者态度强弱和方向的选项。</li>
+                            </ol>
+                        </div>
+                         <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>印象中, 文物给我的常是一种高冷、神秘、刻板、枯燥的印象... 尔后, 逐渐有一些机会听到收藏家回忆他们和某一文物相遇、相守的故事... 我便开始对文物有了新鲜的认识, 似乎还能感受到老物件的温度, 意识到原来“文”是中心,“物”只是载体; 收藏文物的目的就是传播文化, 而不是仅仅将其作为物品小心翼翼地收藏起来。</p>
+                            <p class="mt-2"><strong>根据这段文字, 下列哪项最好地阐明了作者对文物的看法?</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 睹物思人</li><li>B. 物尽其用</li><li>C. 超然物外</li><li>D. 寄情于物</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong> (PDF答案为D，但B也有合理性)</p><p><strong>解析：</strong>作者的看法从“高冷、刻板”转变为认识到文物承载文化、有“温度”。“寄情于物”强调情感与文化内涵。若侧重“传播文化”，则“物尽其用”(B)也相关。PDF答案为D，更侧重情感和文化核心。</p></div>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例2:</p>
+                            <p>中国人对虚拟现实技术及设备的兴趣也远远超过了西方人。这是为什么呢?...中国人似乎更容易适应原有逻辑被破坏掉的新生活方式...面对那些或许将改写生命与生活的本质的东西, 人类一味以审美的方式去享受其带来的眩晕感和魔幻感, <span class="highlight">这恐怕是比技术本身更令人惊惧的现象吧。</span></p>
+                            <p class="mt-2"><strong>对中国人在面对虚拟现实技术时的表现, 作者的态度是:</strong></p>
+                             <ul class="list-disc list-inside ml-4"><li>A. 欢欣鼓舞</li><li>B. 不置可否</li><li>C. 忧心忡忡</li><li>D. 嗤之以鼻</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p><p><strong>解析：</strong>文段末尾的反问句“这恐怕是比技术本身更令人惊惧的现象吧”以及“令人惊惧”一词，清晰地表达了作者对人类（包括中国人）在虚拟现实技术面前只顾享受而忽视潜在本质改变的担忧态度。C选项“忧心忡忡”最符合作者流露的情感。</p></div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <section id="chapter4" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">第四章 道理启示题</h2>
+                <details class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">核心理论与解题技巧 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point">
+                            <h4 class="font-semibold">【提问方式】</h4>
+                            <p>“这段文字给我们的启示是什么?” / “这个文段意在告诉人们?” / “这段文字告诉我们的道理是?”</p>
+                        </div>
+                        <div class="key-point mt-3">
+                            <h4 class="font-semibold">【理论要点】</h4>
+                            <ul class="list-disc list-inside ml-4 space-y-1">
+                                <li><strong>源于原文，高于原文：</strong>是对文段内容的升华和引申，具有普遍指导意义。</li>
+                                <li><strong>积极向上：</strong>通常蕴含积极的人生哲理、处世态度或工作方法。</li>
+                                <li><strong>针对性：</strong>往往是针对文段中反映的问题、现象或描述的成功/失败经验而提出的。</li>
+                                <li><strong>概括性：</strong>是对文段核心思想的进一步抽象和总结。</li>
+                            </ul>
+                        </div>
+                        <div class="key-point mt-3">
+                            <h4 class="font-semibold">【解题技巧】</h4>
+                            <ol class="list-decimal list-inside ml-4 space-y-1">
+                                <li><strong>理解文段主旨：</strong>把握核心内容和作者观点或事件结果。</li>
+                                <li><strong>分析文段类型：</strong>故事类（分析结局哲理）、现象评论类（分析原因影响，提炼态度做法）、成功/失败案例类（总结经验教训）。</li>
+                                <li><strong>排除干扰选项：</strong>排除仅复述原文、无关或相悖、过于绝对或片面、消极或不具指导意义的选项。</li>
+                                <li><strong>选择最具普遍性和指导性的选项。</strong></li>
+                            </ol>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>一只老钟对一只小钟说:“你一年要摆31536000下。"小钟吓坏了...另一只老钟笑着说:“不用怕, 并不难啊, 只要坚持每秒摆一下就可以了...”果然, 小钟很轻松地就摆了一下, 不知不觉一年过去了, 小钟已经摆了31536000下!</p>
+                            <p class="mt-2"><strong>这段文字给我们的启示是什么:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 坚持下去, 就可胜利</li><li>B. 化整为零, 圆梦更易</li><li>C. 不忘初心, 方得始终</li><li>D. 千里之行, 始于足下</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p><p><strong>解析：</strong>故事的核心在于老钟将一个看似庞大艰巨的任务分解为简单易行的小任务，帮助小钟轻松完成。这体现了“化整为零”的智慧。B选项“化整为零，圆梦更易”最能概括此道理。</p></div>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例3:</p>
+                            <p>无论导演还是监制,都是非常复杂的工种,经验的积累非常重要。没有经历过片场的摸爬滚打,在现场的执行能力就会有问题。因此,在一些电影产业成熟的国家,新人从学校毕业之后,要先在制片厂当学徒,从写剧本开始,再经过副导演、执行导演等环节,在各方面技能掌握齐全之后,最终成长为一名合格的导演,此后再“导而优则监”。</p>
+                            <p class="mt-2"><strong>下列哪句话最能概括这段文字所包含的道理?</strong></p>
+                             <ul class="list-disc list-inside ml-4"><li>A. 纸上得来终觉浅, 绝知此事要躬行</li><li>B. 书山有路勤为径, 学海无涯苦作舟</li><li>C. 天才是的1%天赋加99%的努力</li><li>D. 不想当将军的士兵不是好士兵</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p><p><strong>解析：</strong>文段强调了导演和监制工作需要经验积累，特别是片场实践的重要性，并以电影产业成熟国家的学徒制为例进行说明。这突出的是实践经验对于掌握技能、胜任工作的关键作用。“纸上得来终觉浅，绝知此事要躬行”恰恰说明了实践出真知的道理，与文段主旨高度契合。</p></div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <section id="chapter5" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">第五章 词句理解题</h2>
+                <details class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">核心理论与解题技巧 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point">
+                            <h4 class="font-semibold">【提问方式】</h4>
+                            <p>“这段文字中的‘……………’指的是?” / “对文中划线词语/句子的理解，最准确的是?”</p>
+                        </div>
+                        <div class="key-point mt-3">
+                            <h4 class="font-semibold">【理论要点】</h4>
+                            <p>考查对特定词句在具体语境中含义的准确把握。</p>
+                            <ul class="list-disc list-inside ml-4 space-y-1">
+                                <li><strong>一般词句：</strong>结合语境判断其具体含义。</li>
+                                <li><strong>指示代词（这、那、其、此等）：</strong>找到准确指代的对象（通常是前面最近的、符合逻辑的词、短语或句子）。</li>
+                                <li><strong>修辞性词句（比喻、象征等）：</strong>理解本体和喻体/象征义的联系。</li>
+                                <li><strong>抽象/概括性词句：</strong>通过上下文具体描述理解其内涵。</li>
+                            </ul>
+                        </div>
+                        <div class="key-point mt-3">
+                            <h4 class="font-semibold">【解题步骤】</h4>
+                            <ol class="list-decimal list-inside ml-4 space-y-1">
+                                <li><strong>定位原文。</strong></li>
+                                <li><strong>联系上下文：</strong>分析前后句，理解语境。</li>
+                                <li><strong>替换验证（可选）。</strong></li>
+                                <li><strong>排除干扰：</strong>排除望文生义、曲解原意、范围不当的选项。</li>
+                            </ol>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例3:“风筝不断线"是吴冠中上世纪80年代前后提出的艺术理念...实则它强调的是: 艺术创作再怎么创新...都不能远离现实生活...艺术家手中“须有一线联系着作品与生活中的源头”。只有“风筝不断线”, 艺术才有根基...</p>
+                            <p class="mt-2"><strong>下列观点符合“风筝不断线”理念的是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 艺术来源于生活而高于生活</li><li>B. 艺术的第一目的是再现现实</li><li>C. 艺术创作应当以生活为基础</li><li>D. 艺术离开民众就失去了土壤</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p><p><strong>解析：</strong>文段明确解释“风筝不断线”强调艺术创作不能远离现实生活，艺术要有根基，这个根基就是“生活中的源头”。C选项“艺术创作应当以生活为基础”准确概括了此核心理念。</p></div>
+                        </div>
+                         <div class="example-box">
+                            <p class="font-medium">例5: 跟石头和金属相比, 木质砧板从表面上看也是硬邦邦一块, 可“内心”很柔软, 内部的植物纤维虽紧密排列, 但仍有很多细微的空隙。 <span class="highlight">这</span>使它在受到剧烈冲击时, 内部结构发生弹性微调...</p>
+                            <p class="mt-2"><strong>画线句子中的“这”指的是木质砧板的:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 外观形态</li><li>B. 材料来源</li><li>C. 制作工艺</li><li>D. 结构特点</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p><p><strong>解析：</strong>指示代词“这”指代前一句描述的内容：“‘内心’很柔软, 内部的植物纤维虽紧密排列, 但仍有很多细微的空隙”。这些都是描述木质砧板的内部结构特点。</p></div>
+                        </div>
+                         <div class="example-box">
+                            <p class="font-medium">例6: 现存最早的密檐塔建于北魏正光四年(532年),位于河南登封嵩山,称为嵩岳寺塔。塔身呈12边形...塔身为15层砖檐...<span class="highlight">它的创作构思</span>,既摆脱了汉魏传统的楼阁,也不拘泥于印度的形式,而着力表现宗教在人们心中唤起的那种深邃而又神秘莫测的力量。此外,陕西西安的小雁塔,云南大理的崇圣寺塔也属于这一类型。</p>
+                            <p class="mt-2"><strong>文中划线处“它的创作构思”中的“它”字指代的是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 密檐塔</li><li>B. 小雁塔</li><li>C. 嵩岳寺塔</li><li>D. 崇圣寺塔</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p><p><strong>解析：</strong>指示代词“它”通常指代上文最近提到的符合逻辑的对象。划线句子之前详细描述的是“嵩岳寺塔”的形态特征。因此，“它的创作构思”中的“它”指代的是嵩岳寺塔。</p></div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <section id="chapter6" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">第六章 提炼关键词</h2>
+                <details class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">核心理论与解题技巧 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point">
+                            <h4 class="font-semibold">【提问方式】</h4>
+                            <p>“对这段文字的关键词提炼准确的是?” / “这段文字的关键词是?”</p>
+                        </div>
+                        <div class="key-point mt-3">
+                            <h4 class="font-semibold">【理论要点】</h4>
+                            <p>关键词是能够高度概括文段核心内容、主要论述对象或主题的词语或短语。</p>
+                            <ul class="list-disc list-inside ml-4 space-y-1">
+                                <li><strong>核心性：</strong>体现中心思想或核心讨论点。</li>
+                                <li><strong>概括性：</strong>涵盖主要信息。</li>
+                                <li><strong>高频性（参考）：</strong>反复出现的词可能是关键词，但核心性更重要。</li>
+                                <li><strong>新颖性/独特性（参考）：</strong>新概念、专业术语、独特表述常为关键词。</li>
+                            </ul>
+                        </div>
+                        <div class="key-point mt-3">
+                            <h4 class="font-semibold">【解题方法】</h4>
+                            <ol class="list-decimal list-inside ml-4 space-y-1">
+                                <li>通读全文，理解主旨。</li>
+                                <li>寻找高频词和核心概念。</li>
+                                <li>关注首尾句和重点句。</li>
+                                <li>注意关联词提示。</li>
+                                <li>概括论述对象和主要方面。</li>
+                                <li>对比选项，选择最能概括核心内容的组合。</li>
+                            </ol>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>五十年代, 人们对幸福的憧憬是“楼上楼下, 电灯电话”; 六七十年代, 是“三转一响”...八十年代是“万元户”; 九十年代是有房有车; 新世纪的幸福感呢, 则和总理最近提出的“尊严”息息相关。</p>
+                            <p class="mt-2"><strong>这段文字的关键词是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 新世纪</li><li>B. 幸福</li><li>C. 尊严</li><li>D. 幸福感</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong> (或 B，但D更精确)</p><p><strong>解析：</strong>文段围绕不同年代人们对“幸福”的憧憬展开，最后落脚到“新世纪的幸福感”。“幸福感”是贯穿始终的核心话题，比单纯的“幸福”更贴切文段的表述。</p></div>
+                        </div>
+                         <div class="example-box">
+                            <p class="font-medium">例2:</p>
+                            <p>中央纪委监察部发出通知, 要求党员领导干部...加强廉洁自律... <span class="highlight">但只靠规定力度有限, 关键在于一切放在阳光下, 让所有的公务支出、官员财产都置于纳税人的监督之下, 才能达到真正的廉洁。</span></p>
+                            <p class="mt-2"><strong>这段文字的关键词是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 通知 廉洁</li><li>B. 规定 廉洁</li><li>C. 廉洁 节日</li><li>D. 廉洁 监督</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p><p><strong>解析：</strong>文段首先提到通知和规定要求加强“廉洁”自律，然后通过“但”转折，指出关键在于“监督”，才能达到真正的“廉洁”。因此，“廉洁”和“监督”是文段的核心词。</p></div>
+                        </div>
+                         <div class="example-box">
+                            <p class="font-medium">例4:</p>
+                            <p>统一的数据采集和分类管理标准有利于政务数据的整合共享,方便各地区、各部门数据库之间的接口连接与数据交换。应加快制定政务数据采集、处理、提供、修改等各类标准规范,对原有信息资源进行标准化处理,规范数据共享的类型、方式、内容、对象和条件,破除数据共享的技术障碍。</p>
+                            <p class="mt-2"><strong>这段文字中提取的关键词最恰当的是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 数据采集 整合共享 技术障碍</li><li>B. 政务数据 数据交换 数据共享</li><li>C. 数据采集 标准规范 信息资源</li><li>D. 政务数据 标准规范 数据共享</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p><p><strong>解析：</strong>文段围绕“政务数据”的“整合共享”展开，强调了制定“标准规范”以促进“数据共享”的重要性。D选项的三个词最能概括文段的核心内容和主要措施。</p></div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+            
+            <section id="chapter7" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">第七章 语句填空题</h2>
+                <details class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">核心理论与解题技巧 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point">
+                            <h4 class="font-semibold">【提问方式】</h4>
+                            <p>“填入画横线部分最恰当的一句是”</p>
+                        </div>
+                        <div class="key-point mt-3">
+                            <h4 class="font-semibold">【理论要点】</h4>
+                            <p>语句填空题考查对文段上下文逻辑关系、语义连贯性和话题一致性的把握。</p>
+                            <ul class="list-disc list-inside ml-4 space-y-1">
+                                <li><strong>话题一致：</strong>填入的句子必须与上下文讨论的核心话题保持一致。</li>
+                                <li><strong>思路连贯：</strong>填入的句子要能使上下文的思路自然衔接，符合文段的行文逻辑。</li>
+                                <li><strong>结构相应：</strong>有时填入的句子在结构上（如并列、总分、分总等）需要与上下文呼应。</li>
+                                <li><strong>感情色彩和语气协调：</strong>填入句子的感情色彩和语气应与整个文段保持一致。</li>
+                            </ul>
+                        </div>
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">类型一：横线在结尾</h4>
+                        <div class="key-point">
+                            <p><strong>作用：</strong>通常是总结上文、点明主旨、提出结论或引出下文（较少见）。</p>
+                            <p><strong>解题思路：</strong>概括前文内容，寻找与前文逻辑关系最紧密的总结性或结论性语句。</p>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>研究发现,人格特质会对一个人能否拥有充足、良好的睡眠产生影响。例如,一个责任心水平较低的人很难自我约束...内向的人更难以入睡...同样,研究人员也发现,习惯早起的人更有责任心,晚上不睡的夜猫子型的人更喜欢新鲜的刺激。每个人其实有着不同的适应自身的睡眠偏好,而这些睡眠习惯, <span class="highlight">_________________</span></p>
+                            <p class="mt-2"><strong>填入画横线部分最恰当的一句是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 很难在短时间内发生根本改变</li><li>B. 最终必然会影响你的身心健康</li><li>C. 其实也不存在绝对的评价标准</li><li>D. 实际上也反映着你的人格特质</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p><p><strong>解析：</strong>文段开篇即点出“人格特质会对一个人能否拥有充足、良好的睡眠产生影响”，随后通过多个例子（责任心低、内向、习惯早起、夜猫子）来论证人格特质与睡眠习惯的关系。结尾处横线前的“而这些睡眠习惯”是在总结前文所述的各种睡眠偏好。因此，横线处应填入一个能够回扣文段主旨（人格特质与睡眠习惯的关系）的句子。D选项“实际上也反映着你的人格特质”与首句呼应，是对前文内容的总结和升华。</p></div>
+                        </div>
+
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">类型二：横线在开头</h4>
+                        <div class="key-point">
+                            <p><strong>作用：</strong>通常是总领下文、提出观点或引出话题。</p>
+                            <p><strong>解题思路：</strong>阅读后文，概括后文的主要内容或论点，选择能总领这些内容的句子。</p>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例6:</p>
+                            <p><span class="highlight">_________________</span> 作为世界上最成功的室内栽培植物之一,绿萝几乎就是盆栽的代名词,绿萝这个物种早在1880年就被确认了,但是你很难想象,直到2004年,它的原产地才被确定为法属波利尼西亚社会群岛的莫雷阿岛。更为神秘的是,绿萝是一种过分矜持的植物,虽然它已经扩散到了全世界的热带地区,却只在1962年有过一次确切的开花记录,直到2016年,人们才发现了它开花的秘密。</p>
+                            <p class="mt-2"><strong>填入画横线部分最恰当的一句是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 唯一的遗憾就是绿萝从来不开花</li><li>B. 因为它非常适合人类的居住环境</li><li>C. 但它却也是我们最熟悉的陌生人</li><li>D. 是一种不可多得的室内观叶植物</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p><p><strong>解析：</strong>横线后的内容描述了绿萝虽然是“最成功的室内栽培植物之一”、“盆栽的代名词”（说明熟悉），但其原产地、开花等秘密却长期不为人知（说明陌生）。C选项“但它却也是我们最熟悉的陌生人”恰好能总领后文这种“熟悉”与“陌生”并存的特点，并形成转折关系。</p></div>
+                        </div>
+
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">类型三：横线在中间</h4>
+                        <div class="key-point">
+                            <p><strong>作用：</strong>通常起承上启下的作用，既要与上文衔接，又要能引出下文。</p>
+                            <p><strong>解题思路：</strong>既要看前句，也要看后句，确保填入的句子在逻辑和语义上都能顺畅连接上下文。</p>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例10:</p>
+                            <p>传续文明,首先是要保护先人留下的物质遗产,比如要保存的图书文献的各种版本, <span class="highlight">_________________</span> 犹太文明的传续,就没有完全依赖物质遗产。传续文明,最核心的乃是传续先人的精神。</p>
+                            <p class="mt-2"><strong>填入画横线部分最恰当的一项是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 但这并不是没有例外的</li><li>B. 但这只是事情的一方面</li><li>C. 但这不是完全可靠的</li><li>D. 但这并不是最重要的</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong> (PDF答案为D，但B也有一定道理)</p><p><strong>解析：</strong>上文说传续文明首先要保护物质遗产。下文通过犹太文明的例子引出“传续文明，最核心的乃是传续先人的精神”。横线处应填入一个承上启下的句子，既要承认物质遗产的重要性，又要为引出精神传承的核心地位做铺垫。D选项“但这并不是最重要的”能够很好地引出后文对“最核心”的精神传承的强调。B选项“但这只是事情的一方面”也能起到转折和引出另一方面的作用，但D的语气更强，更能突出后文“最核心”的观点。</p></div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+            
+            <section id="chapter8" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">第八章 接语选择题</h2>
+                <details class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">核心理论与解题技巧 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point">
+                            <h4 class="font-semibold">【提问方式】</h4>
+                            <p>“作者接下来最有可能讲述的是/最不可能讲述的是”</p>
+                        </div>
+                        <div class="key-point mt-3">
+                            <h4 class="font-semibold">【理论要点】</h4>
+                            <p>接语选择题考查对文段末尾信息所暗示的后续内容的合理推断。</p>
+                            <ul class="list-disc list-inside ml-4 space-y-1">
+                                <li><strong>话题一致性：</strong>下文内容应与文段尾句或整个文段的核心话题保持一致。</li>
+                                <li><strong>思路连贯性：</strong>下文内容应是尾句所述内容的自然延伸或进一步阐述。</li>
+                                <li><strong>逻辑合理性：</strong>推断要符合正常的逻辑思维和行文规律。</li>
+                            </ul>
+                        </div>
+                         <div class="key-point mt-3">
+                            <h4 class="font-semibold">【解题技巧】</h4>
+                            <ol class="list-decimal list-inside ml-4 space-y-1">
+                                <li><strong>重点关注尾句：</strong>尾句往往包含对接续内容的提示信息（如提出问题、留下悬念、引出新概念、预告下文等）。</li>
+                                <li><strong>分析尾句作用：</strong>
+                                    <ul class="list-circle list-inside ml-6">
+                                        <li>如果尾句提出问题，下文可能解答问题。</li>
+                                        <li>如果尾句引出新概念或新方面，下文可能详细阐述。</li>
+                                        <li>如果尾句是总结，下文可能开始新的相关话题或深化讨论。</li>
+                                        <li>如果尾句是并列结构的一部分，下文可能继续列举。</li>
+                                    </ul>
+                                </li>
+                                <li><strong>保持话题连贯：</strong>选择与前文话题最紧密相关的选项。</li>
+                                <li><strong>排除无关或跳跃选项：</strong>排除与前文话题不一致、逻辑跳跃过大或已经阐述过的内容。</li>
+                                <li><strong>对于“最不可能讲述的”：</strong>选择与文段主旨、尾句提示方向相反或完全无关的选项。</li>
+                            </ol>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>潜水员在执行水下任务的过程中,普遍采用信号绳作为主要通信工具...这种通信方式便捷、直接,但是其弊端也是显而易见的...可以说,潜水员在执行水下任务时,是真正的命悬一“线”。<span class="highlight">针对信号绳的诸多弊病,结合智能穿戴设备在民用领域的快速发展,面向军事潜水领域的智能穿戴产品逐渐成为科技工作者的研发热点之一。</span></p>
+                            <p class="mt-2"><strong>这段文字接下来最可能讲的是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 军事潜水领域智能穿戴设备的关键技术</li><li>B. 信号绳在军事领域传递信息中的缺陷</li><li>C. 日常生活中智能穿戴设备的发展现状</li><li>D. 人工智能技术引入穿戴设备的前景预期</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：A</strong></p><p><strong>解析：</strong>文段尾句明确指出“面向军事潜水领域的智能穿戴产品逐渐成为科技工作者的研发热点之一”。按照正常的行文逻辑，接下来最有可能详细介绍这一“研发热点”，即具体阐述军事潜水领域智能穿戴设备的相关内容，例如其关键技术、具体产品、研发进展等。A选项“军事潜水领域智能穿戴设备的关键技术”是对此最直接和合乎逻辑的延伸。</p></div>
+                        </div>
+                         <div class="example-box">
+                            <p class="font-medium">例5:</p>
+                            <p>随着城市化的推进,地下空间的开发利用越来越成为媒体的热点话题。在“高度”“广度”不断拓展的今天,地下空间所标注的“深度”,为城市打开了更加立体的发展格局。有研究将21世纪称为“地下空间开发利用发展的世纪”,也有国家将地下空间归为“新型国土资源”。<span class="highlight">可以说,地下空间是一座“富矿”,特别是在改善基础设施、提升空间容量、缓解交通压力等方面,更发挥着不可替代的作用。</span></p>
+                            <p class="mt-2"><strong>接下来,作者最不可能谈论的是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 城市地下空间开发利用目前存在的不足</li><li>B. 破解城市地下空间开发难题的有效途径</li><li>C. 进行城市地下空间开发利用的已有经验</li><li>D. 地下空间开发对于城市发展的重要意义</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p><p><strong>解析：</strong>文段已经详细阐述了地下空间开发对于城市发展的重要意义（“打开了更加立体的发展格局”、“是一座‘富矿’”、“发挥着不可替代的作用”）。因此，接下来再次重复论述其重要意义的可能性最小。而A、B、C选项分别涉及开发利用的不足、解决难题的途径、已有经验，这些都是在肯定其重要性之后可能进一步探讨的方面。</p></div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <section id="chapter9" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">第九章 逻辑填空题</h2>
+                <details id="ch9_sec1" class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">第一节 绪论 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point">
+                            <h4 class="font-semibold">【解题思路】</h4>
+                            <p>从语境中分析逻辑关系，然后在选项里对比词语的含义、用法、搭配和感情色彩，选择最恰当的。</p>
+                            <p><strong>核心步骤：</strong></p>
+                            <ol class="list-decimal list-inside ml-4">
+                                <li><strong>分析语境：</strong>理解句子或文段的整体意思，判断设空处词语应表达的逻辑关系（如并列、转折、因果、递进等）和语义指向。</li>
+                                <li><strong>辨析选项：</strong>对比选项中词语的词义（基本义、引申义、比喻义）、词性、搭配习惯（固定搭配、与特定词语的搭配）、感情色彩（褒义、贬义、中性）、语体风格（书面语、口语）等方面的差异。</li>
+                                <li><strong>代入验证：</strong>将选定的词语代入原文，看是否通顺、符合逻辑、准确表达。</li>
+                            </ol>
+                        </div>
+                        <div class="example-box">
+                             <p class="font-medium">【大纲样题1】</p>
+                            <p>脱贫攻坚必须<span class="highlight">________</span>,一步一个脚印,确保各项扶贫政策措施落到实处,积小胜为大胜,最终取得全面胜利。同时也应加强贫困村基层组织建设,充分调动贫困群众的积极性,提高其参与度、获得感,激励其<span class="highlight">________</span>,激发其脱贫的内生动力与活力。</p>
+                            <p class="mt-2"><strong>依次填入画横线部分最恰当的一项是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 未雨绸缪 一马当先</li><li>B. 一鼓作气 奋发图强</li><li>C. 循序渐进 再接再厉</li><li>D. 稳扎稳打 自力更生</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p><p><strong>解析：</strong>第一空，后文“一步一个脚印”、“积小胜为大胜”提示此处应填入表示踏实、有步骤地进行的词语。“稳扎稳打”符合此意。“未雨绸缪”指事前预防；“一鼓作气”指做事时鼓起劲头一口气完成；“循序渐进”指按顺序逐步深入或提高。第二空，前文“充分调动贫困群众的积极性”、“激发其脱贫的内生动力与活力”提示此处应填入表示依靠自身力量的词语。“自力更生”符合此意。“一马当先”指领先；“奋发图强”指振作精神，努力自强；“再接再厉”指继续努力。综合来看，D项最为恰当。</p></div>
+                        </div>
+                    </div>
+                </details>
+                <details id="ch9_sec2" class="mb-6 content-section-details">
+                    <summary class="text-xl flex justify-between items-center">第二节 合理假设 (分析上下文逻辑关系) <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">一、找搭配 (词语的固定搭配、习惯用法)</h4>
+                        <div class="key-point"><p>关注词语与前后词语的固定搭配或常见搭配，如动宾搭配、主谓搭配、修饰语与中心语的搭配等。</p></div>
+                        <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>有些海蚀洞的“天花板”上还有个大窟窿,阳光照进来,就像罗马的万神殿一样,这可能是因为顶部岩石本身质地脆弱,更易被<span class="highlight">________</span>。也可能是海水挤入岩石裂隙时,原本在里面的空气被压缩,水填满洞隙下方,压缩空气便<span class="highlight">________</span>洞顶,直至将洞顶击穿,形成天窗。</p>
+                            <p class="mt-2"><strong>依次填入画横线部分最恰当的词语是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 腐蚀 入侵</li><li>B. 侵蚀 冲击</li><li>C. 侵袭 攻击</li><li>D. 腐化 充盈</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p><p><strong>解析：</strong>第一空，对于岩石的破坏，常用“侵蚀”，指逐渐侵害使变坏。“腐蚀”多指化学性的破坏。“侵袭”指侵入袭击。“腐化”指有机体腐烂或思想行为变坏。第二空，压缩空气对洞顶的作用，应为物理性的“冲击”。“入侵”指侵入。“攻击”范围较广。“充盈”指充满。结合语境，B项“侵蚀”、“冲击”最为恰当。</p></div>
+                        </div>
+
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">二、找解释 (上下文对空缺处词语的解释说明)</h4>
+                        <div class="key-point"><p>空缺处词语的含义往往在上下文中有所暗示或直接解释。</p></div>
+                         <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>在会展场馆、组展商实力和展会项目三大指标上全面领跑,使德国得以称雄全球会展业。德国企业<span class="highlight">________</span>,大量中小企业从家门口举办的国际高品质展会中获益匪浅,“德国制造”和“优质展会”<span class="highlight">________</span>,共同助推德国经济的发展。</p>
+                            <p class="mt-2"><strong>依次填入画横线部分最恰当的一项是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 蜂拥而至 相辅相成</li><li>B. 近水楼台 相得益彰</li><li>C. 不期而遇 并驾齐驱</li><li>D. 摩拳擦掌 同舟共济</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p><p><strong>解析：</strong>第一空，后文“大量中小企业从家门口举办的国际高品质展会中获益匪浅”解释了德国企业具有的优势，即地理位置便利。“近水楼台”比喻因接近某些人或事物而得到优先的机会，符合此意。第二空，“德国制造”和“优质展会”共同助推德国经济发展，两者相互配合，效果更好。“相得益彰”指互相配合、映衬，更能显出各自的优点，符合此意。</p></div>
+                        </div>
+
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">三、找关联 (通过关联词判断逻辑关系)</h4>
+                        <div class="key-point"><p>关注文段中的关联词，如转折、因果、并列、递进、条件等，它们提示了空缺处词语应具有的逻辑意义。</p></div>
+                        <div class="example-box">
+                            <p class="font-medium">例1 (转折关系):</p>
+                            <p>近二十几年来,人类已发现数千颗围绕其他恒星公转的行星,其中绝大多数与地球<span class="highlight">________</span>。<span class="highlight">不过</span>,《发现》杂志曾预测,观察大约150个邻近星系,就应该会找到一个类似地球的小型行星。</p>
+                            <p class="mt-2"><strong>填入划横线部分最恰当的一项是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 泾渭分明</li><li>B. 唇齿相依</li><li>C. 息息相关</li><li>D. 大相径庭</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p><p><strong>解析：</strong>关联词“不过”表示转折。后文说“就应该会找到一个类似地球的小型行星”，暗示前文发现的行星与地球“不类似”。“大相径庭”形容彼此相差很远，大不相同，符合转折后的语义。其余选项均不符合转折逻辑。</p></div>
+                        </div>
+                    </div>
+                </details>
+                <details id="ch9_sec3" class="mb-6 content-section-details">
+                    <summary class="text-xl flex justify-between items-center">第三节 小心求证 (辨析词义细微差别) <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">一、程度轻重</h4>
+                        <div class="key-point"><p>辨析词义所表示的程度深浅、范围大小等差异。</p></div>
+                         <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>人工智能促进了社会的巨大发展,但不少人仍对人工智能<span class="highlight">________</span>,这多半来自于其高速发展所带来的未知性,与生物技术、核技术相比,目前对人工智能的监管近乎空白,如何<span class="highlight">________</span>,保证人工智能良性有序发展并使人类社会尽快适应,已经被提上议事日程。</p>
+                            <p class="mt-2"><strong>依次填入划横线部分最恰当的一项是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 忧心忡忡 先发制人</li><li>B. 谈虎色变 防患未然</li><li>C. 心存芥蒂 未雨绸缪</li><li>D. 半信半疑 力挽狂澜</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p><p><strong>解析：</strong>第一空，“忧心忡忡”和“谈虎色变”程度过重。“半信半疑”与后文“未知性”和“监管空白”带来的担忧不完全吻合。“心存芥蒂”指因不满或猜疑而心中存在的不快或疙瘩，比较符合人们对高速发展且监管不足的人工智能的复杂心态。第二空，对应“监管近乎空白”，应采取预防措施。“未雨绸缪”比喻事先做好准备，符合文意。“先发制人”指抢先动手。“防患未然”也指预防，但“未雨绸缪”更侧重准备。综合看C项更优。</p></div>
+                        </div>
+
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">二、感情色彩</h4>
+                        <div class="key-point"><p>区分词语的褒义、贬义或中性色彩，使其与文段的感情基调一致。</p></div>
+                        <div class="example-box">
+                            <p class="font-medium">例2:</p>
+                            <p>当资产价格下跌,越来越多的机构和个人开始抛售资产,<span class="highlight">________</span>资产价格进一步下跌,出现恶性循环,市场流动性<span class="highlight">________</span>,最终导致金融体系的崩溃。</p>
+                            <p class="mt-2"><strong>依次填入划横线部分最恰当的一项是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 推动 降低</li><li>B. 促使 缺乏</li><li>C. 导致 枯竭</li><li>D. 驱使 消失</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p><p><strong>解析：</strong>第一空，抛售资产对价格下跌是直接的负面影响，“导致”比“推动”、“促使”、“驱使”更准确地表达这种因果关系和消极后果。第二空，市场流动性在金融危机中会急剧减少甚至消失，“枯竭”比“降低”、“缺乏”、“消失”更能形容这种严重程度和过程。</p></div>
+                        </div>
+
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">三、形象表达 (词语的比喻义、象征义)</h4>
+                        <div class="key-point"><p>注意词语是否运用了比喻、拟人等修辞手法，理解其形象化的表达效果。</p></div>
+                         <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>虽然没有法律强制力做支撑的道德是虚妄的,但是法律在面对道德问题时,也总是会显得<span class="highlight">________</span>,这种力不从心的根本原因还是由于法律的外在属性与道德的内在属性之间的矛盾。社会秩序的大厦是法律与道德共同支撑的,如果道德不立,人心善变,那法律终会<span class="highlight">________</span>。</p>
+                            <p class="mt-2"><strong>依次填入画横线部分最恰当的一项是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 相形见绌 回天乏术</li><li>B. 爱莫能助 孤立无援</li><li>C. 左支右绌 独木难支</li><li>D. 捉襟见肘 力所不逮</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p><p><strong>解析：</strong>第一空，描述法律面对道德问题时的力不从心。“左支右绌”形容力量不足，应付了这边，那边又出了问题，符合语境。“相形见绌”是对比下显得不足；“爱莫能助”指内心同情但无力帮助；“捉襟见肘”形容贫困或窘迫。第二空，如果道德不立，法律就会失去支撑。“独木难支”比喻个人力量单薄，难以支撑大局，形象地表达了法律失去道德支撑后的困境。</p></div>
+                        </div>
+
+                        <h4 class="text-lg font-semibold mt-4 mb-2 text-sky-600">四、语法搭配 (词语的词性、句法功能)</h4>
+                        <div class="key-point"><p>确保填入的词语在词性和句法功能上与句子结构相符。</p></div>
+                        <div class="example-box">
+                            <p class="font-medium">例2:</p>
+                            <p>一个大党诞生于一条小船。从此,中国共产党引领革命的航船,<span class="highlight">________</span>,<span class="highlight">________</span>,开天辟地,使中国革命的面貌<span class="highlight">________</span>。</p>
+                            <p class="mt-2"><strong>依次填入画横线部分最恰当的一项是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 披荆斩棘 改天换地</li><li>B. 乘风破浪 改头换面</li><li>C. 踏浪而来 日新月异</li><li>D. 劈波斩浪 焕然一新</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：D</strong></p><p><strong>解析：</strong>前两个空应为动词性短语，描述航船的行进状态。“劈波斩浪”形象地描绘了航船克服困难前进。第三个空，“焕然一新”形容出现了崭新的面貌，与“使中国革命的面貌”搭配恰当。“改天换地”和“改头换面”语义略有不合或色彩不当。“日新月异”形容发展快，但“焕然一新”更侧重面貌的改变。</p></div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <section id="chapter10" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">第十章 细节判断题</h2>
+                <details class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">核心理论与解题技巧 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point">
+                            <h4 class="font-semibold">【提问方式】</h4>
+                            <p>“下列说法理解正确的一项是?” / “下列说法理解不正确的一项是?”</p>
+                            <p>“符合这段话意思的是?” / “不符合这段话意思的是?”</p>
+                            <p>“根据这段文字，……的原因是?/……的特征?”</p>
+                        </div>
+                        <div class="key-point mt-3">
+                            <h4 class="font-semibold">【理论要点】</h4>
+                            <p>细节判断题考查对文段中具体信息的准确理解和辨别能力。</p>
+                            <ul class="list-disc list-inside ml-4 space-y-1">
+                                <li><strong>考察内容：</strong>通常是对原文部分表述的同义替换、合理推断或信息整合。</li>
+                                <li><strong>常见错误类型：</strong>
+                                    <ul class="list-circle list-inside ml-6">
+                                        <li><strong>无中生有：</strong>选项内容在原文中没有提及。</li>
+                                        <li><strong>概念偷换/混淆：</strong>选项将原文中的概念替换为相似但含义不同的概念，或混淆不同概念。</li>
+                                        <li><strong>范围扩大/缩小：</strong>选项将原文信息的适用范围随意扩大或缩小。</li>
+                                        <li><strong>时态/语气改变：</strong>选项改变了原文描述事件的时间状态（已然、未然）或语气（肯定、可能、推测）。</li>
+                                        <li><strong>正反混淆：</strong>选项将原文的肯定表述变为否定，或反之。</li>
+                                        <li><strong>强加因果/条件：</strong>选项将原文中没有因果或条件关系的内容强加联系。</li>
+                                        <li><strong>曲解原意：</strong>选项对原文信息的理解发生偏差。</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                         <div class="key-point mt-3">
+                            <h4 class="font-semibold">【做题顺序与技巧】</h4>
+                            <ol class="list-decimal list-inside ml-4 space-y-1">
+                                <li><strong>审清题干：</strong>明确是选择“正确”还是“不正确”的，以及判断的对象。</li>
+                                <li><strong>定位原文：</strong>根据选项中的关键词或核心信息，快速回到原文中找到相关描述。
+                                    <ul class="list-circle list-inside ml-6">
+                                        <li>若选项字数少或有易定位信息（数字、专有名词等），可先看选项再回原文。</li>
+                                        <li>若文段短选项长，可先读文段再逐一核对选项。</li>
+                                    </ul>
+                                </li>
+                                <li><strong>仔细比对：</strong>将选项与原文相关内容进行细致比较，判断是否存在上述常见错误。</li>
+                                <li><strong>注意绝对化表述：</strong>选项中出现“都”、“所有”、“一定”、“必须”、“绝不”、“唯一”等绝对化词语时要特别警惕，核对原文是否有同样强度的表述。</li>
+                                <li><strong>注意可能性表述：</strong>选项中出现“可能”、“也许”、“大概”等词语时，也要核对原文是否支持这种不确定性。</li>
+                            </ol>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>算法决策其实就是用过去的数据预测未来的趋势。算法模型和数据输入决定着预测的结果,这两个要素也是算法歧视的主要来源。一方面,算法在本质上是“以数学方式或者计算机代码表达的意见”,包括其设计、目的、成功标准、数据使用等等都是设计者、开发者的主观选择,设计者和开发者可能将自己的偏见嵌入算法系统。另一方面,数据的有效性、准确性,也会影响整个算法决策和预测的准确性。比如,数据是社会现实的反映,训练数据本身可能是歧视性的,用这样的数据训练出来的系统,自然也会带上歧视的影子。</p>
+                            <p class="mt-2"><strong>根据这段文字,下列说法错误的是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 算法决策的结果取决于算法模型和数据输入</li><li>B. 算法决策并不能完全客观准确地预测未来</li><li>C. 算法歧视可以通过训练数据来有效避免</li><li>D. 算法歧视在数据运用的过程中难以避免</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：C</strong></p><p><strong>解析：</strong></p><ul><li>A项：原文第二句“算法模型和数据输入决定着预测的结果”可印证。</li><li>B项：原文提到算法设计者可能嵌入偏见，训练数据本身可能歧视性，说明算法决策并非完全客观准确。</li><li>C项：原文末句“训练数据本身可能是歧视性的,用这样的数据训练出来的系统,自然也会带上歧视的影子”，表明训练数据可能是歧视的来源，而非避免歧视的手段。因此C项错误。</li><li>D项：原文分析了算法设计和数据输入两方面都可能引入歧视，暗示了其难以避免。</li></ul></div>
+                        </div>
+                         <div class="example-box">
+                            <p class="font-medium">例2:</p>
+                            <p>宇宙大爆炸之后大概30万年,整个宇宙处于黑暗时代。在那段时期,宇宙中没有恒星,没有星系,整个宇宙被中性氢所充满。在这个黑暗时代末期,宇宙第一代恒星和星系开始形成,它们发出的紫外光辐射电离了周围的中性氢,使得整个宇宙开始明亮起来。这段整个宇宙的整体相变过程被称为再电离。确定再电离的细致过程及第一代星系是何时形成的,是天体物理前沿一个极具挑战性的问题。</p>
+                            <p class="mt-2"><strong>根据这段文字,下面说法正确的是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 紫外光辐射是形成恒星和星系的必要条件</li><li>B. 宇宙的明亮过程就是再电离过程</li><li>C. 宇宙的再电离过程发生在黑暗时代之前</li><li>D. 人们已充分掌握了再电离的细致过程</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button><div class="explanation"><p><strong>答案：B</strong></p><p><strong>解析：</strong></p><ul><li>A项：原文说第一代恒星和星系发出紫外光辐射电离了中性氢，并未说紫外光辐射是形成恒星和星系的必要条件，属于强加因果。</li><li>B项：原文“它们发出的紫外光辐射电离了周围的中性氢,使得整个宇宙开始明亮起来。这段整个宇宙的整体相变过程被称为再电离。”说明宇宙明亮的过程就是再电离过程，正确。</li><li>C项：原文“在这个黑暗时代末期,宇宙第一代恒星和星系开始形成...这段整个宇宙的整体相变过程被称为再电离”，说明再电离发生在黑暗时代末期或之后，而非之前。</li><li>D项：原文末句“确定再电离的细致过程...是天体物理前沿一个极具挑战性的问题”，说明尚未充分掌握。</li></ul></div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+            
+            <section id="chapter11" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">第十一章 语句排序题</h2>
+                <details class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">核心理论与解题技巧 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point">
+                            <h4 class="font-semibold">【提问方式】</h4>
+                            <p>“将以上/以下几个句子重新排列，语序正确的是”</p>
+                            <p>“将以下几个句子重新排列组合最连贯的是:”</p>
+                        </div>
+                        <div class="key-point mt-3">
+                            <h4 class="font-semibold">【理论要点】“三步走”战略</h4>
+                            <ol class="list-decimal list-inside ml-4 space-y-1">
+                                <li><strong>第一步：确定首句</strong>
+                                    <ul class="list-disc list-inside ml-6">
+                                        <li><strong>适合做首句的特征：</strong>下定义句、背景引入句、提出观点句。</li>
+                                        <li><strong>不适合做首句的特征：</strong>以关联词后半部分开头（如：因此、但是、所以）、以指代不明的代词开头（如：这、那、他、其）、以“比如”等举例词开头的句子一般不作段落首句。</li>
+                                        <li>对比选项，快速排除明显不适合做首句的选项。</li>
+                                    </ul>
+                                </li>
+                                <li><strong>第二步：确定捆绑与顺序</strong>
+                                    <ul class="list-disc list-inside ml-6">
+                                        <li><strong>指代词捆绑：</strong>寻找“这、那、他、她、它、其、这些、那些”等代词，它们指代的内容通常在前一句。</li>
+                                        <li><strong>关联词捆绑：</strong>成对出现的关联词（如：不但…而且…，虽然…但是…）通常连接紧密。单个关联词也要注意其逻辑连接作用。</li>
+                                        <li><strong>重复词/同义词捆绑：</strong>相邻句子中出现相同或相近的词语，可能表示话题的延续。</li>
+                                        <li><strong>逻辑顺序：</strong>
+                                            <ul class="list-circle list-inside ml-8">
+                                                <li>时间顺序：按事件发生的时间先后排列。</li>
+                                                <li>空间顺序：按地点方位或事物的空间结构排列。</li>
+                                                <li>逻辑顺序：如总分、分总、因果、递进、并列、观点+解释/举例等。</li>
+                                            </ul>
+                                        </li>
+                                        <li><strong>确定尾句特征：</strong>总结性语句（因此、所以、总之、看来）、提出对策或展望的语句常做尾句。</li>
+                                    </ul>
+                                </li>
+                                <li><strong>第三步：验证答案</strong>
+                                    <ul class="list-disc list-inside ml-6">
+                                        <li>将基本确定的顺序代入，通读一遍，检查是否语意连贯、逻辑清晰、话题一致。</li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例1:</p>
+                            <p>将以下6个句子重新排列，语序正确的是：</p>
+                            <ol class="list-decimal list-inside ml-4 my-2">
+                                <li>一般认为，下击暴流的形成与雷暴云顶的上冲和崩溃紧密相关</li>
+                                <li>随着上冲高度的增加，上升气流的动能变为势能(表现为重、冷的云顶)而被储存起来</li>
+                                <li>通俗地讲，下击暴流就是从云中快速下冲的一股强烈气流，触及地面后向四面八方散开</li>
+                                <li>下击暴流是一股在地面或地面附近引起辐射型灾害性大风的强烈下沉气流</li>
+                                <li>一旦上升气流消失，云顶迅速崩溃，产生下沉气流，在下降过程中吸收了巨大的水平动量迅速向前推进，到达地面时，就形成了下击暴流</li>
+                                <li>上升气流在其上升和上冲过程中，从高层大气运动中获得了水平动量</li>
+                            </ol>
+                            <p class="mt-2"><strong>排列组合:</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>A. 431625</li> <li>B. 413256</li> <li>C. 314652</li> <li>D. 341265</li>
+                            </ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                            <div class="explanation">
+                                <p><strong>答案：A</strong></p>
+                                <p><strong>解析：</strong></p>
+                                <ol>
+                                    <li><strong>确定首句：</strong>④句是对“下击暴流”的专业定义，③句是通俗解释。通常先给出专业定义再通俗解释，或反之。观察选项，A、B以④为首，C、D以③为首。④更像一个正式的引出。</li>
+                                    <li><strong>捆绑与顺序：</strong>
+                                        <ul>
+                                            <li>④定义“下击暴流”后，③用通俗语言解释，④③连接自然。</li>
+                                            <li>①提出“下击暴流的形成与雷暴云顶的上冲和崩溃紧密相关”，引出形成过程。</li>
+                                            <li>⑥讲“上升气流”获得水平动量，②讲上升气流的动能变势能，是上升过程。⑥②顺序。</li>
+                                            <li>⑤讲“一旦上升气流消失，云顶迅速崩溃，产生下沉气流...形成下击暴流”，是形成结果。这是对①中“上冲和崩溃”的具体阐述。所以①之后应连接⑥②⑤。</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>验证：</strong>A选项顺序为④③①⑥②⑤。④定义，③解释，①提出形成原因，⑥②⑤详细描述形成过程。逻辑通顺。</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <section id="chapter12" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">第十二章 篇章阅读题</h2>
+                <details class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">核心理论与解题技巧 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <div class="key-point">
+                            <h4 class="font-semibold">【理论要点】</h4>
+                            <p>篇章阅读题通常包含一篇较长的文段（或几段文字），后设多个题目，题目类型可能涵盖中心理解、细节判断、词句理解、推断下文等多种单项题型。</p>
+                            <ul class="list-disc list-inside ml-4 space-y-1">
+                                <li><strong>整体把握与局部定位相结合：</strong>先快速通读全文，了解文章大意、主题和结构。做具体题目时，再根据题干关键词定位到原文相关段落或句子进行细读。</li>
+                                <li><strong>题目顺序与行文顺序：</strong>部分篇章阅读题的题目顺序与文章行文顺序大致对应，可利用此规律。</li>
+                                <li><strong>综合运用各类题型解题技巧：</strong>将前面章节学到的各种题型（中心理解、细节判断等）的解题方法灵活运用于篇章阅读的各个小题中。</li>
+                                <li><strong>注意上下文联系：</strong>篇章中的句子和段落是相互关联的，理解某一细节时要考虑其在整个篇章中的作用和意义。</li>
+                            </ul>
+                        </div>
+                        <div class="example-box">
+                            <p class="font-medium">例题一 (节选)</p>
+                            <p>当前,我国区域发展形势是好的,同时出现了一些值得关注的新情况新问题。一是区域经济发展分化态势明显。长三角、珠三角等地区已初步走上高质量发展轨道,一些北方省份增长放缓、全国经济重心进一步南移。①各板块内部也出现明显分化,有的省份内部也有分化现象。二是发展动力极化现象日益突出。经济和人口向大城市及城市群集聚的趋势比较明显。②北京、上海、广州、深圳等特大城市发展优势不断增强,杭州、南京、武汉、郑州、成都、西安等大城市发展势头较好,形成推动高质量发展的区域增长极。③三是部分区域发展面临较大困难。东北地区、西北地区发展相对滞后。2012年至2018年,东北地区经济总量占全国的比重从8.7%下降到6.2%,常住人口减少137万,多数是年轻人和科技人才。一些城市特别是资源枯竭型城市、传统工矿区城市发展活力不足。④</p>
+                            <p>总的来看, <span class="highlight">_________________</span> ,中心城市和城市群正在成为承载发展要素的主要空间形式。我们必须适应新形势,谋划区域协调发展新思路。</p>
+                            
+                            <p class="mt-3"><strong>1. 以下例证放在原文的哪个位置最为合适?</strong></p>
+                            <p class="italic ml-4">2018年,北方地区经济总量占全国的比重为38.5%,比2012年下降4.3个百分点。</p>
+                            <ul class="list-disc list-inside ml-4"><li>A. ①</li><li>B. ②</li><li>C. ③</li><li>D. ④</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                            <div class="explanation">
+                                <p><strong>答案：A</strong></p>
+                                <p><strong>解析：</strong>所给例证“2018年,北方地区经济总量占全国的比重为38.5%,比2012年下降4.3个百分点”具体说明了“一些北方省份增长放缓、全国经济重心进一步南移”这一现象。原文中，这一点在“一是区域经济发展分化态势明显”之后首次被提及。位置①紧随其后，是承接和具体例证这句话的最佳位置。</p>
+                            </div>
+
+                            <p class="mt-3"><strong>2. 填入第二段画横线部分最恰当的一项是:</strong></p>
+                            <ul class="list-disc list-inside ml-4"><li>A. 我国经济发展的空间结构正在发生深刻变化</li><li>B. 经济发展条件好的地区要承载更多产业和人口</li><li>C. 应推动形成优势互补高质量发展的区域经济布局</li><li>D. 要有效整合资源,主动调整经济结构</li></ul>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案与解析</button>
+                            <div class="explanation">
+                                <p><strong>答案：A</strong></p>
+                                <p><strong>解析：</strong>横线前的第一段列举了区域经济发展分化、发展动力极化、部分区域发展困难等新情况新问题。横线后的句子“中心城市和城市群正在成为承载发展要素的主要空间形式”是对当前发展要素集聚特点的总结。A选项“我国经济发展的空间结构正在发生深刻变化”能够总括第一段所述的各种分化和集聚现象，并自然引出后一句对空间形式的判断。B、C、D多为对策性或具体措施性表述，作为总结性判断不够恰当。</p>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <section id="practice2025" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">2025年国考(行政执法)(网友回忆题目)</h2>
+                <details class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">练习题 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <p class="italic text-gray-600 mb-4">以下为部分回忆题目，答案请参考讲义末尾或自行查阅。</p>
+                        <div class="example-box question-item">
+                            <p>36、《营造法式》刊行之后,两浙一带的建筑技术借助官方的推广完全融入了中国古典木构建筑技术的主流。以抬梁式为梁柱结构,屋面重量通过橡、檩、梁、斗拱、柱传递至基础的方案,形成此后中国官式建筑<span class="highlight">________</span>的发展路径。这种结构开间大、立柱少,气势恢宏,可细分为殿堂式与厅堂式,满足不同礼制等级的需要。</p>
+                            <p class="mt-2"><strong>填入画横线部分最恰当的一项是:</strong></p>
+                            <ol><li>A. 源远流长</li><li>B. 一枝独秀</li><li>C. 标新立异</li><li>D. 一以贯之</li></ol>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案提示</button>
+                            <div class="explanation"><p><strong>答案提示 (源自PDF): D</strong></p></div>
+                        </div>
+                        <div class="example-box question-item">
+                            <p>37、随着技术经验积累,高空风弹道修正等技术方法能使火箭在飞行过程中有效抵抗风干扰。为了有更强的适应性,长八火箭除了使用自主抗干扰控制技术等成熟方法,还增加了自动滚转减载技术,根据风的来向,在空中主动滚动调整,以更稳定的优势面来应对高空风,用<span class="highlight">________</span>的方式,通过自身旋转抵消掉高空风的影响。</p>
+                            <p class="mt-2"><strong>填入画横线部分最恰当的一项是:</strong></p>
+                            <ol><li>A. 以柔克刚</li><li>B. 以守为攻</li><li>C. 以虚为实</li><li>D. 以退为进</li></ol>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案提示</button>
+                            <div class="explanation"><p><strong>答案提示 (源自PDF): A</strong></p></div>
+                        </div>
+                         <div class="example-box question-item">
+                            <p>51、如果一味沉湎于琐碎的日常事务,缺乏大局观念和政治远见,不分轻重缓急,不从原则高度想问题,就会陷入事务主义。习近平总书记指出:“如果忙忙碌碌,只是机械做事,陷入事务主义,是很难提高认识和工作水平的。"这就意味着,要提高认识水平,必须走出事务主义的泥潭。毛泽东曾经指出:“庸俗的事务主义家不是这样,他们尊重经验而看轻理论,因而不能通观客观过程的全体,缺乏明确的方针,没有远大的前途,沾沾自喜于一得之功和一孔之见。”这为如何走出事务主义提供了指南针和路线图。</p>
+                            <p class="mt-2"><strong>这段文字认为,为避免陷入事务主义,应该:</strong></p>
+                            <ol><li>A. 不断从实践中总结经验教训</li><li>B. 通过学习补齐能力素质短板</li><li>C. 具有清晰明确的工作方案</li><li>D. 坚持从理论高度看待问题</li></ol>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案提示</button>
+                            <div class="explanation"><p><strong>答案提示 (源自PDF): D</strong></p></div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <section id="practice2024" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">2024年国考(行政执法)(网友回忆题目)</h2>
+                <details class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">练习题 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                         <p class="italic text-gray-600 mb-4">以下为部分回忆题目，答案请参考讲义末尾或自行查阅。</p>
+                        <div class="example-box question-item">
+                            <p>21、推进公交专用车道的开放共享,不等于废除公交专用通道,更不等于在城市交通治理中不再坚持“公交先行”的理念。理想状况下的公交专用通道共享,应该是在不影响公交通行效率的前提下,方便社会车辆的通行,从而在整体上提升道路交通的通行效率,而并非<span class="highlight">________</span>。</p>
+                            <p class="mt-2"><strong>填入画横线部分最恰当的一项是:</strong></p>
+                            <ol><li>A. 不分彼此</li><li>B. 厚此薄彼</li><li>C. 顾此失彼</li><li>D. 此消彼长</li></ol>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案提示</button>
+                            <div class="explanation"><p><strong>答案提示 (源自PDF): C</strong></p></div>
+                        </div>
+                        <div class="example-box question-item">
+                            <p>22、所谓环境影响评价,是指对规划和建设项目实施后可能造成的环境影响进行分析、预测和评估,提出预防或减轻不良环境影响的对策和措施,进行跟踪监测的方法与制度。可以说,环境影响评价是控制环境风险的“<span class="highlight">________</span>”,也是在发展中守住绿水青山的第一道防线,对协同推进经济高质量发展和生态环境高水平保护发挥着重要作用。</p>
+                            <p class="mt-2"><strong>填入画横线部分最恰当的一项是:</strong></p>
+                            <ol><li>A. 预警机</li><li>B. 安全阀</li><li>C. 试金石</li><li>D. 缓冲器</li></ol>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案提示</button>
+                            <div class="explanation"><p><strong>答案提示 (源自PDF): B</strong></p></div>
+                        </div>
+                        <div class="example-box question-item">
+                            <p>41、良法是善治的前提。“法非从天下,非从地出,发于人间,合乎人心而已。”<span class="highlight">________</span>。发挥好人大及其常委会在立法工作中的主导作用,坚持尊重和体现客观规律,坚持为了人民、依靠人民,坚持严格依照法定权限和法定程序,深入推进科学立法、民主立法、依法立法。</p>
+                            <p class="mt-2"><strong>填入画横线部分最恰当的一项是:</strong></p>
+                            <ol><li>A. 要抓住提高立法质量这个关键</li><li>B. 人大要统筹运用法定监督方式</li><li>C. 法律体系须与时俱进加以完善</li><li>D. 治国理政要保障人民当家作主</li></ol>
+                            <button class="btn mt-2" onclick="toggleExplanation(this)">显示答案提示</button>
+                            <div class="explanation"><p><strong>答案提示 (源自PDF): A</strong></p></div>
+                        </div>
+                    </div>
+                </details>
+            </section>
+
+            <section id="answers" class="content-section mb-8">
+                <h2 class="text-3xl font-bold text-sky-700 mb-4 border-b-2 border-sky-500 pb-2">讲义答案汇总</h2>
+                <details class="mb-6 content-section-details" open>
+                    <summary class="text-xl flex justify-between items-center">查看答案 <span class="details-marker">▼</span></summary>
+                    <div class="p-4 border border-t-0 border-sky-600 rounded-b-lg bg-white">
+                        <p class="text-gray-600">此部分用于汇总讲义中各章节练习题的答案，详细答案列表待后续根据讲义内容整理填充。</p>
+                        <p class="mt-2"><strong>第一章 中心理解题</strong></p>
+                        <p class="ml-4">第一节： D A B B A D D D</p>
+                        <p class="ml-4">第二节： 例题B; 一、ACB; 二、DACAA; 三、CBDBB; 四、BACCD; 五、CADA</p>
+                        <p class="ml-4">第三节： 一、CABBCA; 二、CDACA; 三、BBCDB</p>
+                        <p class="ml-4">第四节： DADCB DCAAA</p>
+                        <p class="ml-4">第五节： ABADD BDBDD</p>
+                        <p class="mt-2"><strong>第二章 标题填入题：</strong> DACBDB</p>
+                        <p class="mt-2"><strong>第三章 态度理解题：</strong> DCB</p>
+                        <p class="mt-2"><strong>第四章 道理启示题：</strong> BDABD</p>
+                        <p class="mt-2"><strong>第五章 词句理解题：</strong> CCCAD CC</p>
+                        <p class="mt-2"><strong>第六章 提炼关键词：</strong> DDBDA</p>
+                        <p class="mt-2"><strong>第七章 语句填空题：</strong> DBBAC CADD DDCD</p>
+                        <p class="mt-2"><strong>第八章 接语选择题：</strong> ACCADB</p>
+                        <p class="mt-2"><strong>第九章 逻辑填空题</strong></p>
+                        <p class="ml-4">第一节： DAD</p>
+                        <p class="ml-4">第二节： 一、BCAAB CC; 二、BBADB BCAAB C; 三、DACC BCCDAB DCD ABCBC AB</p>
+                        <p class="ml-4">第三节： 一、CCDC; 二、CCDB; 三、CCBADD; 四、CDACAA</p>
+                        <p class="mt-2"><strong>第十章 细节判断题：</strong> CBBA ADDC</p>
+                        <p class="mt-2"><strong>第十一章 语句排序题：</strong> ADBAD ACADB CCDBB D</p>
+                        <p class="mt-2"><strong>第十二章 篇章阅读题：</strong> AA CCD ADBDB CDDBA</p>
+                        <p class="mt-2"><strong>2025年国考（行政执法）（网友回忆题目）答案：</strong></p>
+                        <p class="ml-4">36—40：DABAD; 41—45：BAACD; 46—50：ABDDC; 51—55：DCBBA; 56—60：ACCAB; 61—65：ACDCD</p>
+                         <p class="mt-2"><strong>2024年国考（行政执法）（网友回忆题目）答案：</strong></p>
+                        <p class="ml-4">21-25 CBBDD; 26-30 ADACD; 31-35 BCBAD; 36-40 CADBC; 41-45 ABBCA; 46-50 ABCDD; 51-55 CCBBA; 56-60 BDCBA</p>
+                    </div>
+                </details>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        function toggleExplanation(button) {
+            const explanationDiv = button.nextElementSibling;
+            if (explanationDiv.style.display === 'none' || explanationDiv.style.display === '') {
+                explanationDiv.style.display = 'block';
+                button.textContent = '隐藏答案与解析';
+            } else {
+                explanationDiv.style.display = 'none';
+                button.textContent = '显示答案与解析';
+            }
+        }
+
+        const mainContentSections = document.querySelectorAll('main > section.content-section');
+        const allSidebarLinks = document.querySelectorAll('aside nav a.sidebar-link, aside nav a.sub-link');
+        const bodyEl = document.body;
+        const menuButton = document.getElementById('menu-button');
+        
+        function showSection(sectionIdToShow) {
+            mainContentSections.forEach(section => {
+                if (section.id === sectionIdToShow) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.innerWidth >= 768) { // md breakpoint: 768px
+                bodyEl.classList.add('sidebar-visible');
+                 bodyEl.classList.remove('sidebar-globally-hidden');
+            } else {
+                bodyEl.classList.remove('sidebar-visible');
+                bodyEl.classList.add('sidebar-globally-hidden'); 
+            }
+
+            const hash = window.location.hash.substring(1);
+            let activeLinkFound = false;
+            let sectionToActivate = 'introduction'; 
+
+            if (hash) {
+                 const targetElementByHash = document.getElementById(hash);
+                 if (targetElementByHash) {
+                    if (targetElementByHash.classList.contains('content-section')) {
+                        sectionToActivate = hash;
+                    } else if (targetElementByHash.classList.contains('content-section-details')) {
+                        sectionToActivate = targetElementByHash.closest('section.content-section').id;
+                    }
+                    activeLinkFound = true;
+                 }
+            }
+            
+            showSection(sectionToActivate);
+
+            allSidebarLinks.forEach(link => {
+                const linkHref = link.getAttribute('href');
+                const linkTargetId = linkHref.substring(1);
+                
+                // Activate link if it directly matches the section to activate OR the specific hash
+                if (linkTargetId === sectionToActivate || (activeLinkFound && linkTargetId === hash) ) {
+                    link.classList.add('active');
+                     // If it's a sub-link or a link within a group that leads to a sub-section, open its parent group
+                    if (link.classList.contains('sub-link') || (targetElementByHash && targetElementByHash.classList.contains('content-section-details') && linkTargetId === hash) ) {
+                        const parentGroup = link.closest('.sidebar-group');
+                        if (parentGroup) {
+                            const subLinksDiv = parentGroup.querySelector('.sub-links');
+                            const toggleLink = parentGroup.querySelector('a.sidebar-link'); // The main link of the group
+                            const toggleIcon = toggleLink.querySelector('.toggle-icon');
+                            if (subLinksDiv) subLinksDiv.classList.add('open');
+                            if (toggleIcon) toggleIcon.style.transform = 'rotate(90deg)';
+                        }
+                    }
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+            
+            if (activeLinkFound && hash) {
+                const targetElementForScroll = document.getElementById(hash);
+                if(targetElementForScroll){
+                    if (targetElementForScroll.tagName === 'DETAILS' && !targetElementForScroll.open) {
+                         // targetElementForScroll.open = true; // Let user open details
+                    }
+                    setTimeout(() => {
+                        targetElementForScroll.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    },100);
+                }
+            } else if (document.getElementById(sectionToActivate)) {
+                 setTimeout(() => {
+                    document.getElementById(sectionToActivate).scrollIntoView({ behavior: 'smooth', block: 'start' });
+                },100);
+            }
+        });
+
+        allSidebarLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                let targetId = this.getAttribute('href').substring(1); // e.g., ch1_sec1 or chapter1
+                let sectionToDisplayId = targetId; // This will be the ID of the <section> element
+
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement && targetElement.classList.contains('content-section-details')) {
+                    // If the link points to a <details> element (a sub-section)
+                    sectionToDisplayId = targetElement.closest('section.content-section').id;
+                } else if (targetElement && targetElement.classList.contains('content-section')) {
+                    // If the link points to a main <section> element
+                    sectionToDisplayId = targetId;
+                }
+                
+                allSidebarLinks.forEach(el => el.classList.remove('active'));
+                this.classList.add('active');
+
+                showSection(sectionToDisplayId);
+                window.location.hash = targetId; 
+
+                if (targetElement) {
+                     if (targetElement.tagName === 'DETAILS' && !targetElement.hasAttribute('open')) {
+                        // targetElement.open = true; // Let user open details manually
+                    }
+                     setTimeout(() => { 
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 50);
+                }
+                
+                if (window.innerWidth < 768 && bodyEl.classList.contains('sidebar-visible')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                     bodyEl.classList.add('sidebar-globally-hidden');
+                }
+            });
+        });
+        
+        menuButton.addEventListener('click', () => {
+            bodyEl.classList.toggle('sidebar-globally-hidden');
+            bodyEl.classList.toggle('sidebar-visible', !bodyEl.classList.contains('sidebar-globally-hidden'));
+        });
+        
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) {
+                if (!bodyEl.classList.contains('sidebar-globally-hidden')) {
+                    bodyEl.classList.add('sidebar-visible');
+                } else {
+                    bodyEl.classList.remove('sidebar-visible');
+                }
+            } else { 
+                if (bodyEl.classList.contains('sidebar-globally-hidden')) {
+                     bodyEl.classList.remove('sidebar-visible');
+                }
+            }
+        });
+
+        document.querySelectorAll('.sidebar-group > a.sidebar-link').forEach(toggle => {
+            const icon = toggle.querySelector('.toggle-icon');
+            const subLinks = toggle.nextElementSibling;
+            if (!subLinks || !subLinks.classList.contains('sub-links') || subLinks.children.length === 0) {
+                if(icon) icon.style.display = 'none';
+                return;
+            }
+            if(icon) icon.style.transform = subLinks.classList.contains('open') ? 'rotate(90deg)' : 'rotate(0deg)';
+
+            toggle.addEventListener('click', function(e) {
+                // This specific click on a group toggle should primarily handle the sub-links expansion.
+                // The navigation to the chapter's main section is handled by the broader allSidebarLinks listener.
+                // However, if this link itself is the one being navigated to (e.g. from hash or direct click),
+                // the allSidebarLinks listener will handle showing the section.
+                // We just toggle the sub-menu here.
+                const isCurrentlyOpen = subLinks.classList.contains('open');
+                // Optional: Close other open sub-menus
+                // document.querySelectorAll('.sidebar-group .sub-links.open').forEach(sl => {
+                //     if (sl !== subLinks) {
+                //         sl.classList.remove('open');
+                //         const otherIcon = sl.previousElementSibling.querySelector('.toggle-icon');
+                //         if (otherIcon) otherIcon.style.transform = 'rotate(0deg)';
+                //     }
+                // });
+                if (subLinks.children.length > 0) {
+                    subLinks.classList.toggle('open');
+                     if (icon) {
+                        icon.style.transform = subLinks.classList.contains('open') ? 'rotate(90deg)' : 'rotate(0deg)';
+                    }
+                }
+            });
+        });
+
+        document.querySelectorAll('details.content-section-details > summary').forEach(summary => {
+            const marker = summary.querySelector('.details-marker');
+            summary.parentElement.addEventListener('toggle', function() {
+                if (marker) {
+                    marker.style.transform = this.open ? 'rotate(90deg)' : 'rotate(0deg)';
+                }
+            });
+            if (marker) {
+                 marker.style.transform = summary.parentElement.open ? 'rotate(90deg)' : 'rotate(0deg)';
+            }
+        });
+
+    </script>
+</body>
+</html>
